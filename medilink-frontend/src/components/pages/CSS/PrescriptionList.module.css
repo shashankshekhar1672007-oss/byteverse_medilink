@@ -1,0 +1,263 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  padding: 60px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerTitle {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+
+.headerSubtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.filterBar {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.filterBtn {
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  bottom: -1px;
+}
+
+.filterBtn:hover {
+  color: var(--text);
+}
+
+.filterBtn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.prescriptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.listSpacing {
+  margin-top: 16px;
+}
+
+.emptyText {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--subtle);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.cardInfo {
+  flex: 1;
+}
+
+.diagnosis {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 4px;
+}
+
+.meta {
+  font-size: 14px;
+  color: #64748B;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusActive {
+  background-color: #E8F8F1;
+  color: #1E7E60;
+}
+
+.statusExpired {
+  background-color: #FEF3E0;
+  color: #9C4E18;
+}
+
+.statusCancelled {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+}
+
+.statusDefault {
+  background-color: #F1F5F9;
+  color: #475569;
+}
+
+.cardContent {
+  padding: 16px;
+}
+
+.contentSpacing {
+  margin-bottom: 16px;
+}
+
+.medicines {
+  flex: 1;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.labelHeading {
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.medicineItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.medicineItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F8FAFC;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.medicineName {
+  font-weight: 500;
+  color: #334155;
+}
+
+.medicineMeta {
+  font-size: 14px;
+  color: #64748B;
+}
+
+.expiryRow {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+}
+
+.expiryLabel {
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.instructions {
+  background-color: #FFFBEB;
+  border-left: 4px solid #F59E0B;
+  padding: 12px;
+  border-radius: 4px 8px 8px 4px;
+  font-size: 14px;
+  color: #92400E;
+  margin: 0 16px 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid #F1F5F9;
+  padding: 8px 16px 16px;
+}
+
+.actions button {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .status {
+    align-self: flex-start;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  .medicineItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}

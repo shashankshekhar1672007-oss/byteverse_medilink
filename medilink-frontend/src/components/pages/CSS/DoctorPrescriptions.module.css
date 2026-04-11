@@ -1,0 +1,291 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.loadingWrap { display: flex; justify-content: center; padding: 60px; }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.headerTitle {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.headerSubtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.header p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 4px 0 0 0;
+}
+
+.filterBar {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.filterBtn {
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  bottom: -1px;
+  white-space: nowrap;
+}
+
+.filterBtn:hover {
+  color: var(--text);
+}
+
+.filterBtn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.prescriptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.listSpacing { margin-top: 16px; }
+
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--border);
+}
+
+.empty p {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0 0 12px 0;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  display: block;
+  opacity: 0.5;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  padding: 4px;
+}
+
+.card:hover {
+  border-color: var(--subtle);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #F1F5F9;
+  margin-bottom: 4px;
+}
+
+.cardInfo {
+  flex: 1;
+}
+
+.diagnosis {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 4px;
+}
+
+.meta {
+  font-size: 14px;
+  color: #64748B;
+}
+
+.patient {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.date {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.statusActive { background-color: #E8F8F1; color: #1E7E60; }
+.statusExpired { background-color: #FEF3E0; color: #9C4E18; }
+.statusCancelled { background-color: #FEE2E2; color: #B91C1C; }
+.statusDefault { background-color: #F1F5F9; color: #475569; }
+
+.cardContent {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.cardContentSpacing { margin-bottom: 4px; }
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.labelHeading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.value {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+.medicineListWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.medicineBadgePill {
+  display: inline-block;
+  background-color: #F8FAFC;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+}
+.moreBadge {
+  display: inline-block;
+  background-color: #F1F5F9;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #64748B;
+}
+.detailText { font-size: 13px; color: #64748B; }
+.detailLabelInline { font-weight: 500; margin-right: 4px; }
+
+.actions {
+  padding: 12px 16px;
+  background: var(--surface);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.revokeAction {
+  padding: 8px 16px;
+  background-color: #FEE2E2;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #B91C1C;
+  cursor: pointer;
+}
+.revokeAction:disabled { cursor: not-allowed; }
+
+.actions button {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.revokeBtn {
+  border-color: #EF4444 !important;
+  color: #EF4444 !important;
+}
+
+.revokeBtn:hover {
+  background: rgba(239, 68, 68, 0.05) !important;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .cardContent {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .status {
+    align-self: flex-start;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,442 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.header h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.step span {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--surface);
+  transition: all 0.2s ease;
+}
+
+.step.active span {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+
+.step.completed span {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+}
+
+.step.completed::after {
+  content: "✓";
+  position: absolute;
+  top: 10px;
+  right: -8px;
+  font-size: 10px;
+}
+
+.step label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+}
+
+.connector {
+  width: 20px;
+  height: 2px;
+  background: var(--border);
+  margin: 0 4px;
+  margin-top: 14px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stepContent h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.stepContent > p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.searchBox {
+  display: flex;
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.searchBox input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.1);
+}
+
+.patientList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.noResults {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.patientCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.patientCard:hover {
+  border-color: var(--primary);
+  background: rgb(62, 207, 142, 0.05);
+}
+
+.patientCard.selected {
+  border-color: var(--primary);
+  background: rgba(62, 207, 142, 0.1);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.1);
+}
+
+.patientInfo {
+  flex: 1;
+}
+
+.patientName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.patientDetail {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.checkmark {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.patientCard.selected .checkmark {
+  opacity: 1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.formGroup textarea,
+.formGroup input[type="text"],
+.formGroup input[type="number"],
+.formGroup select {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.formGroup textarea:focus,
+.formGroup input[type="text"]:focus,
+.formGroup input[type="number"]:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.1);
+}
+
+.medicinesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.sectionHeader h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.addBtn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.addBtn:hover {
+  background: rgba(62, 207, 142, 0.1);
+}
+
+.medicineRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr auto;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.inputFull {
+  grid-column: 1;
+}
+
+.inputSelect {
+  grid-column: auto;
+}
+
+.inputSmall {
+  grid-column: auto;
+}
+
+.removeBtn {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.removeBtn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #EF4444;
+}
+
+.followUpBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.followUpInput {
+  width: 60px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.reviewBox {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+}
+
+.reviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reviewSection h3 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin: 0;
+}
+
+.reviewSection p {
+  font-size: 14px;
+  color: var(--text);
+  margin: 0;
+}
+
+.muted {
+  color: var(--muted) !important;
+  font-size: 13px !important;
+}
+
+.reviewMedicine {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.reviewMedicine:last-child {
+  border-bottom: none;
+}
+
+.reviewMedicine strong {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.reviewMedicine .muted {
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.actions button {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .steps {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .medicineRow {
+    grid-template-columns: 1fr;
+  }
+
+  .inputFull,
+  .inputSelect,
+  .inputSmall,
+  .removeBtn {
+    grid-column: auto !important;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

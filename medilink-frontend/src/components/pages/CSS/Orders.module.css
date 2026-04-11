@@ -1,0 +1,190 @@
+.page { display: flex; flex-direction: column; gap: 16px; }
+.loadingWrap { display: flex; justify-content: center; padding: 60px; }
+.emptyText { color: var(--muted); font-size: 13px; }
+.fulfilmentTitle { margin-top: 20px; }
+
+.greeting h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.greeting p { color: var(--muted); font-size: 13px; margin-top: 3px; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 16px;
+  align-items: start;
+}
+
+.colTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+/* Medicine list */
+.medList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.medRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: border-color 0.15s;
+}
+.medRow:hover { border-color: var(--subtle); }
+.medIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--amber-dim);
+  border: 1px solid rgba(245,158,11,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.medInfo { flex: 1; }
+.medName { font-size: 13px; font-weight: 600; color: var(--text); }
+.medMeta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Delivery modes */
+.modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.modeBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+}
+.modeBtn:hover { border-color: var(--subtle); }
+.modeActive {
+  border-color: var(--primary-border) !important;
+  background: var(--primary-dim) !important;
+}
+.modeIcon { font-size: 20px; flex-shrink: 0; }
+.modeName { font-size: 13px; font-weight: 600; color: var(--text); }
+.modeSub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Right column */
+.right { display: flex; flex-direction: column; gap: 14px; }
+
+/* Cart card */
+.cartCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cartTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.cartRows { display: flex; flex-direction: column; gap: 8px; }
+.cartRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+.cartTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+/* Tracker */
+.trackerCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+.tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 12px;
+}
+.step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.stepLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 12px;
+}
+.stepDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.done    { background: var(--primary); }
+.current { background: var(--primary); box-shadow: 0 0 0 3px rgba(62,207,142,0.25); }
+.pending { background: var(--border); }
+
+.stepLine {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  margin-top: 3px;
+}
+.doneLine { background: var(--primary); }
+
+.stepLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  padding-bottom: 16px;
+  flex: 1;
+}
+.currentLabel { color: var(--text); font-weight: 600; }
+
+.stepBadge {
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--primary-dim);
+  color: var(--primary);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .modes  { grid-template-columns: 1fr; }
+}

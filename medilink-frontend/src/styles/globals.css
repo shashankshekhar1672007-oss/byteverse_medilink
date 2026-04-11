@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700&display=swap');
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #FFFFFF;
+  --surface: #F9FAFB;
+  --card: #FFFFFF;
+  --card2: #F3F4F6;
+  --border: #E5E7EB;
+  --primary: #10B981;
+  --primary-dim: rgba(16, 185, 129, 0.12);
+  --primary-border: rgba(16, 185, 129, 0.25);
+  --accent: #EF4444;
+  --accent-dim: rgba(239, 68, 68, 0.12);
+  --accent-border: rgba(239, 68, 68, 0.25);
+  --blue: #0EA5E9;
+  --blue-dim: rgba(14, 165, 233, 0.12);
+  --amber: #FBBF24;
+  --amber-dim: rgba(251, 191, 36, 0.12);
+  --text: #111827;
+  --muted: #6B7280;
+  --subtle: #D1D5DB;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* Light theme */
+.light-theme {
+  --bg: #FFFFFF;
+  --surface: #F8F9FA;
+  --card: #FFFFFF;
+  --primary: #007BFF;
+  --accent: #DC3545;
+  --text: #212529;
+  --muted: #6C757D;
+}
+
+/* Dark theme (current) */
+.dark-theme {
+  --bg: #0D0F12;
+  --surface: #161A1F;
+  --card: #1C2128;
+  --primary: #3ECF8E;
+  --accent: #FF4D6D;
+  --text: #E8ECF0;
+  --muted: #7A8694;
+}

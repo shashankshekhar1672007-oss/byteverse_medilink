@@ -1,0 +1,242 @@
+.page { display: flex; flex-direction: column; gap: 16px; }
+.loadingWrap { display: flex; justify-content: center; padding: 60px; }
+
+.greeting {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.greeting h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.greeting p { color: var(--muted); font-size: 13px; margin-top: 3px; }
+
+.backBtn {
+  flex-shrink: 0;
+}
+
+.backBtn button {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.backBtn button:hover {
+  background: rgba(62, 207, 142, 0.1);
+}
+
+
+.card {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  width: 100%;
+}
+
+.rxHeader {
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(62,207,142,0.06), rgba(75,158,255,0.06));
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.rxLogo {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.rxId {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.rxDateLabel { font-size: 11px; color: var(--muted); text-align: right; }
+.rxDateVal   { font-size: 13px; font-weight: 600; color: var(--text); }
+
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.statusActive { background-color: #E8F8F1; color: #1E7E60; }
+.statusExpired { background-color: #FEF3E0; color: #9C4E18; }
+.statusCancelled { background-color: #FEE2E2; color: #B91C1C; }
+
+.warningBanner {
+  padding: 12px 24px;
+  background: #FFFBEB;
+  border-bottom: 1px solid var(--border);
+  color: #92400E;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.validityBox {
+  padding: 16px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.validityItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.valueActive { color: #1E7E60; }
+.valueExpired { color: #9C4E18; }
+.valueCancelled { color: #B91C1C; }
+
+.parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.party {
+  padding: 16px 24px;
+  border-right: 1px solid var(--border);
+}
+.party:last-child { border-right: none; }
+
+.partyLabel {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.partyName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.partyDetail {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.verified { color: var(--primary); }
+
+.tableWrap { padding: 20px 24px; }
+
+.diagnosis {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  padding: 0 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.table td {
+  padding: 12px;
+  font-size: 13px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: var(--card2); }
+
+.instructions {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--card2);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--primary);
+}
+.instructionsLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 5px;
+}
+.instructionsText {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.followUp {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: rgba(59, 130, 246, 0.08);
+  border-radius: var(--radius-md);
+  border-left: 3px solid #3B82F6;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  color: #1F2937;
+}
+
+.followUpIcon {
+  font-size: 18px;
+}
+
+.actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+}
+.actions button { flex: 1; }
+
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+.emptyBackButton {
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

@@ -1,0 +1,146 @@
+.page { display: flex; flex-direction: column; gap: 16px; }
+.loadingWrap { display: flex; justify-content: center; padding: 60px; }
+
+.greeting h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.greeting p { color: var(--muted); font-size: 13px; margin-top: 3px; }
+
+.filtersBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  flex-wrap: wrap;
+}
+
+.select {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 6px 10px;
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+.toggleTrack {
+  width: 32px;
+  height: 17px;
+  border-radius: 10px;
+  position: relative;
+  display: inline-block;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.on  { background: var(--primary); }
+.off { background: #BFBFBF; }
+.toggleThumb {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  top: 2.5px;
+  left: 2.5px;
+  transition: left 0.2s, background 0.2s;
+}
+.toggleTrack.on .toggleThumb { 
+  left: calc(100% - 14.5px);
+}
+.toggleTrack.off .toggleThumb {
+  background: #fff;
+}
+
+.priceRange {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.priceRange input { width: 90px; accent-color: var(--primary); }
+
+.resultCount {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s;
+}
+.card:hover { border-color: var(--subtle); }
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.photo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.name { font-size: 13px; font-weight: 600; color: var(--text); }
+.spec { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--amber);
+  font-weight: 600;
+}
+.rating span { color: var(--muted); font-weight: 400; }
+
+.price { font-size: 11px; color: var(--muted); }
+
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--muted);
+  padding: 40px;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2,1fr); }
+}
