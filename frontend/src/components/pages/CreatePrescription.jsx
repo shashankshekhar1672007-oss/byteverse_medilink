@@ -130,7 +130,7 @@ export default function CreatePrescription() {
       {step === 1 && (
         <div className={styles.card}>
           <div className={styles.stepContent}>
-            <h2>Select Patient</h2>
+            <h2>👥 Select Patient</h2>
             <p>Choose the patient for this prescription</p>
             <div className={styles.searchBox}>
               <input
@@ -190,10 +190,10 @@ export default function CreatePrescription() {
       {step === 2 && (
         <div className={styles.card}>
           <div className={styles.stepContent}>
-            <h2>Prescription Details</h2>
+            <h2>📋 Prescription Details</h2>
             <p>Patient: {selectedPatient?.userId?.name}</p>
             <div className={styles.formGroup}>
-              <label>Diagnosis</label>
+              <label>🏥 Diagnosis</label>
               <textarea
                 value={diagnosis}
                 onChange={(e) => setDiagnosis(e.target.value)}
@@ -203,9 +203,9 @@ export default function CreatePrescription() {
             </div>
             <div className={styles.medicinesSection}>
               <div className={styles.sectionHeader}>
-                <h3>Medicines</h3>
+                <h3>💊 Medicines</h3>
                 <button className={styles.addBtn} onClick={addMed}>
-                  + Add Medicine
+                  ➕ Add Medicine
                 </button>
               </div>
               {medicines.map((med, i) => (
@@ -256,7 +256,7 @@ export default function CreatePrescription() {
               ))}
             </div>
             <div className={styles.formGroup}>
-              <label>Instructions</label>
+              <label>📝 Instructions</label>
               <textarea
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
@@ -301,20 +301,20 @@ export default function CreatePrescription() {
       {step === 3 && (
         <div className={styles.card}>
           <div className={styles.stepContent}>
-            <h2>Review Prescription</h2>
+            <h2>✅ Review Prescription</h2>
             <div className={styles.reviewBox}>
               <div className={styles.reviewSection}>
-                <h3>Patient</h3>
+                <h3>👤 Patient</h3>
                 <p>
                   <strong>{selectedPatient?.userId?.name}</strong>
                 </p>
               </div>
               <div className={styles.reviewSection}>
-                <h3>Diagnosis</h3>
+                <h3>🏥 Diagnosis</h3>
                 <p>{diagnosis}</p>
               </div>
               <div className={styles.reviewSection}>
-                <h3>Medicines</h3>
+                <h3>💊 Medicines</h3>
                 {medicines
                   .filter((m) => m.name)
                   .map((m, i) => (
@@ -328,13 +328,13 @@ export default function CreatePrescription() {
               </div>
               {instructions && (
                 <div className={styles.reviewSection}>
-                  <h3>Instructions</h3>
+                  <h3>📝 Instructions</h3>
                   <p>{instructions}</p>
                 </div>
               )}
               {followUp && followUpDate && (
                 <div className={styles.reviewSection}>
-                  <h3>Follow-up</h3>
+                  <h3>📅 Follow-up</h3>
                   <p>
                     {new Date(followUpDate).toLocaleDateString("en-IN", {
                       day: "numeric",

@@ -1,5 +1,6 @@
 import styles from "../CSS/Consultation.module.css";
 import { formatMessageTime, isOwnMessage } from "./consultationUtils";
+import { useState } from "react";
 
 export default function ChatPanel({
   bottomRef,
@@ -16,8 +17,16 @@ export default function ChatPanel({
   socketReady,
   user,
 }) {
+  const [reactingTo, setReactingTo] = useState(null);
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey && !disabled) onSend();
+  };
+
+  const handleReaction = (messageId, emoji) => {
+    // In a real app, this would send the reaction to the server
+    console.log(`Reacting to message ${messageId} with ${emoji}`);
+    setReactingTo(null);
   };
 
   return (
@@ -38,12 +47,17 @@ export default function ChatPanel({
             key={message._id || `${message.createdAt}-${index}`}
             message={message}
             user={user}
+            onReaction={handleReaction}
+            reactingTo={reactingTo}
+            setReactingTo={setReactingTo}
           />
         ))}
 
         {peerTyping && (
           <div className={`${styles.msg} ${styles.doctor}`}>
-            <div className={styles.bubble}>typing...</div>
+            <div className={styles.bubble}>
+              <TypingIndicator />
+            </div>
           </div>
         )}
         <div ref={bottomRef} />
@@ -71,7 +85,7 @@ export default function ChatPanel({
           title="Send"
           type="button"
         >
-          Send
+          {sending ? "..." : "Send"}
         </button>
       </div>
     </div>
@@ -100,27 +114,68 @@ function ChatHeader({ disabled, initials, peerName, peerTyping, socketReady }) {
   );
 }
 
-function EmptyChat() {
+function TypingIndicator() {
   return (
-    <div className={styles.emptyChat}>
-      <div className={styles.emptyChatIcon}>💬</div>
-      <div className={styles.emptyChatTitle}>Start the conversation</div>
-      <div className={styles.emptyChatMeta}>Messages are private</div>
+    <div className={styles.typingIndicator}>
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   );
 }
 
-function MessageBubble({ message, user }) {
+function MessageBubble({ message, user, onReaction, reactingTo, setReactingTo }) {
   const isMe = isOwnMessage(message, user);
   const isPending = message._id?.startsWith("tmp_");
 
+  const handleReactionClick = (emoji) => {
+    onReaction(message._id, emoji);
+  };
+
   return (
     <div className={`${styles.msg} ${isMe ? styles.patient : styles.doctor}`}>
-      <div className={styles.bubble}>{message.text}</div>
+      <div className={styles.bubbleContainer}>
+        <div className={styles.bubble}>
+          {message.text}
+          {message.reactions && message.reactions.length > 0 && (
+            <div className={styles.reactions}>
+              {message.reactions.map((reaction, idx) => (
+                <span key={idx} className={styles.reaction}>
+                  {reaction.emoji} {reaction.count}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        {!isMe && (
+          <button
+            className={styles.reactionBtn}
+            onClick={() => setReactingTo(reactingTo === message._id ? null : message._id)}
+            title="React"
+          >
+            😊
+          </button>
+        )}
+      </div>
+      {reactingTo === message._id && (
+        <div className={styles.reactionPicker}>
+          {["👍", "❤️", "😂", "😮", "😢", "😡"].map((emoji) => (
+            <button
+              key={emoji}
+              className={styles.emojiBtn}
+              onClick={() => handleReactionClick(emoji)}
+            >
+              {emoji}
+            </button>
+          ))}
+        </div>
+      )}
       <div className={styles.msgTime}>
         {formatMessageTime(message.createdAt)}
         {isMe && (
-          <span className={styles.messageAck}>{isPending ? "○" : "✓"}</span>
+          <span className={styles.messageAck}>
+            {isPending ? "○" : "✓"}
+          </span>
         )}
       </div>
     </div>

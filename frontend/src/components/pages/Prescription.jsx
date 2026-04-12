@@ -35,6 +35,40 @@ export default function Prescription() {
   const [rx, setRx] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
+
+  useEffect(() => {
+    if (!selectedPrescriptionId) {
+      setLoading(false);
+      return;
+    }
+    (async () => {
+      try {
+        const r =
+          user?.role === "doctor"
+            ? await rxApi.getById(selectedPrescriptionId)
+            : await patientsApi.getPrescriptionById(selectedPrescriptionId);
+        setRx(r.data);
+
+        // Generate QR code for display
+        const QRCode = (await import("qrcode")).default;
+        const prescriptionUrl = `${window.location.origin}/prescription/${r.data._id}`;
+        const qrUrl = await QRCode.toDataURL(prescriptionUrl, {
+          width: 120,
+          margin: 1,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        });
+        setQrCodeUrl(qrUrl);
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [selectedPrescriptionId]);
 
   useEffect(() => {
     if (!selectedPrescriptionId) {
@@ -108,6 +142,38 @@ export default function Prescription() {
     const element = document.getElementById("prescription-card");
     if (!element) return;
 
+    // Generate QR code
+    const QRCode = (await import("qrcode")).default;
+    const qrCanvas = document.createElement("canvas");
+    const prescriptionUrl = `${window.location.origin}/prescription/${rx._id}`;
+    await QRCode.toCanvas(qrCanvas, prescriptionUrl, {
+      width: 100,
+      margin: 1,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      }
+    });
+
+    // Add QR code to the prescription element temporarily
+    const qrContainer = document.createElement("div");
+    qrContainer.style.cssText = `
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-align: center;
+      font-size: 10px;
+      color: #666;
+    `;
+    qrContainer.innerHTML = `
+      <div>Scan to verify</div>
+      <img src="${qrCanvas.toDataURL()}" style="width: 80px; height: 80px; margin: 5px 0;" />
+      <div style="font-size: 8px;">ID: ${rx.rxId}</div>
+    `;
+
+    element.style.position = "relative";
+    element.appendChild(qrContainer);
+
     const html2pdf = (await import("html2pdf.js")).default;
     html2pdf()
       .from(element)
@@ -121,7 +187,12 @@ export default function Prescription() {
         },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       })
-      .save();
+      .save()
+      .finally(() => {
+        // Remove QR code after PDF generation
+        element.removeChild(qrContainer);
+        element.style.position = "";
+      });
   };
 
   return (
@@ -167,6 +238,12 @@ export default function Prescription() {
                 year: "numeric",
               })}
             </div>
+          </div>
+          <div className={styles.qrSection}>
+            <div className={styles.qrCode}>
+              {qrCodeUrl && <img src={qrCodeUrl} alt="Prescription QR Code" />}
+            </div>
+            <div className={styles.qrLabel}>Scan to verify</div>
           </div>
           <div className={`${styles.statusBadge} ${sd.badgeClassName}`}>
             {sd.text}
