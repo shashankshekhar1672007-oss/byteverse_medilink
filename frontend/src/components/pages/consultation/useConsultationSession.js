@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PAGES } from "../../../context/AppContext";
 import { consultations as consultApi } from "../../../services/api";
+import { playIncomingMessageTone } from "../../../services/sounds";
 import {
   connectSocket,
   EVENTS,
@@ -9,6 +10,7 @@ import {
   sendSocketMessage,
   sendTyping,
 } from "../../../services/socket";
+import { isOwnMessage } from "./consultationUtils";
 
 const ICE_CONFIG = {
   iceServers: [
@@ -680,7 +682,10 @@ export function useConsultationSession({
       setSocketReady(false);
       setPeerReady(false);
     };
-    const onMessage = (message) => addMessage(message);
+    const onMessage = (message) => {
+      addMessage(message);
+      if (!isOwnMessage(message, user)) playIncomingMessageTone();
+    };
     const onSocketError = (payload = {}) => {
       const message = payload.message || "Realtime message failed";
       if (/consultation is not active/i.test(message)) {

@@ -12,6 +12,10 @@ import {
   getSocket,
   EVENTS,
 } from "../services/socket";
+import {
+  playIncomingMessageTone,
+  playNotificationSound,
+} from "../services/sounds";
 
 export const PAGES = {
   DASHBOARD: "dashboard",
@@ -204,14 +208,6 @@ export function AppProvider({ children }) {
     const sock = getSocket() || (token ? connectSocket(token) : null);
     if (!sock) return;
 
-    const playNotificationSound = () => {
-      try {
-        const audio = new Audio("/ringtone.mp3");
-        audio.volume = 0.35;
-        audio.play().catch(() => {});
-      } catch {}
-    };
-
     const showBrowserNotification = (title, body) => {
       if (
         typeof Notification === "undefined" ||
@@ -251,7 +247,11 @@ export function AppProvider({ children }) {
       setNotifications((n) => n + 1);
       setNotificationItems((items) => [item, ...items].slice(0, 20));
       showToast(title, "success");
-      playNotificationSound();
+      if (type === "message") {
+        playIncomingMessageTone();
+      } else {
+        playNotificationSound();
+      }
       showBrowserNotification(title, body);
       return item;
     };

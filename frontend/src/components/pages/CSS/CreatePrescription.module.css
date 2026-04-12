@@ -172,7 +172,7 @@
 }
 
 .searchBox::before {
-  content: "🔍";
+  content: "";
   position: absolute;
   right: 16px;
   top: 50%;
@@ -663,5 +663,407 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+  }
+}
+
+/* Professional, dashboard-aligned overrides */
+.page {
+  gap: 20px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.headerTitle {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+
+.headerSubtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.steps {
+  min-width: 340px;
+  gap: 10px;
+  background: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.step {
+  flex: 0 0 auto;
+  flex-direction: row;
+  gap: 8px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.step span {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border-width: 1px;
+  background: var(--card);
+  box-shadow: none;
+  font-size: 12px;
+}
+
+.step.active span,
+.step.completed span {
+  transform: none;
+  box-shadow: none;
+}
+
+.step.completed::after {
+  content: none;
+}
+
+.step label {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.step.active,
+.step.completed {
+  color: var(--primary);
+}
+
+.connector {
+  width: 28px;
+  height: 1px;
+  margin: 0;
+}
+
+.card {
+  padding: 0;
+  box-shadow: none;
+}
+
+.card:hover {
+  box-shadow: none;
+}
+
+.stepContent {
+  gap: 18px;
+  padding: 20px;
+}
+
+.stepContent h2 {
+  font-size: 18px;
+}
+
+.stepContent > p {
+  font-size: 13px;
+  margin: -10px 0 0;
+}
+
+.searchBox::before {
+  content: none;
+}
+
+.searchBox input,
+.formGroup textarea,
+.formGroup input[type="text"],
+.formGroup input[type="number"],
+.formGroup select,
+.medicineRow input,
+.medicineRow select,
+.followUpInput {
+  border-width: 1px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  box-shadow: none;
+  transform: none;
+}
+
+.searchBox input {
+  padding: 11px 12px;
+}
+
+.searchBox input:focus,
+.formGroup textarea:focus,
+.formGroup input[type="text"]:focus,
+.formGroup input[type="number"]:focus,
+.formGroup select:focus,
+.medicineRow input:focus,
+.medicineRow select:focus,
+.followUpInput:focus {
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
+  transform: none;
+}
+
+.patientList {
+  gap: 10px;
+  padding: 0;
+  max-height: 440px;
+}
+
+.noResults {
+  padding: 36px 16px;
+  font-size: 13px;
+  border-style: dashed;
+}
+
+.patientCard {
+  border-width: 1px;
+  padding: 14px 16px;
+  overflow: visible;
+  transform: none;
+}
+
+.patientCard::before {
+  content: none;
+}
+
+.patientCard:hover,
+.patientCard.selected {
+  transform: none;
+}
+
+.patientCard:hover {
+  border-color: var(--subtle);
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.patientCard.selected {
+  background: var(--primary-dim);
+  border-color: var(--primary);
+  box-shadow: none;
+}
+
+.patientName {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.patientDetail {
+  font-size: 12px;
+}
+
+.checkmark {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+  color: transparent;
+  font-size: 13px;
+}
+
+.patientCard.selected .checkmark {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  transform: none;
+}
+
+.formGroup label {
+  font-size: 13px;
+  font-weight: 700;
+  gap: 0;
+}
+
+.formGroup textarea {
+  min-height: 88px;
+  padding: 12px;
+}
+
+.medicinesSection {
+  gap: 12px;
+  padding: 16px;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.sectionHeader {
+  margin-bottom: 0;
+  gap: 12px;
+}
+
+.sectionHeader h3 {
+  font-size: 15px;
+  font-weight: 700;
+  gap: 0;
+}
+
+.addBtn {
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 9px 12px;
+  box-shadow: none;
+}
+
+.addBtn:hover {
+  transform: none;
+  box-shadow: none;
+  opacity: 0.92;
+}
+
+.medicineRow {
+  grid-template-columns: minmax(180px, 2fr) minmax(120px, 1fr) minmax(140px, 1.3fr) minmax(110px, 1fr) 38px;
+  gap: 10px;
+  background: transparent;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.medicineRow:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.medicineRow input,
+.medicineRow select {
+  min-height: 40px;
+  padding: 9px 10px;
+}
+
+.removeBtn {
+  width: 38px;
+  height: 38px;
+  font-size: 14px;
+  transform: none;
+}
+
+.removeBtn:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.followUpBox,
+.reviewBox {
+  padding: 14px 16px;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.checkbox {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.followUpInput {
+  max-width: 160px;
+  padding: 10px 12px;
+}
+
+.reviewBox {
+  gap: 14px;
+}
+
+.reviewSection h3 {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  gap: 0;
+}
+
+.reviewSection p {
+  font-size: 14px;
+}
+
+.reviewMedicine {
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.reviewMedicine strong {
+  font-size: 14px;
+}
+
+.muted {
+  font-size: 13px !important;
+}
+
+.actions {
+  gap: 12px;
+}
+
+.actions button {
+  border-radius: 8px;
+  box-shadow: none;
+  transform: none;
+}
+
+.actions button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 900px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .steps {
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+  }
+
+  .medicineRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .inputFull {
+    grid-column: 1 / -1;
+  }
+
+  .removeBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .stepContent {
+    padding: 16px;
+  }
+
+  .step label {
+    display: none;
+  }
+
+  .connector {
+    flex: 1;
+  }
+
+  .medicineRow {
+    grid-template-columns: 1fr;
+  }
+
+  .inputFull,
+  .inputSelect,
+  .inputSmall {
+    grid-column: auto;
+  }
+
+  .followUpBox,
+  .sectionHeader,
+  .reviewMedicine {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .followUpInput {
+    max-width: none;
   }
 }
