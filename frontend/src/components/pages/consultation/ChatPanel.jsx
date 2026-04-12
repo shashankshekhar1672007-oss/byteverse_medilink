@@ -124,6 +124,18 @@ function TypingIndicator() {
   );
 }
 
+function EmptyChat() {
+  return (
+    <div className={styles.emptyChat}>
+      <div className={styles.emptyChatIcon}>💬</div>
+      <div className={styles.emptyChatTitle}>No messages yet</div>
+      <div className={styles.emptyChatMeta}>
+        Start the conversation when the consultation is active.
+      </div>
+    </div>
+  );
+}
+
 function MessageBubble({ message, user, onReaction, reactingTo, setReactingTo }) {
   const isMe = isOwnMessage(message, user);
   const isPending = message._id?.startsWith("tmp_");
