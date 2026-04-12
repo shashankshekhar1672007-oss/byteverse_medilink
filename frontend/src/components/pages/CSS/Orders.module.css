@@ -1,7 +1,23 @@
-.page { display: flex; flex-direction: column; gap: 16px; }
-.loadingWrap { display: flex; justify-content: center; padding: 60px; }
-.emptyText { color: var(--muted); font-size: 13px; }
-.fulfilmentTitle { margin-top: 20px; }
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  padding: 60px;
+}
+
+.emptyText {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.fulfilmentTitle {
+  margin-top: 20px;
+}
 
 .hero {
   background:
@@ -32,7 +48,12 @@
   font-weight: 700;
   color: var(--text);
 }
-.greeting p { color: var(--muted); font-size: 13px; margin-top: 3px; }
+
+.greeting p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 3px;
+}
 
 .heroStats {
   display: grid;
@@ -126,6 +147,7 @@
   flex-direction: column;
   gap: 8px;
 }
+
 .medRow {
   display: flex;
   align-items: center;
@@ -136,28 +158,47 @@
   padding: 12px 14px;
   transition: border-color 0.15s;
 }
-.medRow:hover { border-color: var(--subtle); }
+
+.medRow:hover {
+  border-color: var(--subtle);
+}
+
 .medIcon {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-md);
   background: var(--amber-dim);
-  border: 1px solid rgba(245,158,11,0.2);
+  border: 1px solid rgba(245, 158, 11, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 15px;
   flex-shrink: 0;
 }
-.medInfo { flex: 1; }
-.medName { font-size: 13px; font-weight: 600; color: var(--text); }
-.medMeta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.medInfo {
+  flex: 1;
+}
+
+.medName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.medMeta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
 .medRight {
   align-items: flex-end;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
+
 .medPrice {
   color: var(--text);
   font-size: 12px;
@@ -170,6 +211,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
+
 .modeBtn {
   display: flex;
   align-items: center;
@@ -182,14 +224,32 @@
   transition: border-color 0.15s, background 0.15s;
   text-align: left;
 }
-.modeBtn:hover { border-color: var(--subtle); }
+
+.modeBtn:hover {
+  border-color: var(--subtle);
+}
+
 .modeActive {
   border-color: var(--primary-border) !important;
   background: var(--primary-dim) !important;
 }
-.modeIcon { font-size: 20px; flex-shrink: 0; }
-.modeName { font-size: 13px; font-weight: 600; color: var(--text); }
-.modeSub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.modeIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.modeName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.modeSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 
 .promiseGrid {
   display: grid;
@@ -215,7 +275,11 @@
 }
 
 /* Right column */
-.right { display: flex; flex-direction: column; gap: 14px; }
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 
 /* Cart card */
 .cartCard {
@@ -227,6 +291,7 @@
   flex-direction: column;
   gap: 12px;
 }
+
 .cartTitle {
   font-size: 14px;
   font-weight: 600;
@@ -269,18 +334,25 @@
   margin-top: 1px;
 }
 
-.cartRows { display: flex; flex-direction: column; gap: 8px; }
+.cartRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .cartRow {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
   color: var(--muted);
 }
+
 .savingsRow,
 .savingsRow span {
   color: var(--primary);
   font-weight: 700;
 }
+
 .cartTotal {
   display: flex;
   justify-content: space-between;
@@ -327,11 +399,13 @@
   gap: 0;
   margin-top: 12px;
 }
+
 .step {
   display: flex;
   gap: 12px;
   align-items: flex-start;
 }
+
 .stepLeft {
   display: flex;
   flex-direction: column;
@@ -339,6 +413,7 @@
   flex-shrink: 0;
   width: 12px;
 }
+
 .stepDot {
   width: 12px;
   height: 12px;
@@ -346,9 +421,19 @@
   flex-shrink: 0;
   margin-top: 3px;
 }
-.done    { background: var(--primary); }
-.current { background: var(--primary); box-shadow: 0 0 0 3px rgba(62,207,142,0.25); }
-.pending { background: var(--border); }
+
+.done {
+  background: var(--primary);
+}
+
+.current {
+  background: var(--primary);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.25);
+}
+
+.pending {
+  background: var(--border);
+}
 
 .stepLine {
   width: 1px;
@@ -356,7 +441,10 @@
   background: var(--border);
   margin-top: 3px;
 }
-.doneLine { background: var(--primary); }
+
+.doneLine {
+  background: var(--primary);
+}
 
 .stepLabel {
   display: flex;
@@ -367,7 +455,11 @@
   padding-bottom: 16px;
   flex: 1;
 }
-.currentLabel { color: var(--text); font-weight: 600; }
+
+.currentLabel {
+  color: var(--text);
+  font-weight: 600;
+}
 
 .stepBadge {
   font-size: 10px;
@@ -458,8 +550,14 @@
 }
 
 @media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-  .modes  { grid-template-columns: 1fr; }
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .modes {
+    grid-template-columns: 1fr;
+  }
+
   .hero {
     align-items: stretch;
     flex-direction: column;
@@ -467,6 +565,7 @@
 }
 
 @media (max-width: 620px) {
+
   .heroStats,
   .promiseGrid {
     grid-template-columns: 1fr;

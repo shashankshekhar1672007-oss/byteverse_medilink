@@ -3,13 +3,19 @@
   flex-direction: column;
   gap: 24px;
 }
-.loadingWrap { display: flex; justify-content: center; padding: 60px; }
+
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  padding: 60px;
+}
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .headerTitle {
   font-family: var(--font-display);
   font-size: 22px;
@@ -17,6 +23,7 @@
   color: var(--text);
   margin: 0 0 4px;
 }
+
 .headerSubtitle {
   color: var(--muted);
   font-size: 13px;
@@ -72,7 +79,10 @@
   flex-direction: column;
   gap: 16px;
 }
-.listSpacing { margin-top: 16px; }
+
+.listSpacing {
+  margin-top: 16px;
+}
 
 .empty {
   text-align: center;
@@ -151,10 +161,26 @@
   font-weight: 600;
   text-transform: capitalize;
 }
-.statusActive { background-color: #E8F8F1; color: #1E7E60; }
-.statusExpired { background-color: #FEF3E0; color: #9C4E18; }
-.statusCancelled { background-color: #FEE2E2; color: #B91C1C; }
-.statusDefault { background-color: #F1F5F9; color: #475569; }
+
+.statusActive {
+  background-color: #E8F8F1;
+  color: #1E7E60;
+}
+
+.statusExpired {
+  background-color: #FEF3E0;
+  color: #9C4E18;
+}
+
+.statusCancelled {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+}
+
+.statusDefault {
+  background-color: #F1F5F9;
+  color: #475569;
+}
 
 .cardContent {
   padding: 16px;
@@ -162,7 +188,10 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
-.cardContentSpacing { margin-bottom: 4px; }
+
+.cardContentSpacing {
+  margin-bottom: 4px;
+}
 
 .details {
   display: flex;
@@ -183,6 +212,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
 .labelHeading {
   font-size: 13px;
   font-weight: 600;
@@ -196,12 +226,14 @@
   color: var(--text);
   font-weight: 500;
 }
+
 .medicineListWrap {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 8px;
 }
+
 .medicineBadgePill {
   display: inline-block;
   background-color: #F8FAFC;
@@ -211,6 +243,7 @@
   color: #334155;
   border: 1px solid #E2E8F0;
 }
+
 .moreBadge {
   display: inline-block;
   background-color: #F1F5F9;
@@ -219,8 +252,16 @@
   font-size: 13px;
   color: #64748B;
 }
-.detailText { font-size: 13px; color: #64748B; }
-.detailLabelInline { font-weight: 500; margin-right: 4px; }
+
+.detailText {
+  font-size: 13px;
+  color: #64748B;
+}
+
+.detailLabelInline {
+  font-weight: 500;
+  margin-right: 4px;
+}
 
 .actions {
   padding: 12px 16px;
@@ -229,6 +270,7 @@
   gap: 12px;
   justify-content: flex-end;
 }
+
 .revokeAction {
   padding: 8px 16px;
   background-color: #FEE2E2;
@@ -239,7 +281,10 @@
   color: #B91C1C;
   cursor: pointer;
 }
-.revokeAction:disabled { cursor: not-allowed; }
+
+.revokeAction:disabled {
+  cursor: not-allowed;
+}
 
 .actions button {
   padding: 8px 16px;

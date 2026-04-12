@@ -100,7 +100,9 @@ export default function PrescriptionList() {
                   {rx.createdBy?.userId?.name?.replace("Dr. ", "") || "Doctor"}
                 </div>
               </div>
-              <div className={`${styles.status} ${getStatusClassName(rx.status)}`}>
+              <div
+                className={`${styles.status} ${getStatusClassName(rx.status)}`}
+              >
                 {rx.status}
               </div>
             </div>

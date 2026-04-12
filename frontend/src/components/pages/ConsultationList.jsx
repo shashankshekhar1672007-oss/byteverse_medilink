@@ -61,7 +61,9 @@ export default function ConsultationList() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.headerTitle}>My Consultations</h1>
-          <p className={styles.headerSubtitle}>View and manage your past and active consultations</p>
+          <p className={styles.headerSubtitle}>
+            View and manage your past and active consultations
+          </p>
         </div>
         <Button variant="primary" onClick={() => navigate(PAGES.DOCTORS)}>
           + New Consultation
@@ -91,13 +93,12 @@ export default function ConsultationList() {
               c.doctor?.userId?.name || c.doctor?.name || "Doctor";
             const spec = c.doctor?.specialization || "Specialist";
             return (
-              <div
-                key={c._id}
-                className={styles.card}
-              >
+              <div key={c._id} className={styles.card}>
                 <div className={styles.cardHeader}>
                   <div className={styles.cardInfo}>
-                    <div className={styles.title}>{c.reason || "General Consultation"}</div>
+                    <div className={styles.title}>
+                      {c.reason || "General Consultation"}
+                    </div>
                     <div className={styles.meta}>
                       {new Date(c.createdAt).toLocaleDateString("en-IN", {
                         day: "numeric",
@@ -107,7 +108,9 @@ export default function ConsultationList() {
                       • Dr. {docName.replace("Dr. ", "")} ({spec})
                     </div>
                   </div>
-                  <div className={`${styles.status} ${getStatusClassName(c.status)}`}>
+                  <div
+                    className={`${styles.status} ${getStatusClassName(c.status)}`}
+                  >
                     {c.status}
                   </div>
                 </div>

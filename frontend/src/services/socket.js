@@ -1,6 +1,6 @@
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5001';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5001";
 
 let socket = null;
 let socketToken = null;
@@ -15,55 +15,67 @@ export const connectSocket = (token) => {
     return socket;
   }
 
-  if (socket) { socket.disconnect(); socket = null; }
+  if (socket) {
+    socket.disconnect();
+    socket = null;
+  }
   socketToken = token;
 
   socket = io(SOCKET_URL, {
-    path: '/socket.io',
+    path: "/socket.io",
     auth: { token },
-    transports: ['websocket', 'polling'],
-    reconnection:         true,
+    transports: ["websocket", "polling"],
+    reconnection: true,
     reconnectionAttempts: 10,
-    reconnectionDelay:    1000,
+    reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
-    timeout:              20000,
+    timeout: 20000,
   });
 
-  socket.on('connect',       () => console.log('[Socket] ✓ connected', socket.id));
-  socket.on('connect_error', (e) => console.warn('[Socket] connect_error:', e.message));
-  socket.on('disconnect',    (r) => console.log('[Socket] disconnected:', r));
-  socket.on('error',         (e) => console.warn('[Socket] error:', e));
+  socket.on("connect", () => console.log("[Socket] ✓ connected", socket.id));
+  socket.on("connect_error", (e) =>
+    console.warn("[Socket] connect_error:", e.message),
+  );
+  socket.on("disconnect", (r) => console.log("[Socket] disconnected:", r));
+  socket.on("error", (e) => {
+    if (e?.message === "Consultation is not active") return;
+    console.warn("[Socket] error:", e);
+  });
 
   return socket;
 };
 
 export const disconnectSocket = () => {
-  if (socket) { socket.disconnect(); socket = null; socketToken = null; }
+  if (socket) {
+    socket.disconnect();
+    socket = null;
+    socketToken = null;
+  }
 };
 
 export const joinConsultation = (consultationId) => {
   if (!socket?.connected || !consultationId) return;
-  socket.emit('joinConsultation', { consultationId });
+  socket.emit("joinConsultation", { consultationId });
 };
 
 export const sendSocketMessage = (consultationId, text) => {
   if (!socket?.connected) return false;
-  socket.emit('sendMessage', { consultationId, text });
+  socket.emit("sendMessage", { consultationId, text });
   return true;
 };
 
 export const sendTyping = (consultationId, isTyping) => {
   if (!socket?.connected || !consultationId) return;
-  socket.emit(isTyping ? 'typing' : 'stopTyping', { consultationId });
+  socket.emit(isTyping ? "typing" : "stopTyping", { consultationId });
 };
 
 export const EVENTS = {
-  RECEIVE_MESSAGE:    'receiveMessage',
-  TYPING:             'typing',
-  STOP_TYPING:        'stopTyping',
-  JOINED:             'joinedConsultation',
-  ERROR:              'error',
-  DOCTOR_ONLINE:      'doctorOnline',
-  DOCTOR_OFFLINE:     'doctorOffline',
-  CONSULTATION_ENDED: 'consultationEnded',
+  RECEIVE_MESSAGE: "receiveMessage",
+  TYPING: "typing",
+  STOP_TYPING: "stopTyping",
+  JOINED: "joinedConsultation",
+  ERROR: "error",
+  DOCTOR_ONLINE: "doctorOnline",
+  DOCTOR_OFFLINE: "doctorOffline",
+  CONSULTATION_ENDED: "consultationEnded",
 };

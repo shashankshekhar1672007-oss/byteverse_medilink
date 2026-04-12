@@ -4,7 +4,14 @@ import { Button, ErrorMsg, Spinner, StatCard } from "../ui/UI";
 import styles from "./CSS/AdminDashboard.module.css";
 
 const USER_FILTERS = ["all", "patient", "doctor", "admin"];
-const ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"];
+const ORDER_STATUSES = [
+  "pending",
+  "confirmed",
+  "processing",
+  "shipped",
+  "delivered",
+  "cancelled",
+];
 const ORDER_STATUS_ALIASES = {
   placed: "pending",
   packed: "processing",
@@ -100,7 +107,9 @@ export default function AdminDashboard() {
           <h1>Platform Management</h1>
           <p>Verify users, manage accounts, and monitor medicine orders.</p>
         </div>
-        <Button variant="outline" onClick={load}>Refresh</Button>
+        <Button variant="outline" onClick={load}>
+          Refresh
+        </Button>
       </div>
 
       {error && <ErrorMsg message={error} onRetry={load} />}
@@ -144,7 +153,11 @@ export default function AdminDashboard() {
             </thead>
             <tbody>
               {users.length === 0 ? (
-                <tr><td colSpan="5" className={styles.empty}>No users found</td></tr>
+                <tr>
+                  <td colSpan="5" className={styles.empty}>
+                    No users found
+                  </td>
+                </tr>
               ) : (
                 users.map((item) => (
                   <UserRow
@@ -190,8 +203,13 @@ export default function AdminDashboard() {
 
 function UserRow({ item, onStatus, onVerify, saving }) {
   const id = item._id || item.id;
-  const verified = item.isEmailVerified ?? item.isVerified ?? item.emailVerified ?? item.verified;
-  const status = item.status || (item.isActive === false ? "blocked" : "active");
+  const verified =
+    item.isEmailVerified ??
+    item.isVerified ??
+    item.emailVerified ??
+    item.verified;
+  const status =
+    item.status || (item.isActive === false ? "blocked" : "active");
 
   return (
     <tr>
@@ -204,27 +222,39 @@ function UserRow({ item, onStatus, onVerify, saving }) {
           </div>
         </div>
       </td>
-      <td><span className={styles.rolePill}>{item.role || "patient"}</span></td>
       <td>
-        <span className={`${styles.statusPill} ${verified ? styles.good : styles.warn}`}>
+        <span className={styles.rolePill}>{item.role || "patient"}</span>
+      </td>
+      <td>
+        <span
+          className={`${styles.statusPill} ${verified ? styles.good : styles.warn}`}
+        >
           {verified ? "Verified" : "Pending"}
         </span>
       </td>
       <td>
-        <span className={`${styles.statusPill} ${status === "active" ? styles.good : styles.danger}`}>
+        <span
+          className={`${styles.statusPill} ${status === "active" ? styles.good : styles.danger}`}
+        >
           {status}
         </span>
       </td>
       <td>
         <div className={styles.rowActions}>
           {!verified && (
-            <button disabled={saving} onClick={() => onVerify(id)} type="button">
+            <button
+              disabled={saving}
+              onClick={() => onVerify(id)}
+              type="button"
+            >
               Verify
             </button>
           )}
           <button
             disabled={saving}
-            onClick={() => onStatus(id, status === "active" ? "blocked" : "active")}
+            onClick={() =>
+              onStatus(id, status === "active" ? "blocked" : "active")
+            }
             type="button"
           >
             {status === "active" ? "Block" : "Activate"}
@@ -238,15 +268,27 @@ function UserRow({ item, onStatus, onVerify, saving }) {
 function OrderCard({ order, onStatus, saving }) {
   const id = order._id || order.id;
   const status = normalizeOrderStatus(order.status);
-  const patientName = order.patient?.userId?.name || order.patient?.name || order.user?.name || "Patient";
+  const patientName =
+    order.patient?.userId?.name ||
+    order.patient?.name ||
+    order.user?.name ||
+    "Patient";
   const total = order.total || order.totalAmount || order.amount || 0;
 
   return (
     <article className={styles.orderCard}>
       <div className={styles.orderTop}>
         <div>
-          <h3>{order.orderNumber || order.orderId || order.rxId || `Order ${String(id || "").slice(-6)}`}</h3>
-          <p>{patientName} · {order.items?.length || order.medicines?.length || 0} items</p>
+          <h3>
+            {order.orderNumber ||
+              order.orderId ||
+              order.rxId ||
+              `Order ${String(id || "").slice(-6)}`}
+          </h3>
+          <p>
+            {patientName} ·{" "}
+            {order.items?.length || order.medicines?.length || 0} items
+          </p>
         </div>
         <span className={styles.price}>₹{total}</span>
       </div>
@@ -258,7 +300,9 @@ function OrderCard({ order, onStatus, saving }) {
           disabled={saving}
         >
           {ORDER_STATUSES.map((option) => (
-            <option key={option} value={option}>{formatStatus(option)}</option>
+            <option key={option} value={option}>
+              {formatStatus(option)}
+            </option>
           ))}
         </select>
       </div>
@@ -267,20 +311,66 @@ function OrderCard({ order, onStatus, saving }) {
 }
 
 function buildStats(dashboard, users, orders) {
-  const totalUsers = dashboard?.stats?.users ?? dashboard?.totalUsers ?? dashboard?.users ?? users.length;
+  const totalUsers =
+    dashboard?.stats?.users ??
+    dashboard?.totalUsers ??
+    dashboard?.users ??
+    users.length;
   const pendingUsers =
     dashboard?.stats?.pendingUsers ??
-    users.filter((user) => !(user.isEmailVerified ?? user.isVerified ?? user.emailVerified ?? user.verified)).length;
-  const totalOrders = dashboard?.stats?.orders ?? dashboard?.totalOrders ?? dashboard?.orders ?? orders.length;
+    users.filter(
+      (user) =>
+        !(
+          user.isEmailVerified ??
+          user.isVerified ??
+          user.emailVerified ??
+          user.verified
+        ),
+    ).length;
+  const totalOrders =
+    dashboard?.stats?.orders ??
+    dashboard?.totalOrders ??
+    dashboard?.orders ??
+    orders.length;
   const activeOrders =
-    dashboard?.stats?.activeOrders ?? dashboard?.pendingOrders ??
-    orders.filter((order) => !["delivered", "cancelled"].includes(normalizeOrderStatus(order.status))).length;
+    dashboard?.stats?.activeOrders ??
+    dashboard?.pendingOrders ??
+    orders.filter(
+      (order) =>
+        !["delivered", "cancelled"].includes(
+          normalizeOrderStatus(order.status),
+        ),
+    ).length;
 
   return [
-    { label: "Total Users", value: String(totalUsers), sub: "Registered accounts", color: "#007BFF", positive: null },
-    { label: "Pending Verification", value: String(pendingUsers), sub: "Need admin/email approval", color: "#F59E0B", positive: pendingUsers === 0 },
-    { label: "Total Orders", value: String(totalOrders), sub: "Pharmacy records", color: "#10B981", positive: null },
-    { label: "Active Orders", value: String(activeOrders), sub: "In fulfilment", color: "#8B5CF6", positive: null },
+    {
+      label: "Total Users",
+      value: String(totalUsers),
+      sub: "Registered accounts",
+      color: "#007BFF",
+      positive: null,
+    },
+    {
+      label: "Pending Verification",
+      value: String(pendingUsers),
+      sub: "Need admin/email approval",
+      color: "#F59E0B",
+      positive: pendingUsers === 0,
+    },
+    {
+      label: "Total Orders",
+      value: String(totalOrders),
+      sub: "Pharmacy records",
+      color: "#10B981",
+      positive: null,
+    },
+    {
+      label: "Active Orders",
+      value: String(activeOrders),
+      sub: "In fulfilment",
+      color: "#8B5CF6",
+      positive: null,
+    },
   ];
 }
 
@@ -293,11 +383,13 @@ function formatStatus(status) {
 }
 
 function getInitials(name = "U") {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .map((part) => part[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2) || "U";
+  return (
+    name
+      .split(" ")
+      .filter(Boolean)
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "U"
+  );
 }

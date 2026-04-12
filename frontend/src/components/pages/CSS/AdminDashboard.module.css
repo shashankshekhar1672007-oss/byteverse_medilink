@@ -267,6 +267,7 @@
 }
 
 @media (max-width: 760px) {
+
   .header,
   .sectionHeader {
     align-items: stretch;

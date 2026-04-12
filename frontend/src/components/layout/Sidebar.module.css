@@ -56,16 +56,19 @@
   background: var(--card);
   color: var(--text);
 }
+
 .navItem svg {
   flex-shrink: 0;
   opacity: 0.7;
 }
+
 .active {
   background: var(--primary-dim) !important;
   color: var(--primary) !important;
   font-weight: 500;
   position: relative;
 }
+
 .active svg {
   opacity: 1 !important;
 }
@@ -90,6 +93,7 @@
   transition: background 0.15s;
   margin-bottom: 8px;
 }
+
 .sosBtn:hover {
   background: rgba(255, 77, 109, 0.18);
 }
@@ -144,8 +148,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.5); }
-  50%       { box-shadow: 0 0 0 5px rgba(255, 77, 109, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px rgba(255, 77, 109, 0);
+  }
 }
 
 @media (max-width: 700px) {
@@ -291,6 +302,7 @@
 }
 
 @media (max-width: 520px) {
+
   .navItem,
   .sosBtn {
     width: auto;

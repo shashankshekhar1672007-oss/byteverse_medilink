@@ -79,7 +79,9 @@ export default function DoctorDashboard() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.headerTitle}>Welcome, {user?.name} 👋</h1>
-          <p className={styles.headerSubtitle}>Manage your consultations and prescriptions</p>
+          <p className={styles.headerSubtitle}>
+            Manage your consultations and prescriptions
+          </p>
         </div>
         <Button
           variant="primary"

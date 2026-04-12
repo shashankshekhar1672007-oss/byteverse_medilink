@@ -10,9 +10,9 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [location, setLocation] = useState(null);
-  const [locationStatus, setLocationStatus] = useState('loading');
-  const [locationError, setLocationError] = useState('');
-  const [mapUrl, setMapUrl] = useState('');
+  const [locationStatus, setLocationStatus] = useState("loading");
+  const [locationError, setLocationError] = useState("");
+  const [mapUrl, setMapUrl] = useState("");
 
   const load = async () => {
     setLoading(true);
@@ -32,8 +32,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setLocationStatus('error');
-      setLocationError('Location is not supported in this browser');
+      setLocationStatus("error");
+      setLocationError("Location is not supported in this browser");
       return;
     }
 
@@ -44,11 +44,11 @@ export default function Dashboard() {
           lng: Number(position.coords.longitude.toFixed(6)),
         };
         setLocation(nextLocation);
-        setLocationStatus('ready');
+        setLocationStatus("ready");
       },
       (err) => {
-        setLocationStatus('error');
-        setLocationError(err.message || 'Could not determine your location');
+        setLocationStatus("error");
+        setLocationError(err.message || "Could not determine your location");
       },
       { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 },
     );
@@ -62,7 +62,7 @@ export default function Dashboard() {
       location.lat - delta,
       location.lng + delta,
       location.lat + delta,
-    ].join('%2C');
+    ].join("%2C");
     setMapUrl(
       `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${location.lat}%2C${location.lng}`,
     );
@@ -184,7 +184,10 @@ export default function Dashboard() {
             ) : (
               <p className={styles.emptyText}>
                 No consultations yet.{" "}
-                <button className={styles.inlineAction} onClick={() => navigate(PAGES.DOCTORS)}>
+                <button
+                  className={styles.inlineAction}
+                  onClick={() => navigate(PAGES.DOCTORS)}
+                >
                   Find a doctor →
                 </button>
               </p>
@@ -216,7 +219,7 @@ export default function Dashboard() {
               <p>Live map centered on your current position</p>
             </div>
             <div className={styles.mapBody}>
-              {locationStatus === 'ready' && mapUrl ? (
+              {locationStatus === "ready" && mapUrl ? (
                 <iframe
                   title="Patient location map"
                   src={mapUrl}
@@ -226,9 +229,9 @@ export default function Dashboard() {
               ) : (
                 <div className={styles.mapEmpty}>
                   <p className={styles.mapEmptyText}>
-                    {locationStatus === 'loading'
-                      ? 'Finding your location…'
-                      : locationError || 'Location unavailable'}
+                    {locationStatus === "loading"
+                      ? "Finding your location…"
+                      : locationError || "Location unavailable"}
                   </p>
                 </div>
               )}
@@ -237,13 +240,17 @@ export default function Dashboard() {
               <div className={styles.pharmacyRow}>
                 <span>Coordinates</span>
                 <span className={styles.dist}>
-                  {location ? `${location.lat}, ${location.lng}` : 'Unknown'}
+                  {location ? `${location.lat}, ${location.lng}` : "Unknown"}
                 </span>
               </div>
               <div className={styles.pharmacyRow}>
                 <span>Nearby guide</span>
                 <a
-                  href={location ? `https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}` : 'https://www.google.com/maps/search/nearest+hospitals'}
+                  href={
+                    location
+                      ? `https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`
+                      : "https://www.google.com/maps/search/nearest+hospitals"
+                  }
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -276,7 +283,9 @@ function QuickCard({ icon, title, subtitle, variant, iconBg, onClick }) {
     >
       <span className={`${styles.quickIcon} ${iconClass}`}>{icon}</span>
       <div>
-        <h3 className={variant === "sos" ? styles.quickTitleSos : ""}>{title}</h3>
+        <h3 className={variant === "sos" ? styles.quickTitleSos : ""}>
+          {title}
+        </h3>
         <p>{subtitle}</p>
       </div>
     </button>

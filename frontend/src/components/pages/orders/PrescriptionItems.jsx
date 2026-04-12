@@ -19,7 +19,10 @@ export default function PrescriptionItems({ medicines, prescription }) {
       ) : (
         <div className={styles.medList}>
           {medicines.map((medicine, index) => (
-            <MedicineRow key={`${medicine.name}-${index}`} medicine={medicine} />
+            <MedicineRow
+              key={`${medicine.name}-${index}`}
+              medicine={medicine}
+            />
           ))}
         </div>
       )}

@@ -3,6 +3,8 @@ import { formatMessageTime, isOwnMessage } from "./consultationUtils";
 
 export default function ChatPanel({
   bottomRef,
+  disabled,
+  disabledReason,
   input,
   initials,
   messages,
@@ -15,13 +17,14 @@ export default function ChatPanel({
   user,
 }) {
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) onSend();
+    if (event.key === "Enter" && !event.shiftKey && !disabled) onSend();
   };
 
   return (
     <div className={styles.chatPanel}>
       <ChatHeader
         initials={initials}
+        disabled={disabled}
         peerName={peerName}
         peerTyping={peerTyping}
         socketReady={socketReady}
@@ -48,17 +51,23 @@ export default function ChatPanel({
 
       <div className={styles.chatInput}>
         <input
-          placeholder={socketReady ? "Type a message..." : "Connecting..."}
+          placeholder={
+            disabled
+              ? disabledReason
+              : socketReady
+                ? "Type a message..."
+                : "Connecting..."
+          }
           value={input}
           onChange={onInputChange}
           onKeyDown={handleKeyDown}
-          disabled={sending}
+          disabled={sending || disabled}
           autoComplete="off"
         />
         <button
           className={styles.sendBtn}
           onClick={onSend}
-          disabled={sending || !input.trim()}
+          disabled={sending || disabled || !input.trim()}
           title="Send"
           type="button"
         >
@@ -69,7 +78,7 @@ export default function ChatPanel({
   );
 }
 
-function ChatHeader({ initials, peerName, peerTyping, socketReady }) {
+function ChatHeader({ disabled, initials, peerName, peerTyping, socketReady }) {
   return (
     <div className={styles.chatHeader}>
       <div className={styles.docAvatar}>{initials}</div>
@@ -81,7 +90,11 @@ function ChatHeader({ initials, peerName, peerTyping, socketReady }) {
         </div>
       </div>
       <span className={socketReady ? styles.liveBadge : styles.connectingBadge}>
-        {socketReady ? "LIVE" : "connecting..."}
+        {socketReady && !disabled
+          ? "LIVE"
+          : socketReady
+            ? "PENDING"
+            : "connecting..."}
       </span>
     </div>
   );

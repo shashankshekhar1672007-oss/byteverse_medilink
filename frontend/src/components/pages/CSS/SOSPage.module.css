@@ -46,8 +46,15 @@
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.45; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
 }
 
 .ring {
@@ -63,18 +70,41 @@
   animation: sosIdle 2s infinite;
   transition: transform 0.12s, border-color 0.12s;
 }
-.ring:hover { border-color: var(--accent); }
-.ring:active { transform: scale(0.96); }
 
-.ringing { animation: sosPulse 1s infinite; }
+.ring:hover {
+  border-color: var(--accent);
+}
+
+.ring:active {
+  transform: scale(0.96);
+}
+
+.ringing {
+  animation: sosPulse 1s infinite;
+}
 
 @keyframes sosIdle {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.28); }
-  50% { box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.28);
+  }
+
+  50% {
+    box-shadow: 0 0 0 18px rgba(239, 68, 68, 0);
+  }
 }
+
 @keyframes sosPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.52); }
-  50% { box-shadow: 0 0 0 30px rgba(239, 68, 68, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.52);
+  }
+
+  50% {
+    box-shadow: 0 0 0 30px rgba(239, 68, 68, 0);
+  }
 }
 
 .inner {
@@ -114,12 +144,18 @@
   font-weight: 700;
 }
 
-.hint { color: var(--subtle); }
+.hint {
+  color: var(--subtle);
+}
+
 .connecting {
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
-.connected { color: var(--primary); }
+
+.connected {
+  color: var(--primary);
+}
 
 .actions {
   display: grid;
@@ -143,23 +179,32 @@
   justify-content: center;
   transition: border-color 0.15s, background 0.15s, transform 0.15s;
 }
+
 .actionChip:first-child {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
 }
+
 .actionChip:hover {
   border-color: var(--subtle);
   background: var(--card2);
   transform: translateY(-1px);
 }
-.actionChip:first-child:hover { background: var(--accent); }
 
-.helpline { margin-top: 4px; }
+.actionChip:first-child:hover {
+  background: var(--accent);
+}
+
+.helpline {
+  margin-top: 4px;
+}
+
 .helplineLabel {
   font-size: 12px;
   color: var(--muted);
 }
+
 .helplineNumber {
   font-family: var(--font-display);
   font-size: 30px;
@@ -218,10 +263,12 @@
   justify-content: space-between;
   gap: 12px;
 }
+
 .hospitalHeader h2 {
   color: var(--text);
   font-size: 15px;
 }
+
 .hospitalHeader p {
   color: var(--muted);
   font-size: 12px;
@@ -272,6 +319,7 @@
   padding: 13px;
   transition: border-color 0.15s, transform 0.15s;
 }
+
 .hospitalCard:hover {
   border-color: var(--subtle);
   transform: translateY(-1px);
@@ -294,11 +342,13 @@
   flex: 1;
   min-width: 0;
 }
+
 .hospitalMain h3 {
   color: var(--text);
   font-size: 13px;
   font-weight: 800;
 }
+
 .hospitalMain p {
   color: var(--muted);
   font-size: 12px;
@@ -311,6 +361,7 @@
   flex-wrap: wrap;
   margin-top: 10px;
 }
+
 .hospitalActions a {
   background: var(--card2);
   border: 1px solid var(--border);
@@ -326,6 +377,7 @@
   display: grid;
   gap: 7px;
 }
+
 .checklist p {
   color: var(--muted);
   font-size: 12px;
@@ -342,6 +394,7 @@
   transition: color 0.15s, background 0.15s;
   align-self: center;
 }
+
 .cancel:hover {
   color: var(--muted);
   background: var(--card2);

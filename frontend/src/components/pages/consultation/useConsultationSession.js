@@ -29,6 +29,7 @@ export function useConsultationSession({
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [accepting, setAccepting] = useState(false);
   const [error, setError] = useState("");
   const [socketReady, setSocketReady] = useState(false);
   const [peerReady, setPeerReady] = useState(false);
@@ -53,6 +54,7 @@ export function useConsultationSession({
   const ringAudio = useRef(null);
   const popoutWindow = useRef(null);
   const consultIdRef = useRef(selectedConsultationId);
+  const isConsultationActive = consultation?.status === "active";
 
   useEffect(() => {
     consultIdRef.current = selectedConsultationId;
@@ -70,7 +72,7 @@ export function useConsultationSession({
   }, [messages, peerTyping]);
 
   useEffect(() => {
-    ringAudio.current = new Audio('/ringtone.mp3');
+    ringAudio.current = new Audio("/ringtone.mp3");
     ringAudio.current.loop = true;
     return () => {
       ringAudio.current?.pause();
@@ -134,7 +136,10 @@ export function useConsultationSession({
     (eventName, payload = {}) => {
       const sock = getSocket();
       if (!sock?.connected) {
-        showToast("Video signal is disconnected. Please wait and try again.", "error");
+        showToast(
+          "Video signal is disconnected. Please wait and try again.",
+          "error",
+        );
         return false;
       }
 
@@ -158,9 +163,9 @@ export function useConsultationSession({
     const win = popoutWindow.current;
     if (!win || win.closed) return;
 
-    const remoteVideo = win.document.getElementById('remoteVideoPopout');
-    const localVideo = win.document.getElementById('localVideoPopout');
-    const status = win.document.getElementById('callStatusPopout');
+    const remoteVideo = win.document.getElementById("remoteVideoPopout");
+    const localVideo = win.document.getElementById("localVideoPopout");
+    const status = win.document.getElementById("callStatusPopout");
 
     if (remoteVideo) {
       remoteVideo.srcObject = remoteVideoRef.current?.srcObject || null;
@@ -170,25 +175,32 @@ export function useConsultationSession({
     }
     if (status) {
       status.textContent =
-        callStatus === 'connected'
-          ? 'Connected'
-          : callStatus === 'ringing'
-            ? 'Incoming call'
-            : callStatus === 'calling'
-              ? 'Calling…'
-              : 'Ready to connect';
+        callStatus === "connected"
+          ? "Connected"
+          : callStatus === "ringing"
+            ? "Incoming call"
+            : callStatus === "calling"
+              ? "Calling…"
+              : "Ready to connect";
     }
   }, [callStatus]);
 
   const openVideoWindow = useCallback(() => {
     if (!window?.open) {
-      showToast('Browser does not support pop-out video', 'warning');
+      showToast("Browser does not support pop-out video", "warning");
       return;
     }
 
-    const win = window.open('', 'MediLinkCall', 'width=920,height=620,resizable=yes,scrollbars=no');
+    const win = window.open(
+      "",
+      "MediLinkCall",
+      "width=920,height=620,resizable=yes,scrollbars=no",
+    );
     if (!win) {
-      showToast('Popup blocked. Allow popups to open the video window.', 'warning');
+      showToast(
+        "Popup blocked. Allow popups to open the video window.",
+        "warning",
+      );
       return;
     }
 
@@ -216,13 +228,13 @@ export function useConsultationSession({
           <div class="section"><div class="label">Your camera</div></div>
           <video id="localVideoPopout" autoplay playsinline muted></video>
           <div class="status" id="callStatusPopout">${
-            callStatus === 'connected'
-              ? 'Connected'
-              : callStatus === 'ringing'
-                ? 'Incoming call'
-                : callStatus === 'calling'
-                  ? 'Calling…'
-                  : 'Ready to connect'
+            callStatus === "connected"
+              ? "Connected"
+              : callStatus === "ringing"
+                ? "Incoming call"
+                : callStatus === "calling"
+                  ? "Calling…"
+                  : "Ready to connect"
           }</div>
         </div>
       </div>
@@ -231,7 +243,7 @@ export function useConsultationSession({
     win.document.write(html);
     win.document.close();
 
-    win.addEventListener('beforeunload', () => {
+    win.addEventListener("beforeunload", () => {
       if (popoutWindow.current === win) popoutWindow.current = null;
     });
 
@@ -239,7 +251,10 @@ export function useConsultationSession({
   }, [callStatus, showToast, syncVideoPopup]);
 
   const flushPendingIceCandidates = useCallback(async () => {
-    if (!pc.current?.remoteDescription || pendingIceCandidates.current.length === 0) {
+    if (
+      !pc.current?.remoteDescription ||
+      pendingIceCandidates.current.length === 0
+    ) {
       return;
     }
 
@@ -313,7 +328,9 @@ export function useConsultationSession({
 
   const getLocalMedia = useCallback(async () => {
     if (!navigator.mediaDevices?.getUserMedia) {
-      throw new Error("Camera and microphone are not supported in this browser");
+      throw new Error(
+        "Camera and microphone are not supported in this browser",
+      );
     }
 
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -339,6 +356,21 @@ export function useConsultationSession({
     const text = input.trim();
     if (!text) return;
 
+    if (!selectedConsultationId) {
+      showToast("Open a consultation before sending a message", "error");
+      return;
+    }
+
+    if (!isConsultationActive) {
+      showToast(
+        user?.role === "doctor"
+          ? "Accept this consultation before chatting."
+          : "Waiting for the doctor to accept this consultation.",
+        "warning",
+      );
+      return;
+    }
+
     setInput("");
     setSending(true);
     sendTyping(selectedConsultationId, false);
@@ -360,7 +392,10 @@ export function useConsultationSession({
     }
 
     try {
-      const response = await consultApi.sendMessage(selectedConsultationId, text);
+      const response = await consultApi.sendMessage(
+        selectedConsultationId,
+        text,
+      );
       addMessage(response.data);
     } catch (e) {
       showToast(e.message, "error");
@@ -368,11 +403,19 @@ export function useConsultationSession({
     } finally {
       setSending(false);
     }
-  }, [addMessage, input, selectedConsultationId, showToast, user]);
+  }, [
+    addMessage,
+    input,
+    isConsultationActive,
+    selectedConsultationId,
+    showToast,
+    user,
+  ]);
 
   const handleInputChange = useCallback(
     (event) => {
       setInput(event.target.value);
+      if (!isConsultationActive) return;
       sendTyping(selectedConsultationId, true);
       clearTimeout(typingTimer.current);
       typingTimer.current = setTimeout(
@@ -380,12 +423,41 @@ export function useConsultationSession({
         1500,
       );
     },
-    [selectedConsultationId],
+    [isConsultationActive, selectedConsultationId],
   );
+
+  const acceptConsultation = useCallback(async () => {
+    if (!selectedConsultationId || user?.role !== "doctor") return;
+
+    setAccepting(true);
+    try {
+      const response = await consultApi.accept(selectedConsultationId);
+      setConsultation(response.data);
+      showToast("Consultation accepted. You can chat now.");
+      joinConsultation(selectedConsultationId);
+    } catch (e) {
+      showToast(e.message || "Could not accept consultation", "error");
+    } finally {
+      setAccepting(false);
+    }
+  }, [selectedConsultationId, showToast, user]);
 
   const startCall = useCallback(async () => {
     if (!selectedConsultationId) {
-      showToast("Open an active consultation before starting a video call", "error");
+      showToast(
+        "Open an active consultation before starting a video call",
+        "error",
+      );
+      return;
+    }
+
+    if (!isConsultationActive) {
+      showToast(
+        user?.role === "doctor"
+          ? "Accept this consultation before starting a call."
+          : "The doctor needs to accept this consultation first.",
+        "warning",
+      );
       return;
     }
 
@@ -422,9 +494,11 @@ export function useConsultationSession({
     buildPeerConnection,
     emitSignal,
     getLocalMedia,
+    isConsultationActive,
     peerReady,
     selectedConsultationId,
     showToast,
+    user,
   ]);
 
   const acceptCall = useCallback(async () => {
@@ -494,7 +568,8 @@ export function useConsultationSession({
           .getSenders()
           .find((item) => item.track?.kind === "video");
         await sender?.replaceTrack(cameraTrack);
-        if (localVideoRef.current) localVideoRef.current.srcObject = localStream.current;
+        if (localVideoRef.current)
+          localVideoRef.current.srcObject = localStream.current;
       }
       setScreenSharing(false);
       return;
@@ -527,7 +602,8 @@ export function useConsultationSession({
             .getSenders()
             .find((item) => item.track?.kind === "video");
           cameraSender?.replaceTrack(cameraTrack);
-          if (localVideoRef.current) localVideoRef.current.srcObject = localStream.current;
+          if (localVideoRef.current)
+            localVideoRef.current.srcObject = localStream.current;
         }
         setScreenSharing(false);
       };
@@ -560,9 +636,9 @@ export function useConsultationSession({
           latestStatus = latest.data?.status || latestStatus;
         } catch {}
 
-        if (latestStatus === 'pending') {
+        if (latestStatus === "pending") {
           await consultApi.cancel(selectedConsultationId);
-        } else if (latestStatus === 'active') {
+        } else if (latestStatus === "active") {
           await consultApi.end(selectedConsultationId);
         }
       }
@@ -571,9 +647,18 @@ export function useConsultationSession({
     }
 
     navigate(
-      user?.role === "doctor" ? PAGES.DOCTOR_DASHBOARD : PAGES.CONSULTATION_LIST,
+      user?.role === "doctor"
+        ? PAGES.DOCTOR_DASHBOARD
+        : PAGES.CONSULTATION_LIST,
     );
-  }, [consultation?.status, endCall, navigate, selectedConsultationId, showToast, user]);
+  }, [
+    consultation?.status,
+    endCall,
+    navigate,
+    selectedConsultationId,
+    showToast,
+    user,
+  ]);
 
   useEffect(() => {
     if (!selectedConsultationId || !user) return;
@@ -596,6 +681,20 @@ export function useConsultationSession({
       setPeerReady(false);
     };
     const onMessage = (message) => addMessage(message);
+    const onSocketError = (payload = {}) => {
+      const message = payload.message || "Realtime message failed";
+      if (/consultation is not active/i.test(message)) {
+        setConsultation((current) =>
+          current && current.status === "active"
+            ? { ...current, status: "pending" }
+            : current,
+        );
+        setMessages((current) =>
+          current.filter((item) => !String(item._id || "").startsWith("tmp_")),
+        );
+      }
+      showToast(message, "error");
+    };
     const onTyping = () => setPeerTyping(true);
     const onStopTyping = () => setPeerTyping(false);
     const onOffer = ({ offer, consultationId }) => {
@@ -614,7 +713,11 @@ export function useConsultationSession({
       if (!isCurrentConsultation(consultationId)) return;
       setConsultation((current) =>
         current
-          ? { ...current, status: "active", startedAt: current.startedAt || new Date().toISOString() }
+          ? {
+              ...current,
+              status: "active",
+              startedAt: current.startedAt || new Date().toISOString(),
+            }
           : current,
       );
     };
@@ -622,7 +725,9 @@ export function useConsultationSession({
       try {
         if (!isCurrentConsultation(consultationId)) return;
         if (pc.current && pc.current.signalingState !== "stable") {
-          await pc.current.setRemoteDescription(new RTCSessionDescription(answer));
+          await pc.current.setRemoteDescription(
+            new RTCSessionDescription(answer),
+          );
           await flushPendingIceCandidates();
         }
       } catch (e) {
@@ -650,6 +755,7 @@ export function useConsultationSession({
     sock.on("connect", onConnect);
     sock.on("disconnect", onDisconnect);
     sock.on(EVENTS.RECEIVE_MESSAGE, onMessage);
+    sock.on(EVENTS.ERROR, onSocketError);
     sock.on(EVENTS.TYPING, onTyping);
     sock.on(EVENTS.STOP_TYPING, onStopTyping);
     sock.on("webrtc:offer", onOffer);
@@ -665,6 +771,7 @@ export function useConsultationSession({
       sock.off("connect", onConnect);
       sock.off("disconnect", onDisconnect);
       sock.off(EVENTS.RECEIVE_MESSAGE, onMessage);
+      sock.off(EVENTS.ERROR, onSocketError);
       sock.off(EVENTS.TYPING, onTyping);
       sock.off(EVENTS.STOP_TYPING, onStopTyping);
       sock.off("webrtc:offer", onOffer);
@@ -685,7 +792,14 @@ export function useConsultationSession({
 
   useEffect(() => {
     syncVideoPopup();
-  }, [syncVideoPopup, hasLocalStream, hasRemoteStream, callStatus, videoOn, audioOn]);
+  }, [
+    syncVideoPopup,
+    hasLocalStream,
+    hasRemoteStream,
+    callStatus,
+    videoOn,
+    audioOn,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -699,6 +813,7 @@ export function useConsultationSession({
 
   return {
     audioOn,
+    accepting,
     bottomRef,
     callStatus,
     consultation,
@@ -707,6 +822,7 @@ export function useConsultationSession({
     hasLocalStream,
     hasRemoteStream,
     input,
+    isConsultationActive,
     localVideoRef,
     loading,
     messages,
@@ -719,6 +835,7 @@ export function useConsultationSession({
     socketReady,
     videoOn,
     acceptCall,
+    acceptConsultation,
     declineCall,
     endCall,
     handleInputChange,

@@ -16,7 +16,9 @@ export const STATUS_TO_STEP = {
 };
 
 export const formatOrderStatus = (status = "pending") =>
-  status.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+  status
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
 export const getInitials = (name) =>
   (name || "User")

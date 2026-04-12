@@ -12,7 +12,9 @@ export function Badge({ type = "default", children }) {
 /* ── StatusBadge (online / offline) ────────────── */
 export function StatusBadge({ online }) {
   return (
-    <span className={`${styles.statusBadge} ${online ? styles.online : styles.offline}`}>
+    <span
+      className={`${styles.statusBadge} ${online ? styles.online : styles.offline}`}
+    >
       <span className={styles.statusDot} />
       {online ? "Online" : "Offline"}
     </span>
@@ -38,7 +40,15 @@ export function Avatar({ initials, color = "#3ECF8E", size = 38 }) {
 }
 
 /* ── Button variants ────────────────────────────── */
-export function Button({ variant = "primary", onClick, disabled, children, fullWidth, className = "", type }) {
+export function Button({
+  variant = "primary",
+  onClick,
+  disabled,
+  children,
+  fullWidth,
+  className = "",
+  type,
+}) {
   return (
     <button
       className={`${styles.btn} ${styles[`btn_${variant}`]} ${fullWidth ? styles.fullWidth : ""} ${className}`}
@@ -64,8 +74,8 @@ export function StatCard({ label, value, sub, color, positive }) {
           positive === true
             ? styles.statUp
             : positive === false
-            ? styles.statDown
-            : ""
+              ? styles.statDown
+              : ""
         }`}
       >
         {sub}
@@ -89,7 +99,15 @@ export function SectionHeader({ title, action, onAction }) {
 }
 
 /* ── Icon Button ────────────────────────────────── */
-export function IconBtn({ children, badge, onClick, title, ariaLabel, active, className = "" }) {
+export function IconBtn({
+  children,
+  badge,
+  onClick,
+  title,
+  ariaLabel,
+  active,
+  className = "",
+}) {
   return (
     <button
       type="button"
@@ -104,26 +122,43 @@ export function IconBtn({ children, badge, onClick, title, ariaLabel, active, cl
   );
 }
 
-export function Spinner({size=28}){
-  return <div className={styles.spinner} style={{width:size,height:size,borderWidth:Math.max(2,size*0.1)}}/>;
+export function Spinner({ size = 28 }) {
+  return (
+    <div
+      className={styles.spinner}
+      style={{
+        width: size,
+        height: size,
+        borderWidth: Math.max(2, size * 0.1),
+      }}
+    />
+  );
 }
 
-export function ErrorMsg({message,onRetry}){
-  return(
+export function ErrorMsg({ message, onRetry }) {
+  return (
     <div className={styles.errorMsg}>
       <span>⚠ {message}</span>
-      {onRetry&&<button className={styles.retryBtn} onClick={onRetry}>Retry</button>}
+      {onRetry && (
+        <button className={styles.retryBtn} onClick={onRetry}>
+          Retry
+        </button>
+      )}
     </div>
   );
 }
 
-export function EmptyState({icon='📭',title,subtitle,action,onAction}){
-  return(
+export function EmptyState({ icon = "📭", title, subtitle, action, onAction }) {
+  return (
     <div className={styles.emptyState}>
       <div className={styles.emptyIcon}>{icon}</div>
       <div className={styles.emptyTitle}>{title}</div>
-      {subtitle&&<div className={styles.emptySub}>{subtitle}</div>}
-      {action&&<Button variant="primary" onClick={onAction}>{action}</Button>}
+      {subtitle && <div className={styles.emptySub}>{subtitle}</div>}
+      {action && (
+        <Button variant="primary" onClick={onAction}>
+          {action}
+        </Button>
+      )}
     </div>
   );
 }

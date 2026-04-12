@@ -11,7 +11,7 @@ const buildMapUrl = (location) => {
     location.lat + delta,
   ]
     .map((value) => encodeURIComponent(value))
-    .join('%2C');
+    .join("%2C");
   return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${location.lat}%2C${location.lng}`;
 };
 
@@ -73,7 +73,11 @@ function LocationStatus({ location, locationText, onShareLocation }) {
         <div className={styles.panelLabel}>Your Location</div>
         <div className={styles.statusText}>{locationText}</div>
       </div>
-      <button className={styles.smallBtn} onClick={onShareLocation} type="button">
+      <button
+        className={styles.smallBtn}
+        onClick={onShareLocation}
+        type="button"
+      >
         {location ? "Share" : "Enable"}
       </button>
     </div>
@@ -87,7 +91,11 @@ function HospitalHeader({ onOpenHospitalSearch }) {
         <h2>Nearest Hospitals</h2>
         <p>Showing the closest five from open map data.</p>
       </div>
-      <button className={styles.smallBtn} onClick={onOpenHospitalSearch} type="button">
+      <button
+        className={styles.smallBtn}
+        onClick={onOpenHospitalSearch}
+        type="button"
+      >
         Open Maps
       </button>
     </div>
@@ -109,7 +117,11 @@ function HospitalContent({
     return (
       <div className={styles.listState}>
         {hospitalError}
-        <button className={styles.inlineBtn} onClick={onOpenHospitalSearch} type="button">
+        <button
+          className={styles.inlineBtn}
+          onClick={onOpenHospitalSearch}
+          type="button"
+        >
           Search in Maps
         </button>
       </div>
@@ -120,7 +132,11 @@ function HospitalContent({
     return (
       <div className={styles.listState}>
         Enable location to load the nearest five hospitals.
-        <button className={styles.inlineBtn} onClick={onActivateEmergency} type="button">
+        <button
+          className={styles.inlineBtn}
+          onClick={onActivateEmergency}
+          type="button"
+        >
           Enable Now
         </button>
       </div>

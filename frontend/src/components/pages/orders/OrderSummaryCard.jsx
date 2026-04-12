@@ -19,7 +19,10 @@ export default function OrderSummaryCard({
       <PatientStrip deliveryMode={deliveryMode} eta={summary.eta} user={user} />
 
       <div className={styles.cartRows}>
-        <SummaryRow label={`Medicines (${itemCount} items)`} value={`₹${summary.basePrice}`} />
+        <SummaryRow
+          label={`Medicines (${itemCount} items)`}
+          value={`₹${summary.basePrice}`}
+        />
         <SummaryRow label="Delivery fee" value={`₹${summary.delivery}`} />
         <SummaryRow label="Care packing" value={`₹${summary.packaging}`} />
         <SummaryRow
@@ -50,12 +53,15 @@ export default function OrderSummaryCard({
       {(orderedAt || latestOrder?.createdAt) && (
         <p className={styles.orderTime}>
           Placed at{" "}
-          {new Date(orderedAt || latestOrder.createdAt).toLocaleString("en-IN", {
-            day: "numeric",
-            month: "short",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {new Date(orderedAt || latestOrder.createdAt).toLocaleString(
+            "en-IN",
+            {
+              day: "numeric",
+              month: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            },
+          )}
         </p>
       )}
     </div>
@@ -69,7 +75,8 @@ function PatientStrip({ deliveryMode, eta, user }) {
       <div>
         <div className={styles.patientName}>{user?.name || "Patient"}</div>
         <div className={styles.patientMeta}>
-          {deliveryMode === "delivery" ? "Home delivery" : "Store pickup"} · {eta}
+          {deliveryMode === "delivery" ? "Home delivery" : "Store pickup"} ·{" "}
+          {eta}
         </div>
       </div>
     </div>

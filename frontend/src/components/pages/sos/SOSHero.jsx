@@ -38,20 +38,34 @@ export default function SOSHero({
         <p className={styles.connecting}>Preparing emergency support{dots}</p>
       )}
       {phase === "connected" && (
-        <p className={styles.connected}>Ready. Choose the fastest next action.</p>
+        <p className={styles.connected}>
+          Ready. Choose the fastest next action.
+        </p>
       )}
 
       <div className={styles.actions}>
         <a className={styles.actionChip} href={`tel:${EMERGENCY_NUMBER}`}>
           <span>Call 108</span>
         </a>
-        <button className={styles.actionChip} onClick={onShareLocation} type="button">
+        <button
+          className={styles.actionChip}
+          onClick={onShareLocation}
+          type="button"
+        >
           Share Location
         </button>
-        <button className={styles.actionChip} onClick={onAlertContacts} type="button">
+        <button
+          className={styles.actionChip}
+          onClick={onAlertContacts}
+          type="button"
+        >
           Alert Contacts
         </button>
-        <button className={styles.actionChip} onClick={onFindDoctor} type="button">
+        <button
+          className={styles.actionChip}
+          onClick={onFindDoctor}
+          type="button"
+        >
           Find Doctor
         </button>
       </div>

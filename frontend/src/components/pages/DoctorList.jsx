@@ -30,12 +30,7 @@ export default function DoctorList() {
   const searchTerm = (pageParams.search || "").trim().toLowerCase();
   const visibleDoctors = doctors.filter((doc) => {
     if (!searchTerm) return true;
-    return [
-      doc.userId?.name,
-      doc.specialization,
-      doc.qualification,
-      doc.bio,
-    ]
+    return [doc.userId?.name, doc.specialization, doc.qualification, doc.bio]
       .filter(Boolean)
       .join(" ")
       .toLowerCase()

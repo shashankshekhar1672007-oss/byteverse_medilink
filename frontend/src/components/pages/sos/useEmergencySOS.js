@@ -58,23 +58,28 @@ export function useEmergencySOS(showToast) {
     return nextLocation;
   }, []);
 
-  const loadHospitals = useCallback(async (nextLocation = location) => {
-    if (!nextLocation) return;
+  const loadHospitals = useCallback(
+    async (nextLocation = location) => {
+      if (!nextLocation) return;
 
-    setHospitalLoading(true);
-    setHospitalError("");
-    try {
-      const nearby = await fetchNearbyHospitals(nextLocation);
-      setHospitals(nearby);
-      if (nearby.length === 0) {
-        setHospitalError("No mapped hospitals found nearby. Open Maps for live results.");
+      setHospitalLoading(true);
+      setHospitalError("");
+      try {
+        const nearby = await fetchNearbyHospitals(nextLocation);
+        setHospitals(nearby);
+        if (nearby.length === 0) {
+          setHospitalError(
+            "No mapped hospitals found nearby. Open Maps for live results.",
+          );
+        }
+      } catch (e) {
+        setHospitalError(e.message);
+      } finally {
+        setHospitalLoading(false);
       }
-    } catch (e) {
-      setHospitalError(e.message);
-    } finally {
-      setHospitalLoading(false);
-    }
-  }, [location]);
+    },
+    [location],
+  );
 
   const activateEmergency = useCallback(async () => {
     setPhase("connecting");

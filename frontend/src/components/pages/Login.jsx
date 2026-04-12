@@ -47,11 +47,16 @@ export default function Login() {
     try {
       await login(email.trim().toLowerCase(), password);
     } catch (err) {
-      if (err.code === "EMAIL_NOT_VERIFIED" || /verify/i.test(err.message || "")) {
+      if (
+        err.code === "EMAIL_NOT_VERIFIED" ||
+        /verify/i.test(err.message || "")
+      ) {
         const nextEmail = email.trim().toLowerCase();
         setVerificationEmail(nextEmail);
         setTab("verify");
-        setNotice("Verify your email before logging in. Enter the code sent to your inbox.");
+        setNotice(
+          "Verify your email before logging in. Enter the code sent to your inbox.",
+        );
         try {
           const { auth } = await import("../../services/api");
           await auth.requestVerification(nextEmail);
@@ -135,7 +140,10 @@ export default function Login() {
     setLoading(true);
     try {
       const { auth } = await import("../../services/api");
-      await auth.verifyEmail(verificationEmail.trim().toLowerCase(), verificationCode.trim());
+      await auth.verifyEmail(
+        verificationEmail.trim().toLowerCase(),
+        verificationCode.trim(),
+      );
       setNotice("Email verified. You can now login.");
       setTab("login");
       setEmail(verificationEmail.trim().toLowerCase());
@@ -201,7 +209,8 @@ export default function Login() {
               setTab("verify");
               setError("");
               setNotice("");
-              if (!verificationEmail && email) setVerificationEmail(email.trim().toLowerCase());
+              if (!verificationEmail && email)
+                setVerificationEmail(email.trim().toLowerCase());
             }}
           >
             Verify

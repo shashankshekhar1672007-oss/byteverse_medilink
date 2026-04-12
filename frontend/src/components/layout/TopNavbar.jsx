@@ -7,30 +7,138 @@ import logo from "../../assets/logo.png";
 
 const SEARCH_ITEMS = {
   patient: [
-    { title: "Find doctors", description: "Search verified specialists", page: PAGES.DOCTORS, keywords: ["doctor", "consult", "appointment", "specialist"] },
-    { title: "General Physician", description: "Fever, cold, cough, weakness", page: PAGES.DOCTORS, params: { specialty: "General Physician", search: "general physician" }, keywords: ["fever", "cold", "cough", "headache", "body pain", "general"] },
-    { title: "Cardiologist", description: "Chest pain, heart and BP care", page: PAGES.DOCTORS, params: { specialty: "Cardiologist", search: "cardiologist" }, keywords: ["heart", "cardio", "chest", "bp", "blood pressure"] },
-    { title: "Dermatologist", description: "Skin rash, acne, allergy", page: PAGES.DOCTORS, params: { specialty: "Dermatologist", search: "dermatologist" }, keywords: ["skin", "rash", "acne", "itching", "allergy"] },
-    { title: "Neurologist", description: "Migraine, seizure, nerve pain", page: PAGES.DOCTORS, params: { specialty: "Neurologist", search: "neurologist" }, keywords: ["migraine", "nerve", "seizure", "brain"] },
-    { title: "Pediatrician", description: "Child health and fever", page: PAGES.DOCTORS, params: { specialty: "Pediatrician", search: "pediatrician" }, keywords: ["child", "baby", "kids", "pediatric"] },
-    { title: "Psychiatrist", description: "Stress, anxiety, sleep support", page: PAGES.DOCTORS, params: { specialty: "Psychiatrist", search: "psychiatrist" }, keywords: ["stress", "anxiety", "sleep", "mental"] },
-    { title: "Prescriptions", description: "View active and past prescriptions", page: PAGES.PRESCRIPTION_LIST, keywords: ["rx", "medicine list", "prescription"] },
-    { title: "Order medicines", description: "Buy medicines from prescription", page: PAGES.ORDERS, keywords: ["order", "medicine", "pharmacy", "tablet"] },
-    { title: "Health records", description: "Reports and medical files", page: PAGES.RECORDS, keywords: ["record", "report", "file", "health"] },
-    { title: "SOS emergency", description: "Emergency help and hospitals", page: PAGES.SOS, keywords: ["sos", "emergency", "ambulance", "hospital"] },
+    {
+      title: "Find doctors",
+      description: "Search verified specialists",
+      page: PAGES.DOCTORS,
+      keywords: ["doctor", "consult", "appointment", "specialist"],
+    },
+    {
+      title: "General Physician",
+      description: "Fever, cold, cough, weakness",
+      page: PAGES.DOCTORS,
+      params: { specialty: "General Physician", search: "general physician" },
+      keywords: ["fever", "cold", "cough", "headache", "body pain", "general"],
+    },
+    {
+      title: "Cardiologist",
+      description: "Chest pain, heart and BP care",
+      page: PAGES.DOCTORS,
+      params: { specialty: "Cardiologist", search: "cardiologist" },
+      keywords: ["heart", "cardio", "chest", "bp", "blood pressure"],
+    },
+    {
+      title: "Dermatologist",
+      description: "Skin rash, acne, allergy",
+      page: PAGES.DOCTORS,
+      params: { specialty: "Dermatologist", search: "dermatologist" },
+      keywords: ["skin", "rash", "acne", "itching", "allergy"],
+    },
+    {
+      title: "Neurologist",
+      description: "Migraine, seizure, nerve pain",
+      page: PAGES.DOCTORS,
+      params: { specialty: "Neurologist", search: "neurologist" },
+      keywords: ["migraine", "nerve", "seizure", "brain"],
+    },
+    {
+      title: "Pediatrician",
+      description: "Child health and fever",
+      page: PAGES.DOCTORS,
+      params: { specialty: "Pediatrician", search: "pediatrician" },
+      keywords: ["child", "baby", "kids", "pediatric"],
+    },
+    {
+      title: "Psychiatrist",
+      description: "Stress, anxiety, sleep support",
+      page: PAGES.DOCTORS,
+      params: { specialty: "Psychiatrist", search: "psychiatrist" },
+      keywords: ["stress", "anxiety", "sleep", "mental"],
+    },
+    {
+      title: "Prescriptions",
+      description: "View active and past prescriptions",
+      page: PAGES.PRESCRIPTION_LIST,
+      keywords: ["rx", "medicine list", "prescription"],
+    },
+    {
+      title: "Order medicines",
+      description: "Buy medicines from prescription",
+      page: PAGES.ORDERS,
+      keywords: ["order", "medicine", "pharmacy", "tablet"],
+    },
+    {
+      title: "Health records",
+      description: "Reports and medical files",
+      page: PAGES.RECORDS,
+      keywords: ["record", "report", "file", "health"],
+    },
+    {
+      title: "SOS emergency",
+      description: "Emergency help and hospitals",
+      page: PAGES.SOS,
+      keywords: ["sos", "emergency", "ambulance", "hospital"],
+    },
   ],
   doctor: [
-    { title: "Doctor dashboard", description: "Overview and activity", page: PAGES.DOCTOR_DASHBOARD, keywords: ["dashboard", "home"] },
-    { title: "Create prescription", description: "Issue a new prescription", page: PAGES.CREATE_PRESCRIPTION, keywords: ["new", "create", "prescription", "rx"] },
-    { title: "My prescriptions", description: "View issued prescriptions", page: PAGES.DOCTOR_PRESCRIPTIONS, keywords: ["prescriptions", "issued", "rx"] },
-    { title: "Consultations", description: "Open live consultation room", page: PAGES.CONSULTATION, keywords: ["chat", "video", "consultation", "patient"] },
-    { title: "Profile", description: "Update professional profile", page: PAGES.PROFILE, keywords: ["profile", "account", "settings"] },
+    {
+      title: "Doctor dashboard",
+      description: "Overview and activity",
+      page: PAGES.DOCTOR_DASHBOARD,
+      keywords: ["dashboard", "home"],
+    },
+    {
+      title: "Create prescription",
+      description: "Issue a new prescription",
+      page: PAGES.CREATE_PRESCRIPTION,
+      keywords: ["new", "create", "prescription", "rx"],
+    },
+    {
+      title: "My prescriptions",
+      description: "View issued prescriptions",
+      page: PAGES.DOCTOR_PRESCRIPTIONS,
+      keywords: ["prescriptions", "issued", "rx"],
+    },
+    {
+      title: "Consultations",
+      description: "Open live consultation room",
+      page: PAGES.CONSULTATION,
+      keywords: ["chat", "video", "consultation", "patient"],
+    },
+    {
+      title: "Profile",
+      description: "Update professional profile",
+      page: PAGES.PROFILE,
+      keywords: ["profile", "account", "settings"],
+    },
   ],
   admin: [
-    { title: "Admin panel", description: "Platform overview", page: PAGES.ADMIN_DASHBOARD, keywords: ["admin", "dashboard", "control"] },
-    { title: "User verification", description: "Approve pending users", page: PAGES.ADMIN_DASHBOARD, params: { section: "users", search: "verification" }, keywords: ["verify", "verification", "users", "approve"] },
-    { title: "Manage orders", description: "Update pharmacy order status", page: PAGES.ADMIN_DASHBOARD, params: { section: "orders", search: "orders" }, keywords: ["order", "orders", "delivery", "pharmacy"] },
-    { title: "Profile", description: "Admin account profile", page: PAGES.PROFILE, keywords: ["profile", "account", "settings"] },
+    {
+      title: "Admin panel",
+      description: "Platform overview",
+      page: PAGES.ADMIN_DASHBOARD,
+      keywords: ["admin", "dashboard", "control"],
+    },
+    {
+      title: "User verification",
+      description: "Approve pending users",
+      page: PAGES.ADMIN_DASHBOARD,
+      params: { section: "users", search: "verification" },
+      keywords: ["verify", "verification", "users", "approve"],
+    },
+    {
+      title: "Manage orders",
+      description: "Update pharmacy order status",
+      page: PAGES.ADMIN_DASHBOARD,
+      params: { section: "orders", search: "orders" },
+      keywords: ["order", "orders", "delivery", "pharmacy"],
+    },
+    {
+      title: "Profile",
+      description: "Admin account profile",
+      page: PAGES.PROFILE,
+      keywords: ["profile", "account", "settings"],
+    },
   ],
 };
 
@@ -72,7 +180,8 @@ export default function TopNavbar() {
   const avatarUrl = resolveAssetUrl(user?.avatar);
   const searchItems = SEARCH_ITEMS[user?.role] || SEARCH_ITEMS.patient;
   const recentNotifications = (notificationItems || []).slice(0, 6);
-  const hasUnreadNotifications = notifications > 0 || recentNotifications.length > 0;
+  const hasUnreadNotifications =
+    notifications > 0 || recentNotifications.length > 0;
   const notificationText =
     notificationPermission === "granted"
       ? "Browser alerts are active"
@@ -87,15 +196,21 @@ export default function TopNavbar() {
 
     return searchItems
       .map((item) => {
-        const haystack = [item.title, item.description, ...(item.keywords || [])]
+        const haystack = [
+          item.title,
+          item.description,
+          ...(item.keywords || []),
+        ]
           .join(" ")
           .toLowerCase();
         const title = item.title.toLowerCase();
-        const score =
-          title.includes(normalized) ? 3 :
-          haystack.includes(normalized) ? 2 :
-          normalized.split(/\s+/).some((word) => haystack.includes(word)) ? 1 :
-          0;
+        const score = title.includes(normalized)
+          ? 3
+          : haystack.includes(normalized)
+            ? 2
+            : normalized.split(/\s+/).some((word) => haystack.includes(word))
+              ? 1
+              : 0;
         return { ...item, score };
       })
       .filter((item) => item.score > 0)
@@ -160,11 +275,12 @@ export default function TopNavbar() {
     if (item) {
       navigate(item.page, item.params || (trimmed ? { search: trimmed } : {}));
     } else if (trimmed) {
-      const fallbackPage = user?.role === "admin"
-        ? PAGES.ADMIN_DASHBOARD
-        : user?.role === "doctor"
-          ? PAGES.CONSULTATION
-          : PAGES.DOCTORS;
+      const fallbackPage =
+        user?.role === "admin"
+          ? PAGES.ADMIN_DASHBOARD
+          : user?.role === "doctor"
+            ? PAGES.CONSULTATION
+            : PAGES.DOCTORS;
       navigate(fallbackPage, { search: trimmed });
     }
     setOpen(false);
@@ -250,7 +366,9 @@ export default function TopNavbar() {
             <BellIcon />
             {hasUnreadNotifications && (
               <span className={styles.notificationCount}>
-                {notifications > 9 ? "9+" : notifications || recentNotifications.length}
+                {notifications > 9
+                  ? "9+"
+                  : notifications || recentNotifications.length}
               </span>
             )}
           </IconBtn>
@@ -264,7 +382,9 @@ export default function TopNavbar() {
                 </div>
                 <span
                   className={`${styles.notificationStatus} ${
-                    notificationPermission === "granted" ? styles.notificationStatusActive : ""
+                    notificationPermission === "granted"
+                      ? styles.notificationStatusActive
+                      : ""
                   }`}
                 >
                   {notificationPermission === "granted" ? "Active" : "Off"}
@@ -374,7 +494,12 @@ function SearchIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
       <circle cx="7" cy="7" r="5" stroke="#7A8694" strokeWidth="1.5" />
-      <path d="M11 11l3 3" stroke="#7A8694" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M11 11l3 3"
+        stroke="#7A8694"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -382,33 +507,76 @@ function SearchIcon() {
 function BellIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-      <path d="M8 1a5 5 0 015 5c0 3 1 4 2 5H1c1-1 2-2 2-5a5 5 0 015-5z" stroke="currentColor" strokeWidth="1.3" />
-      <path d="M6.5 13.5a1.5 1.5 0 003 0" stroke="currentColor" strokeWidth="1.3" />
+      <path
+        d="M8 1a5 5 0 015 5c0 3 1 4 2 5H1c1-1 2-2 2-5a5 5 0 015-5z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <path
+        d="M6.5 13.5a1.5 1.5 0 003 0"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
     </svg>
   );
 }
 
 function ChevronIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M4 6l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 function ProfileIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
       <circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.3" />
-      <path d="M2.5 14c.7-3.2 2.6-5 5.5-5s4.8 1.8 5.5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path
+        d="M2.5 14c.7-3.2 2.6-5 5.5-5s4.8 1.8 5.5 5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function LogoutIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M10 2h2a2 2 0 012 2v8a2 2 0 01-2 2h-2M6 12l4-4m0 0L6 4m4 4H2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M10 2h2a2 2 0 012 2v8a2 2 0 01-2 2h-2M6 12l4-4m0 0L6 4m4 4H2"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

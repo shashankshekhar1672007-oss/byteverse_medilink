@@ -74,7 +74,8 @@ export default function Profile() {
     dashboardData?.patient || dashboardData?.doctor || contextProfile || {};
   const stats = dashboardData?.stats || {};
   const locationText = formatLocation(profileData, user);
-  const avatarUrl = form?.avatarPreview || resolveAssetUrl(profileData.avatar || user?.avatar);
+  const avatarUrl =
+    form?.avatarPreview || resolveAssetUrl(profileData.avatar || user?.avatar);
   const initials =
     (form?.name || user?.name)
       ?.split(" ")
@@ -178,7 +179,11 @@ export default function Profile() {
               <Button variant="outline" onClick={resetForm} disabled={isSaving}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={saveProfile} disabled={isSaving}>
+              <Button
+                variant="primary"
+                onClick={saveProfile}
+                disabled={isSaving}
+              >
                 {isSaving ? "Saving..." : "Save Changes"}
               </Button>
             </>
@@ -228,7 +233,11 @@ export default function Profile() {
           </h2>
 
           <div className={styles.roleBadge}>
-            {isAdmin ? "Administrator" : isDoctor ? "Medical Doctor" : "Patient"}
+            {isAdmin
+              ? "Administrator"
+              : isDoctor
+                ? "Medical Doctor"
+                : "Patient"}
           </div>
 
           <div className={styles.contactSection}>
@@ -290,7 +299,9 @@ export default function Profile() {
                   </div>
                 </div>
               ) : (
-                <div className={styles.contactValue}>{locationText || "N/A"}</div>
+                <div className={styles.contactValue}>
+                  {locationText || "N/A"}
+                </div>
               )}
             </ContactBlock>
 
@@ -315,9 +326,23 @@ export default function Profile() {
               {isAdmin ? (
                 <>
                   <InfoField label="Role" value="Administrator" />
-                  <InfoField label="Email Verification" value={user?.isVerified || user?.emailVerified ? "Verified" : "Pending"} />
-                  <InfoField label="Account Status" value={user?.status || "Active"} />
-                  <InfoField label="Access Level" value="Platform controls, users, and orders" fullWidth />
+                  <InfoField
+                    label="Email Verification"
+                    value={
+                      user?.isVerified || user?.emailVerified
+                        ? "Verified"
+                        : "Pending"
+                    }
+                  />
+                  <InfoField
+                    label="Account Status"
+                    value={user?.status || "Active"}
+                  />
+                  <InfoField
+                    label="Access Level"
+                    value="Platform controls, users, and orders"
+                    fullWidth
+                  />
                 </>
               ) : !isDoctor ? (
                 <>
@@ -328,7 +353,9 @@ export default function Profile() {
                     {isEditing ? (
                       <select
                         value={form?.bloodGroup || ""}
-                        onChange={(e) => handleChange("bloodGroup", e.target.value)}
+                        onChange={(e) =>
+                          handleChange("bloodGroup", e.target.value)
+                        }
                         className={styles.input}
                       >
                         <option value="">Select blood group</option>
@@ -383,7 +410,9 @@ export default function Profile() {
 
                   <InfoField
                     label="Weight"
-                    value={profileData.weight ? `${profileData.weight} kg` : "—"}
+                    value={
+                      profileData.weight ? `${profileData.weight} kg` : "—"
+                    }
                   >
                     {isEditing ? (
                       <input
@@ -400,7 +429,9 @@ export default function Profile() {
 
                   <InfoField
                     label="Height"
-                    value={profileData.height ? `${profileData.height} cm` : "—"}
+                    value={
+                      profileData.height ? `${profileData.height} cm` : "—"
+                    }
                   >
                     {isEditing ? (
                       <input
@@ -432,7 +463,9 @@ export default function Profile() {
                     {isEditing ? (
                       <textarea
                         value={form?.allergies || ""}
-                        onChange={(e) => handleChange("allergies", e.target.value)}
+                        onChange={(e) =>
+                          handleChange("allergies", e.target.value)
+                        }
                         className={styles.textarea}
                         placeholder="Separate allergies with commas"
                       />
@@ -469,12 +502,16 @@ export default function Profile() {
 
                   <InfoField
                     label="Qualification"
-                    value={profileData.qualification || user?.qualification || "MBBS"}
+                    value={
+                      profileData.qualification || user?.qualification || "MBBS"
+                    }
                   >
                     {isEditing ? (
                       <input
                         value={form?.qualification || ""}
-                        onChange={(e) => handleChange("qualification", e.target.value)}
+                        onChange={(e) =>
+                          handleChange("qualification", e.target.value)
+                        }
                         className={styles.input}
                         placeholder="Qualification"
                       />
@@ -518,14 +555,20 @@ export default function Profile() {
 
                   <InfoField
                     label="Experience"
-                    value={profileData.experience ? `${profileData.experience} yrs` : "—"}
+                    value={
+                      profileData.experience
+                        ? `${profileData.experience} yrs`
+                        : "—"
+                    }
                   >
                     {isEditing ? (
                       <input
                         type="number"
                         min="0"
                         value={form?.experience ?? ""}
-                        onChange={(e) => handleChange("experience", e.target.value)}
+                        onChange={(e) =>
+                          handleChange("experience", e.target.value)
+                        }
                         className={styles.input}
                         placeholder="Years of experience"
                       />
@@ -543,14 +586,20 @@ export default function Profile() {
                     {isEditing ? (
                       <input
                         value={form?.languages || ""}
-                        onChange={(e) => handleChange("languages", e.target.value)}
+                        onChange={(e) =>
+                          handleChange("languages", e.target.value)
+                        }
                         className={styles.input}
                         placeholder="English, Hindi"
                       />
                     ) : null}
                   </InfoField>
 
-                  <InfoField label="Bio" value={profileData.bio || "—"} fullWidth>
+                  <InfoField
+                    label="Bio"
+                    value={profileData.bio || "—"}
+                    fullWidth
+                  >
                     {isEditing ? (
                       <textarea
                         value={form?.bio || ""}
@@ -683,7 +732,9 @@ function buildFormState(user, profile, isDoctor) {
 }
 
 function buildProfilePayload(form, isDoctor) {
-  const payload = isDoctor ? buildDoctorPayload(form) : buildPatientPayload(form);
+  const payload = isDoctor
+    ? buildDoctorPayload(form)
+    : buildPatientPayload(form);
   if (!form.avatarFile) return payload;
 
   const data = new FormData();

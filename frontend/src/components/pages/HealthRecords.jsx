@@ -176,7 +176,9 @@ export default function HealthRecords() {
                     ["Blood Group", profile?.bloodGroup || "—", "normal"],
                     [
                       "Weight",
-                      profile?.weight ? `${Math.round(profile.weight)} kg` : "—",
+                      profile?.weight
+                        ? `${Math.round(profile.weight)} kg`
+                        : "—",
                       "normal",
                     ],
                     ["BMI", profile?.bmi || "—", "normal"],
@@ -190,7 +192,9 @@ export default function HealthRecords() {
                   ].map(([k, v, c]) => (
                     <div key={k} className={styles.summaryRow}>
                       <span>{k}</span>
-                      <span className={c === "warn" ? styles.warn : styles.normal}>
+                      <span
+                        className={c === "warn" ? styles.warn : styles.normal}
+                      >
                         {v}
                       </span>
                     </div>
@@ -229,7 +233,9 @@ function PrescriptionsTab({ rxList }) {
                   {rx.createdBy?.userId?.name?.replace("Dr. ", "") || "Doctor"}
                 </div>
               </div>
-              <div className={`${styles.badge} ${getStatusClassName(rx.status)}`}>
+              <div
+                className={`${styles.badge} ${getStatusClassName(rx.status)}`}
+              >
                 {rx.status}
               </div>
             </div>
@@ -291,7 +297,9 @@ function ReportsTab() {
                   <span className={styles.parameter}>{r.parameter}</span>
                   <span className={styles.resultValue}>{r.value}</span>
                   <span className={styles.range}>{r.range}</span>
-                  <span className={`${styles.badge} ${getStatusClassName(r.status)}`}>
+                  <span
+                    className={`${styles.badge} ${getStatusClassName(r.status)}`}
+                  >
                     {r.status}
                   </span>
                 </div>
@@ -322,7 +330,9 @@ function VitalsTab({ profile }) {
                 {profile.weight && <div>• Weight: {profile.weight} kg</div>}
                 {profile.height && <div>• Height: {profile.height} cm</div>}
                 {profile.bmi && <div>• BMI: {profile.bmi}</div>}
-                {profile.bloodGroup && <div>• Blood Group: {profile.bloodGroup}</div>}
+                {profile.bloodGroup && (
+                  <div>• Blood Group: {profile.bloodGroup}</div>
+                )}
               </div>
             </div>
           </div>

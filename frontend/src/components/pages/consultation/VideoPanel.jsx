@@ -23,6 +23,7 @@ export default function VideoPanel({
   specialization,
   videoOn,
   peerReady,
+  disabled,
 }) {
   return (
     <div className={styles.videoPanel}>
@@ -50,6 +51,7 @@ export default function VideoPanel({
         {!hasRemoteStream && (
           <VideoPlaceholder
             callStatus={callStatus}
+            disabled={disabled}
             initials={initials}
             peerName={peerName}
           />
@@ -97,14 +99,17 @@ export default function VideoPanel({
         screenSharing={screenSharing}
         videoOn={videoOn}
         peerReady={peerReady}
+        disabled={disabled}
       />
     </div>
   );
 }
 
-function VideoPlaceholder({ callStatus, initials, peerName }) {
+function VideoPlaceholder({ callStatus, disabled, initials, peerName }) {
   const hint = {
-    idle: "Click Call to start video",
+    idle: disabled
+      ? "Video starts after the consultation is active"
+      : "Click Call to start video",
     ringing: "Incoming call. Tap Accept above.",
     calling: `Calling ${peerName}...`,
     connected: "Connected. Waiting for video...",
@@ -140,6 +145,7 @@ function VideoControls({
   screenSharing,
   videoOn,
   peerReady,
+  disabled,
 }) {
   return (
     <div className={styles.videoControls}>
@@ -177,10 +183,10 @@ function VideoControls({
         <button
           className={`${styles.vcBtn} ${styles.callBtn}`}
           onClick={onStartCall}
-          disabled={!peerReady}
+          disabled={disabled || !peerReady}
           type="button"
         >
-          {peerReady ? 'Call' : 'Waiting for peer...'}
+          {disabled ? "Pending" : peerReady ? "Call" : "Waiting for peer..."}
         </button>
       )}
       {callStatus === "calling" && (

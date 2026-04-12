@@ -240,10 +240,21 @@
   font-weight: 600;
 }
 
-.statGreen { color: #3ECF8E; }
-.statBlue { color: #4B9EFF; }
-.statPurple { color: #8B5CF6; }
-.statAmber { color: #F59E0B; }
+.statGreen {
+  color: #3ECF8E;
+}
+
+.statBlue {
+  color: #4B9EFF;
+}
+
+.statPurple {
+  color: #8B5CF6;
+}
+
+.statAmber {
+  color: #F59E0B;
+}
 
 .input,
 .textarea {

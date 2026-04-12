@@ -1,4 +1,8 @@
-.page { display: flex; flex-direction: column; gap: 16px; }
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .loadingWrap {
   display: flex;
@@ -13,7 +17,11 @@
   color: var(--text);
 }
 
-.greeting p { color: var(--muted); font-size: 13px; margin-top: 3px; }
+.greeting p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 3px;
+}
 
 .tabs {
   display: flex;
@@ -35,9 +43,18 @@
   transition: background 0.15s, color 0.15s;
 }
 
-.tab:last-child { border-right: none; }
-.tab:hover { color: var(--text); }
-.activeTab { background: var(--card2); color: var(--text); }
+.tab:last-child {
+  border-right: none;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.activeTab {
+  background: var(--card2);
+  color: var(--text);
+}
 
 .layout {
   display: grid;
@@ -46,7 +63,9 @@
   align-items: start;
 }
 
-.mainContent { flex: 1; }
+.mainContent {
+  flex: 1;
+}
 
 .colTitle {
   font-size: 14px;
@@ -72,7 +91,7 @@
   border-radius: 12px;
   padding: 20px;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .recordHeader {
@@ -205,9 +224,23 @@
   gap: 12px;
 }
 
-.parameter { font-weight: 500; color: #334155; flex: 2; }
-.resultValue { font-weight: 600; color: #1E293B; flex: 1; }
-.range { font-size: 13px; color: #64748B; flex: 1; }
+.parameter {
+  font-weight: 500;
+  color: #334155;
+  flex: 2;
+}
+
+.resultValue {
+  font-weight: 600;
+  color: #1E293B;
+  flex: 1;
+}
+
+.range {
+  font-size: 13px;
+  color: #64748B;
+  flex: 1;
+}
 
 .timeline {
   display: flex;
@@ -250,7 +283,7 @@
   border-radius: 12px;
   padding: 16px;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .tlDate {
@@ -331,19 +364,56 @@
   border-color: var(--blue);
 }
 
-.barH20 { height: 25px; }
-.barH40 { height: 49px; }
-.barH46 { height: 57px; }
-.barH50 { height: 62px; }
-.barH54 { height: 67px; }
-.barH58 { height: 72px; }
-.barH60 { height: 74px; }
-.barH62 { height: 77px; }
-.barH65 { height: 80px; }
-.barH70 { height: 80px; }
+.barH20 {
+  height: 25px;
+}
 
-.barLabel { font-size: 10px; color: var(--muted); }
-.chartSub { font-size: 11px; color: var(--muted); margin-top: 10px; }
+.barH40 {
+  height: 49px;
+}
+
+.barH46 {
+  height: 57px;
+}
+
+.barH50 {
+  height: 62px;
+}
+
+.barH54 {
+  height: 67px;
+}
+
+.barH58 {
+  height: 72px;
+}
+
+.barH60 {
+  height: 74px;
+}
+
+.barH62 {
+  height: 77px;
+}
+
+.barH65 {
+  height: 80px;
+}
+
+.barH70 {
+  height: 80px;
+}
+
+.barLabel {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.chartSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 10px;
+}
 
 .summaryCard {
   background: var(--card);
@@ -369,9 +439,19 @@
   color: var(--muted);
 }
 
-.summaryRow:last-child { border-bottom: none; }
-.normal { color: var(--primary); font-weight: 600; }
-.warn { color: var(--amber); font-weight: 600; }
+.summaryRow:last-child {
+  border-bottom: none;
+}
+
+.normal {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.warn {
+  color: var(--amber);
+  font-weight: 600;
+}
 
 .healthSidebar {
   margin-top: 35px;
@@ -429,7 +509,9 @@
 }
 
 @media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
+  .layout {
+    grid-template-columns: 1fr;
+  }
 
   .healthSidebar {
     width: 100%;

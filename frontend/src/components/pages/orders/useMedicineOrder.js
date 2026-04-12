@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { orders as ordersApi, patients as patientsApi } from "../../../services/api";
+import {
+  orders as ordersApi,
+  patients as patientsApi,
+} from "../../../services/api";
 import { getOrderSummary, STATUS_TO_STEP } from "./orderUtils";
 
 export function useMedicineOrder({ profile, user, showToast } = {}) {
@@ -27,7 +30,7 @@ export function useMedicineOrder({ profile, user, showToast } = {}) {
       setError(e.message || "Could not load orders");
     } finally {
       setLoading(false);
-    };
+    }
   };
 
   useEffect(() => {

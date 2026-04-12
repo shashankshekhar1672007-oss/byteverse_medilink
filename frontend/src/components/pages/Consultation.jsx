@@ -27,6 +27,13 @@ export default function Consultation() {
   const specialization = isDoc ? "" : peer?.specialization || "";
   const initials = getInitials(peerName);
   const myInitials = getInitials(user?.name, "ME");
+  const isPending = session.consultation?.status === "pending";
+  const inactiveReason =
+    session.consultation?.status === "pending"
+      ? isDoc
+        ? "Accept this consultation to start chat."
+        : "Waiting for the doctor to accept this consultation."
+      : "This consultation is not active.";
 
   if (session.loading)
     return (
@@ -39,14 +46,22 @@ export default function Consultation() {
   if (session.error && !session.consultation)
     return (
       <div className={styles.page}>
-        <ErrorMsg message={session.error} onRetry={() => window.location.reload()} />
+        <ErrorMsg
+          message={session.error}
+          onRetry={() => window.location.reload()}
+        />
       </div>
     );
 
   return (
     <div className={styles.page}>
       <ConsultationHeader
+        accepting={session.accepting}
+        canAccept={isDoc && isPending}
+        consultationStatus={session.consultation?.status}
+        onAccept={session.acceptConsultation}
         peerName={peerName}
+        isActive={session.isConsultationActive}
         socketReady={session.socketReady}
         specialization={specialization}
       />
@@ -70,6 +85,8 @@ export default function Consultation() {
           peerName={peerName}
           peerTyping={session.peerTyping}
           sending={session.sending}
+          disabled={!session.isConsultationActive}
+          disabledReason={inactiveReason}
           socketReady={session.socketReady}
           user={user}
         />
@@ -96,6 +113,7 @@ export default function Consultation() {
           specialization={specialization}
           videoOn={session.videoOn}
           peerReady={session.peerReady}
+          disabled={!session.isConsultationActive}
         />
       </div>
     </div>

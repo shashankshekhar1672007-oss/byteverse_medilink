@@ -6,7 +6,11 @@ export default function OrderTracker({ currentStep, ordered, status }) {
     <div className={styles.trackerCard}>
       <div className={styles.trackerHead}>
         <h2 className={styles.cartTitle}>Order Tracker</h2>
-        {status && <span className={styles.trackerStatus}>{formatOrderStatus(status)}</span>}
+        {status && (
+          <span className={styles.trackerStatus}>
+            {formatOrderStatus(status)}
+          </span>
+        )}
       </div>
       <div className={styles.tracker}>
         {ORDER_STEPS.map((step, index) => (
@@ -37,10 +41,14 @@ function TrackerStep({ currentStep, index, ordered, step }) {
           }`}
         />
         {index < ORDER_STEPS.length - 1 && (
-          <div className={`${styles.stepLine} ${isDone ? styles.doneLine : ""}`} />
+          <div
+            className={`${styles.stepLine} ${isDone ? styles.doneLine : ""}`}
+          />
         )}
       </div>
-      <div className={`${styles.stepLabel} ${isActive ? styles.currentLabel : ""}`}>
+      <div
+        className={`${styles.stepLabel} ${isActive ? styles.currentLabel : ""}`}
+      >
         {step}
         {isCurrent && (
           <span className={styles.stepBadge}>

@@ -42,6 +42,7 @@
 .logo span {
   color: var(--text);
 }
+
 .logo .badge {
   font-size: 10px;
   font-weight: 600;
@@ -67,9 +68,11 @@
   transition: border-color 0.15s;
   position: relative;
 }
+
 .search:focus-within {
   border-color: var(--subtle);
 }
+
 .search input {
   background: none;
   border: none;
@@ -77,6 +80,7 @@
   font-size: 12px;
   width: 100%;
 }
+
 .search input::placeholder {
   color: var(--muted);
 }
@@ -293,7 +297,7 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, rgba(62,207,142,0.13), rgba(75,158,255,0.2));
+  background: linear-gradient(135deg, rgba(62, 207, 142, 0.13), rgba(75, 158, 255, 0.2));
   border: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -347,7 +351,7 @@
 
 .accountAvatar {
   align-items: center;
-  background: linear-gradient(135deg, rgba(62,207,142,0.13), rgba(75,158,255,0.2));
+  background: linear-gradient(135deg, rgba(62, 207, 142, 0.13), rgba(75, 158, 255, 0.2));
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--primary);
@@ -439,15 +443,30 @@
 }
 
 @media (max-width: 760px) {
-  .navbar { padding: 0 12px; gap: 10px; }
-  .search { max-width: none; }
+  .navbar {
+    padding: 0 12px;
+    gap: 10px;
+  }
+
+  .search {
+    max-width: none;
+  }
+
   .userName,
-  .userInfo svg:last-child { display: none; }
-  .logoImage { height: 34px; width: 41px; }
+  .userInfo svg:last-child {
+    display: none;
+  }
+
+  .logoImage {
+    height: 34px;
+    width: 41px;
+  }
+
   .userInfo {
     min-height: 34px;
     padding: 0;
   }
+
   .accountMenu {
     right: 0;
     min-width: 220px;

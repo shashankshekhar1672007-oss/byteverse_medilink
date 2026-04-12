@@ -76,7 +76,9 @@ export default function DoctorPrescriptions() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.headerTitle}>My Prescriptions</h1>
-          <p className={styles.headerSubtitle}>Manage all your issued prescriptions</p>
+          <p className={styles.headerSubtitle}>
+            Manage all your issued prescriptions
+          </p>
         </div>
         <Button
           variant="primary"
@@ -107,10 +109,7 @@ export default function DoctorPrescriptions() {
           filtered.map((rx) => {
             const patName = rx.createdFor?.userId?.name || "Patient";
             return (
-              <div
-                key={rx._id}
-                className={styles.card}
-              >
+              <div key={rx._id} className={styles.card}>
                 <div className={styles.cardHeader}>
                   <div className={styles.cardInfo}>
                     <div className={styles.diagnosis}>{rx.diagnosis}</div>
@@ -123,16 +122,22 @@ export default function DoctorPrescriptions() {
                       • Patient: {patName}
                     </div>
                   </div>
-                  <div className={`${styles.status} ${getStatusClassName(rx.status)}`}>
+                  <div
+                    className={`${styles.status} ${getStatusClassName(rx.status)}`}
+                  >
                     {rx.status}
                   </div>
                 </div>
-                <div className={`${styles.cardContent} ${styles.cardContentSpacing}`}>
+                <div
+                  className={`${styles.cardContent} ${styles.cardContentSpacing}`}
+                >
                   <div className={styles.medicines}>
                     <span className={`${styles.label} ${styles.labelHeading}`}>
                       Medicines ({rx.medicines?.length || 0})
                     </span>
-                    <div className={`${styles.medicineList} ${styles.medicineListWrap}`}>
+                    <div
+                      className={`${styles.medicineList} ${styles.medicineListWrap}`}
+                    >
                       {(rx.medicines || []).slice(0, 2).map((m, i) => (
                         <span
                           key={i}
@@ -150,7 +155,9 @@ export default function DoctorPrescriptions() {
                   </div>
                   <div className={styles.details}>
                     <div className={`${styles.detail} ${styles.detailText}`}>
-                      <span className={`${styles.label} ${styles.detailLabelInline}`}>
+                      <span
+                        className={`${styles.label} ${styles.detailLabelInline}`}
+                      >
                         Expires:
                       </span>
                       <span>

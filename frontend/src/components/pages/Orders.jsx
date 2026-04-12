@@ -77,7 +77,9 @@ function PreviousOrders({ orders }) {
       <div className={styles.sectionTop}>
         <div>
           <h2 className={styles.colTitle}>Previous Orders</h2>
-          <p className={styles.emptyText}>Track medicine orders and fulfilment status.</p>
+          <p className={styles.emptyText}>
+            Track medicine orders and fulfilment status.
+          </p>
         </div>
       </div>
 
@@ -86,7 +88,9 @@ function PreviousOrders({ orders }) {
           <div className={styles.emptyIcon}>Rx</div>
           <div>
             <div className={styles.medName}>No orders yet</div>
-            <div className={styles.medMeta}>Placed medicine orders will appear here.</div>
+            <div className={styles.medMeta}>
+              Placed medicine orders will appear here.
+            </div>
           </div>
         </div>
       ) : (
@@ -95,10 +99,12 @@ function PreviousOrders({ orders }) {
             <article className={styles.historyCard} key={item._id || item.id}>
               <div>
                 <div className={styles.historyTitle}>
-                  {item.orderNumber || `Order ${String(item._id || item.id || "").slice(-6)}`}
+                  {item.orderNumber ||
+                    `Order ${String(item._id || item.id || "").slice(-6)}`}
                 </div>
                 <div className={styles.historyMeta}>
-                  {(item.items || []).length} item{(item.items || []).length === 1 ? "" : "s"} ·{" "}
+                  {(item.items || []).length} item
+                  {(item.items || []).length === 1 ? "" : "s"} ·{" "}
                   {new Date(item.createdAt).toLocaleDateString("en-IN", {
                     day: "numeric",
                     month: "short",
@@ -107,7 +113,9 @@ function PreviousOrders({ orders }) {
                 </div>
               </div>
               <div className={styles.historyRight}>
-                <span className={`${styles.statusPill} ${styles[`status_${item.status}`] || ""}`}>
+                <span
+                  className={`${styles.statusPill} ${styles[`status_${item.status}`] || ""}`}
+                >
                   {formatStatus(item.status)}
                 </span>
                 <span className={styles.historyTotal}>₹{item.total || 0}</span>
@@ -121,5 +129,7 @@ function PreviousOrders({ orders }) {
 }
 
 function formatStatus(status = "pending") {
-  return status.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return status
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
