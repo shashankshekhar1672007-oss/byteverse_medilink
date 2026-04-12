@@ -22,8 +22,9 @@ export default function TopNavbar() {
         type="button"
         className={styles.logo}
         onClick={() => navigate(PAGES.DASHBOARD)}
+        style={{ background: "transparent", border: "none", cursor: "pointer", padding: 0 }}
       >
-        <img src={logo} alt="MediLink logo" className={styles.logoImage} />
+        <img src={logo} alt="MediLink logo" className={styles.logoImage} style={{ background: "transparent" }} />
         {isDoctor && <span className={styles.badge}>Doctor</span>}
       </button>
 
