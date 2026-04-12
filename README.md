@@ -263,7 +263,8 @@ docker-compose --profile dev up -d
 
 ## ⚙️ Environment Variables
 
-Copy `.env.example` to `.env` in the `medilink-backend` directory and configure:
+### Backend (`/medilink-backend/.env`)
+Copy `.env.example` to `.env` and configure:
 
 ```env
 # Required
@@ -297,6 +298,19 @@ Run these from the `medilink-backend` directory:
 | `npm run seed:status` | Show collection counts |
 | `npm test` | Run Jest test suite |
 | `npm run test:coverage` | Run tests with coverage report |
+
+---
+
+## 👥 Team — The DOMinators
+
+| Role | Name | Branch | Stream | Year |
+|------|------|--------|--------|------|
+| Team Leader | Shashank Shekhar Singh | B.Tech | CSE | I |
+| Member | Madhukar Kumar | B.Tech | CSE | I |
+| Member | Udit Narayan | B.Tech | CSE | I |
+| Member | Ayush Ranjan | B.Tech | CSE | I |
+
+**Institute:** NIT Patna | **Hackathon:** ByteVerse 8th Edition
 
 ---
 
