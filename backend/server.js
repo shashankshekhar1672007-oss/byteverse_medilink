@@ -13,6 +13,10 @@ const mongoSanitize = require('express-mongo-sanitize');
 const errorHandler = require('./middleware/errorHandler');
 const { registerSocketHandlers } = require('./socket/handlers');
 
+// ── App setup ─────────────────────────────────────────────────────────────────
+const app = express();
+let server = null;
+
 // ── Routes ────────────────────────────────────────────────────────────────────
 const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patients');
@@ -23,26 +27,29 @@ const orderRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
 
 // ── App setup ─────────────────────────────────────────────────────────────────
-const app = express();
-const server = http.createServer(app);
-
-// ── Socket.io ─────────────────────────────────────────────────────────────────
+// ── Socket.io helpers ─────────────────────────────────────────────────────────
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins,
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-  pingTimeout: 60000,
-});
+const initializeServer = () => {
+  server = http.createServer(app);
 
-registerSocketHandlers(io);
-require('./socket/ioInstance').set(io);
+  const io = new Server(server, {
+    cors: {
+      origin: allowedOrigins,
+      methods: ['GET', 'POST'],
+      credentials: true,
+    },
+    pingTimeout: 60000,
+  });
+
+  registerSocketHandlers(io);
+  require('./socket/ioInstance').set(io);
+
+  return server;
+};
 
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(helmet());
@@ -131,12 +138,19 @@ const connectDB = async () => {
 // ── Graceful shutdown ─────────────────────────────────────────────────────────
 const shutdown = async (signal) => {
   console.log(`${signal} received — shutting down gracefully`);
-  server.close(async () => {
-    await mongoose.connection.close();
-    console.log('Server closed');
-    process.exit(0);
-  });
-  setTimeout(() => process.exit(1), 10000); // force after 10s
+
+  if (server) {
+    server.close(async () => {
+      await mongoose.connection.close();
+      console.log('Server closed');
+      process.exit(0);
+    });
+    setTimeout(() => process.exit(1), 10000); // force after 10s
+    return;
+  }
+
+  await mongoose.connection.close();
+  process.exit(0);
 };
 
 process.on('SIGTERM', () => shutdown('SIGTERM'));
@@ -150,6 +164,7 @@ process.on('unhandledRejection', (err) => {
 const PORT = parseInt(process.env.PORT) || 5001;
 
 if (require.main === module) {
+  initializeServer();
   connectDB().then(() => {
     server.listen(PORT, () => {
       console.log(`🚀 Medilink API running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
@@ -158,4 +173,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { app, server };
+module.exports = { app };
