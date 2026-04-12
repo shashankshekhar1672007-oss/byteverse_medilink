@@ -7,6 +7,7 @@ import {
   EVENTS,
   getSocket,
   joinConsultation,
+  requestVideoCall as requestSocketVideoCall,
   sendSocketMessage,
   sendTyping,
 } from "../../../services/socket";
@@ -56,6 +57,8 @@ export function useConsultationSession({
   const ringAudio = useRef(null);
   const popoutWindow = useRef(null);
   const consultIdRef = useRef(selectedConsultationId);
+  const pendingVideoStart = useRef(false);
+  const lastRemoteCallEndAt = useRef(0);
   const isConsultationActive = consultation?.status === "active";
 
   useEffect(() => {
@@ -473,6 +476,7 @@ export function useConsultationSession({
         "Waiting for the other party to join the consultation before starting the call.",
         "warning",
       );
+      pendingVideoStart.current = true;
       return;
     }
 
@@ -502,6 +506,50 @@ export function useConsultationSession({
     showToast,
     user,
   ]);
+
+  const requestVideoCall = useCallback(() => {
+    if (!selectedConsultationId) {
+      showToast("Open a consultation before starting a video call", "error");
+      return;
+    }
+
+    if (!isConsultationActive) {
+      showToast(
+        user?.role === "doctor"
+          ? "Accept this consultation before starting a call."
+          : "The doctor needs to accept this consultation first.",
+        "warning",
+      );
+      return;
+    }
+
+    const sent = requestSocketVideoCall(selectedConsultationId);
+    pendingVideoStart.current = true;
+
+    if (sent) {
+      showToast("Video call request sent.");
+    } else {
+      showToast("Connecting to video server. Try again in a moment.", "error");
+    }
+
+    if (peerReady) startCall();
+  }, [
+    isConsultationActive,
+    peerReady,
+    selectedConsultationId,
+    showToast,
+    startCall,
+    user,
+  ]);
+
+  useEffect(() => {
+    if (!pendingVideoStart.current || !peerReady || callStatus !== "idle") {
+      return;
+    }
+
+    pendingVideoStart.current = false;
+    startCall();
+  }, [callStatus, peerReady, startCall]);
 
   const acceptCall = useCallback(async () => {
     const offer = incomingOffer.current;
@@ -751,10 +799,26 @@ export function useConsultationSession({
         console.warn("addIceCandidate:", e.message);
       }
     };
-    const onCallEnded = () => {
+    const onCallEnded = ({ consultationId } = {}) => {
+      if (!isCurrentConsultation(consultationId)) return;
+      const now = Date.now();
+      if (now - lastRemoteCallEndAt.current < 800) return;
+      lastRemoteCallEndAt.current = now;
       stopIncomingRing();
       showToast("The other party ended the call");
       cleanupCall();
+    };
+    const onPeerLeft = ({ consultationId } = {}) => {
+      if (!isCurrentConsultation(consultationId)) return;
+      setPeerReady(false);
+      if (callStatus !== "idle") {
+        showToast("The other party left. The call was closed.", "warning");
+        cleanupCall();
+      }
+    };
+    const onVideoCallDeclined = ({ consultationId } = {}) => {
+      if (!isCurrentConsultation(consultationId)) return;
+      pendingVideoStart.current = false;
     };
 
     sock.on("connect", onConnect);
@@ -767,8 +831,10 @@ export function useConsultationSession({
     sock.on("webrtc:answer", onAnswer);
     sock.on("webrtc:ice-candidate", onIce);
     sock.on("webrtc:call-ended", onCallEnded);
+    sock.on("peerLeft", onPeerLeft);
     sock.on("readyForCall", onReadyForCall);
     sock.on("consultationAccepted", onConsultationAccepted);
+    sock.on(EVENTS.VIDEO_CALL_DECLINED, onVideoCallDeclined);
 
     if (sock.connected) onConnect();
 
@@ -783,13 +849,16 @@ export function useConsultationSession({
       sock.off("webrtc:answer", onAnswer);
       sock.off("webrtc:ice-candidate", onIce);
       sock.off("webrtc:call-ended", onCallEnded);
+      sock.off("peerLeft", onPeerLeft);
       sock.off("readyForCall", onReadyForCall);
       sock.off("consultationAccepted", onConsultationAccepted);
+      sock.off(EVENTS.VIDEO_CALL_DECLINED, onVideoCallDeclined);
     };
   }, [
     addMessage,
     cleanupCall,
     flushPendingIceCandidates,
+    callStatus,
     selectedConsultationId,
     showToast,
     user,
@@ -845,6 +914,7 @@ export function useConsultationSession({
     endCall,
     handleInputChange,
     leaveConsultation,
+    requestVideoCall,
     sendMessage,
     startCall,
     toggleAudio,

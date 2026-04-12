@@ -23,6 +23,8 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [roleFilter, setRoleFilter] = useState("all");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState("");
   const [error, setError] = useState("");
@@ -60,6 +62,34 @@ export default function AdminDashboard() {
       setError(e.message || "Could not verify user");
     } finally {
       setSavingId("");
+    }
+  };
+
+  const verifyDoctor = async (userId, verified) => {
+    setSavingId(userId);
+    try {
+      await adminApi.verifyDoctor(userId, verified);
+      await load();
+      if (selectedUser?.user?._id === userId || selectedUser?._id === userId) {
+        await viewUser(userId);
+      }
+    } catch (e) {
+      setError(e.message || "Could not update doctor verification");
+    } finally {
+      setSavingId("");
+    }
+  };
+
+  const viewUser = async (userId) => {
+    setDetailsLoading(true);
+    setError("");
+    try {
+      const response = await adminApi.getUserById(userId);
+      setSelectedUser(response.data);
+    } catch (e) {
+      setError(e.message || "Could not load user details");
+    } finally {
+      setDetailsLoading(false);
     }
   };
 
@@ -164,6 +194,8 @@ export default function AdminDashboard() {
                     item={item}
                     key={item._id || item.id || item.email}
                     onStatus={updateUserStatus}
+                    onView={viewUser}
+                    onVerifyDoctor={verifyDoctor}
                     onVerify={verifyUser}
                     saving={savingId === (item._id || item.id)}
                   />
@@ -197,17 +229,35 @@ export default function AdminDashboard() {
           )}
         </div>
       </section>
+
+      {(selectedUser || detailsLoading) && (
+        <UserDetailsPanel
+          data={selectedUser}
+          loading={detailsLoading}
+          onClose={() => setSelectedUser(null)}
+          onVerifyDoctor={verifyDoctor}
+          savingId={savingId}
+        />
+      )}
     </div>
   );
 }
 
-function UserRow({ item, onStatus, onVerify, saving }) {
+function UserRow({
+  item,
+  onStatus,
+  onVerify,
+  onVerifyDoctor,
+  onView,
+  saving,
+}) {
   const id = item._id || item.id;
-  const verified =
+  const emailVerified =
     item.isEmailVerified ??
     item.isVerified ??
     item.emailVerified ??
     item.verified;
+  const doctorVerified = item.profile?.isVerified;
   const status =
     item.status || (item.isActive === false ? "blocked" : "active");
 
@@ -227,10 +277,17 @@ function UserRow({ item, onStatus, onVerify, saving }) {
       </td>
       <td>
         <span
-          className={`${styles.statusPill} ${verified ? styles.good : styles.warn}`}
+          className={`${styles.statusPill} ${emailVerified ? styles.good : styles.warn}`}
         >
-          {verified ? "Verified" : "Pending"}
+          {emailVerified ? "Email verified" : "Email pending"}
         </span>
+        {item.role === "doctor" && (
+          <span
+            className={`${styles.statusPill} ${doctorVerified ? styles.good : styles.warn} ${styles.inlinePill}`}
+          >
+            {doctorVerified ? "Doctor verified" : "Doctor pending"}
+          </span>
+        )}
       </td>
       <td>
         <span
@@ -241,13 +298,25 @@ function UserRow({ item, onStatus, onVerify, saving }) {
       </td>
       <td>
         <div className={styles.rowActions}>
-          {!verified && (
+          <button disabled={saving} onClick={() => onView(id)} type="button">
+            Details
+          </button>
+          {!emailVerified && (
             <button
               disabled={saving}
               onClick={() => onVerify(id)}
               type="button"
             >
               Verify
+            </button>
+          )}
+          {item.role === "doctor" && (
+            <button
+              disabled={saving}
+              onClick={() => onVerifyDoctor(id, !doctorVerified)}
+              type="button"
+            >
+              {doctorVerified ? "Unverify Doctor" : "Verify Doctor"}
             </button>
           )}
           <button
@@ -262,6 +331,107 @@ function UserRow({ item, onStatus, onVerify, saving }) {
         </div>
       </td>
     </tr>
+  );
+}
+
+function UserDetailsPanel({
+  data,
+  loading,
+  onClose,
+  onVerifyDoctor,
+  savingId,
+}) {
+  const user = data?.user || data;
+  const profile = data?.profile || null;
+  const userId = user?._id || user?.id;
+  const isDoctor = user?.role === "doctor";
+  const doctorVerified = Boolean(profile?.isVerified);
+
+  return (
+    <div className={styles.modalBackdrop} role="presentation">
+      <aside className={styles.detailsPanel} role="dialog" aria-modal="true">
+        <div className={styles.detailsHeader}>
+          <div>
+            <h2>User Details</h2>
+            <p>Complete account and profile information.</p>
+          </div>
+          <button className={styles.closeBtn} onClick={onClose} type="button">
+            Close
+          </button>
+        </div>
+
+        {loading ? (
+          <div className={styles.loadingWrap}>
+            <Spinner size={28} />
+          </div>
+        ) : (
+          <>
+            <div className={styles.detailsHero}>
+              <div className={styles.avatar}>{getInitials(user?.name)}</div>
+              <div>
+                <h3>{user?.name || "Unnamed user"}</h3>
+                <p>{user?.email || "No email"}</p>
+              </div>
+            </div>
+
+            <DetailGrid
+              title="Account"
+              items={[
+                ["Role", user?.role],
+                ["Phone", user?.phone],
+                ["Email verified", yesNo(user?.isEmailVerified)],
+                ["Status", user?.isActive === false ? "Blocked" : "Active"],
+                ["Joined", formatDateTime(user?.createdAt)],
+                ["Last seen", formatDateTime(user?.lastSeen)],
+              ]}
+            />
+
+            {profile && (
+              <DetailGrid
+                title={isDoctor ? "Doctor Profile" : "Patient Profile"}
+                items={profileDetailItems(profile, isDoctor)}
+              />
+            )}
+
+            {isDoctor && (
+              <div className={styles.verifyBox}>
+                <div>
+                  <strong>Doctor verification</strong>
+                  <span>
+                    {doctorVerified
+                      ? "This doctor is approved to appear as verified."
+                      : "Review registration details before approving."}
+                  </span>
+                </div>
+                <Button
+                  variant={doctorVerified ? "outline" : "primary"}
+                  disabled={savingId === userId}
+                  onClick={() => onVerifyDoctor(userId, !doctorVerified)}
+                >
+                  {doctorVerified ? "Unverify Doctor" : "Verify Doctor"}
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </aside>
+    </div>
+  );
+}
+
+function DetailGrid({ title, items }) {
+  return (
+    <section className={styles.detailSection}>
+      <h3>{title}</h3>
+      <div className={styles.detailGrid}>
+        {items.map(([label, value]) => (
+          <div className={styles.detailItem} key={label}>
+            <span>{label}</span>
+            <strong>{formatValue(value)}</strong>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -380,6 +550,76 @@ function normalizeOrderStatus(status) {
 
 function formatStatus(status) {
   return status.replaceAll("_", " ");
+}
+
+function profileDetailItems(profile, isDoctor) {
+  if (isDoctor) {
+    return [
+      ["Specialization", profile.specialization],
+      ["Qualification", profile.qualification],
+      ["Registration No.", profile.regNo],
+      ["Experience", profile.experience ? `${profile.experience} years` : "0 years"],
+      ["Consultation fee", profile.price ? `₹${profile.price}` : "₹0"],
+      ["Doctor verified", yesNo(profile.isVerified)],
+      ["Online", yesNo(profile.online)],
+      ["Rating", profile.rating ? `${profile.rating} (${profile.ratingCount || 0} reviews)` : "No ratings"],
+      ["Consultations", profile.consultationCount],
+      ["Hospital", formatHospital(profile.hospital)],
+      ["Languages", profile.languages?.join(", ")],
+      ["Bio", profile.bio],
+    ];
+  }
+
+  return [
+    ["Age", profile.age],
+    ["Gender", profile.gender],
+    ["Blood group", profile.bloodGroup],
+    ["Weight", profile.weight ? `${profile.weight} kg` : ""],
+    ["Height", profile.height ? `${profile.height} cm` : ""],
+    ["Allergies", arrayOrText(profile.allergies)],
+    ["Chronic conditions", arrayOrText(profile.chronicConditions)],
+    ["Emergency contact", profile.emergencyContact?.phone || profile.emergencyContact],
+    ["Address", formatAddress(profile.address)],
+  ];
+}
+
+function formatValue(value) {
+  if (value === undefined || value === null || value === "") return "Not provided";
+  if (typeof value === "boolean") return yesNo(value);
+  return String(value);
+}
+
+function yesNo(value) {
+  return value ? "Yes" : "No";
+}
+
+function arrayOrText(value) {
+  if (Array.isArray(value)) return value.join(", ");
+  return value;
+}
+
+function formatHospital(hospital) {
+  if (!hospital) return "";
+  return [hospital.name, hospital.city, hospital.state].filter(Boolean).join(", ");
+}
+
+function formatAddress(address) {
+  if (!address) return "";
+  if (typeof address === "string") return address;
+  return [address.line1, address.city, address.state, address.pincode]
+    .filter(Boolean)
+    .join(", ");
+}
+
+function formatDateTime(value) {
+  if (!value) return "";
+  return new Date(value).toLocaleString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
 function getInitials(name = "U") {

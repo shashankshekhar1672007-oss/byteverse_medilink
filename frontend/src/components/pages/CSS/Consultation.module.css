@@ -124,6 +124,163 @@
   height: calc(100vh - 160px);
 }
 
+.singlePanelLayout {
+  grid-template-columns: 1fr;
+}
+
+.roomModeBar {
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  width: fit-content;
+}
+
+.modeSwitchBtn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  min-width: 110px;
+  padding: 9px 12px;
+}
+
+.modeSwitchBtn:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.modeSwitchBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.modeSwitchActive {
+  background: var(--primary-dim);
+  border-color: var(--primary-border);
+  color: var(--primary);
+}
+
+.roomListPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.roomList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.roomCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.roomCard:hover {
+  border-color: var(--subtle);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.roomMain {
+  min-width: 0;
+  flex: 1;
+}
+
+.roomTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.roomTitleRow h2 {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.roomMain p {
+  color: var(--text);
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+
+.roomMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.roomStatus {
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.roomStatusActive {
+  background: var(--primary-dim);
+  color: var(--primary);
+}
+
+.roomStatusPending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.roomStatusDefault {
+  background: var(--card2);
+  color: var(--muted);
+}
+
+.roomActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.roomEmpty {
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 42px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roomEmpty strong {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.roomEmpty span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 /* Chat panel */
 .chatPanel {
   background: var(--card);
@@ -614,22 +771,33 @@
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.videoControlGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .vcBtn {
-  min-width: 38px;
+  min-width: 104px;
   height: 38px;
-  padding: 0 11px;
-  border-radius: 10px;
+  padding: 0 12px;
+  border-radius: 8px;
   background: var(--card2);
   border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
   transition: border-color 0.15s;
 }
 
@@ -667,7 +835,7 @@
 
 .callBtn {
   width: auto;
-  min-width: 78px;
+  min-width: 118px;
   padding: 0 14px;
   background: var(--primary);
   border-color: var(--primary);
@@ -677,7 +845,7 @@
 
 .hangBtn {
   width: auto;
-  min-width: 82px;
+  min-width: 104px;
   padding: 0 14px;
   background: var(--accent);
   border-color: var(--accent);
@@ -687,7 +855,7 @@
 
 .leaveBtn {
   width: auto;
-  min-width: 72px;
+  min-width: 92px;
   padding: 0 14px;
   color: var(--muted);
 }
@@ -733,6 +901,15 @@
     flex-direction: column;
   }
 
+  .roomModeBar {
+    width: 100%;
+  }
+
+  .modeSwitchBtn {
+    flex: 1;
+    min-width: 0;
+  }
+
   .acceptConsultationBtn {
     width: 100%;
   }
@@ -758,6 +935,12 @@
     width: 100%;
   }
 
+  .roomCard,
+  .roomActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .msg {
     max-width: 88%;
   }
@@ -771,7 +954,27 @@
   }
 
   .videoControls {
-    flex-wrap: wrap;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .videoControlGroup {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .videoControlGroup:first-child {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .vcBtn,
+  .callBtn,
+  .hangBtn,
+  .leaveBtn,
+  .vcActionBtn {
+    min-width: 0;
+    width: 100%;
   }
 
   .pip,

@@ -182,10 +182,16 @@ export const patients = {
 export const admin = {
   getDashboard: () => req("/admin/dashboard"),
   getUsers: (p = {}) => req(`/admin/users?${new URLSearchParams(p)}`),
+  getUserById: (id) => req(`/admin/users/${id}`),
   verifyUser: (id, verified = true) =>
     req(`/admin/users/${id}`, {
       method: "PUT",
       body: JSON.stringify({ isEmailVerified: verified }),
+    }),
+  verifyDoctor: (id, verified = true) =>
+    req(`/admin/users/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ doctorProfile: { isVerified: verified } }),
     }),
   updateUserStatus: (id, status) =>
     status === "active"

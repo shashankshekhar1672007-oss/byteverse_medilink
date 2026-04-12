@@ -110,7 +110,7 @@ function VideoPlaceholder({ callStatus, disabled, initials, peerName }) {
     idle: disabled
       ? "Video starts after the consultation is active"
       : "Click Call to start video",
-    ringing: "Incoming call. Tap Accept above.",
+    ringing: "Connecting incoming call...",
     calling: `Calling ${peerName}...`,
     connected: "Connected. Waiting for video...",
     failed: "Call failed. Try again.",
@@ -147,84 +147,91 @@ function VideoControls({
   peerReady,
   disabled,
 }) {
+  const callLabel =
+    disabled ? "Pending" : peerReady ? "Start call" : "Request call";
+
   return (
     <div className={styles.videoControls}>
-      <button
-        className={`${styles.vcBtn} ${!videoOn ? styles.vcOff : ""}`}
-        onClick={onToggleVideo}
-        disabled={!hasLocalStream}
-        title={videoOn ? "Turn off camera" : "Turn on camera"}
-        type="button"
-      >
-        {videoOn ? "Cam" : "Cam off"}
-      </button>
-
-      <button
-        className={`${styles.vcBtn} ${!audioOn ? styles.vcOff : ""}`}
-        onClick={onToggleAudio}
-        disabled={!hasLocalStream}
-        title={audioOn ? "Mute" : "Unmute"}
-        type="button"
-      >
-        {audioOn ? "Mic" : "Muted"}
-      </button>
-
-      <button
-        className={`${styles.vcBtn} ${screenSharing ? styles.vcActive : ""}`}
-        onClick={onToggleScreenShare}
-        disabled={callStatus !== "connected"}
-        title="Share screen"
-        type="button"
-      >
-        Share
-      </button>
-
-      {(callStatus === "idle" || callStatus === "failed") && (
+      <div className={styles.videoControlGroup}>
         <button
-          className={`${styles.vcBtn} ${styles.callBtn}`}
-          onClick={onStartCall}
-          disabled={disabled || !peerReady}
+          className={`${styles.vcBtn} ${!videoOn ? styles.vcOff : ""}`}
+          onClick={onToggleVideo}
+          disabled={!hasLocalStream}
+          title={videoOn ? "Turn off camera" : "Turn on camera"}
           type="button"
         >
-          {disabled ? "Pending" : peerReady ? "Call" : "Waiting for peer..."}
+          {videoOn ? "Camera" : "Camera off"}
         </button>
-      )}
-      {callStatus === "calling" && (
-        <button
-          className={`${styles.vcBtn} ${styles.hangBtn}`}
-          onClick={onEndCall}
-          type="button"
-        >
-          Cancel
-        </button>
-      )}
-      {callStatus === "connected" && (
-        <button
-          className={`${styles.vcBtn} ${styles.vcActionBtn}`}
-          onClick={onOpenVideoWindow}
-          disabled={!hasLocalStream && !hasRemoteStream}
-          type="button"
-        >
-          Pop-out
-        </button>
-      )}
-      {callStatus === "connected" && (
-        <button
-          className={`${styles.vcBtn} ${styles.hangBtn}`}
-          onClick={onEndCall}
-          type="button"
-        >
-          End
-        </button>
-      )}
 
-      <button
-        className={`${styles.vcBtn} ${styles.leaveBtn}`}
-        onClick={onLeave}
-        type="button"
-      >
-        Leave
-      </button>
+        <button
+          className={`${styles.vcBtn} ${!audioOn ? styles.vcOff : ""}`}
+          onClick={onToggleAudio}
+          disabled={!hasLocalStream}
+          title={audioOn ? "Mute" : "Unmute"}
+          type="button"
+        >
+          {audioOn ? "Microphone" : "Muted"}
+        </button>
+
+        <button
+          className={`${styles.vcBtn} ${screenSharing ? styles.vcActive : ""}`}
+          onClick={onToggleScreenShare}
+          disabled={callStatus !== "connected"}
+          title="Share screen"
+          type="button"
+        >
+          Share
+        </button>
+      </div>
+
+      <div className={styles.videoControlGroup}>
+        {(callStatus === "idle" || callStatus === "failed") && (
+          <button
+            className={`${styles.vcBtn} ${styles.callBtn}`}
+            onClick={onStartCall}
+            disabled={disabled}
+            type="button"
+          >
+            {callLabel}
+          </button>
+        )}
+        {callStatus === "calling" && (
+          <button
+            className={`${styles.vcBtn} ${styles.hangBtn}`}
+            onClick={onEndCall}
+            type="button"
+          >
+            Cancel
+          </button>
+        )}
+        {callStatus === "connected" && (
+          <button
+            className={`${styles.vcBtn} ${styles.vcActionBtn}`}
+            onClick={onOpenVideoWindow}
+            disabled={!hasLocalStream && !hasRemoteStream}
+            type="button"
+          >
+            Pop-out
+          </button>
+        )}
+        {callStatus === "connected" && (
+          <button
+            className={`${styles.vcBtn} ${styles.hangBtn}`}
+            onClick={onEndCall}
+            type="button"
+          >
+            End call
+          </button>
+        )}
+
+        <button
+          className={`${styles.vcBtn} ${styles.leaveBtn}`}
+          onClick={onLeave}
+          type="button"
+        >
+          Leave
+        </button>
+      </div>
     </div>
   );
 }

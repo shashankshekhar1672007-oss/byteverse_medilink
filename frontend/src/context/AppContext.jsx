@@ -11,6 +11,7 @@ import {
   disconnectSocket,
   getSocket,
   EVENTS,
+  declineVideoCall,
 } from "../services/socket";
 import {
   playIncomingMessageTone,
@@ -54,6 +55,7 @@ export function AppProvider({ children }) {
   const [selectedConsultationId, setSelectedConsultationId] = useState(null);
   const [notifications, setNotifications] = useState(0);
   const [notificationItems, setNotificationItems] = useState([]);
+  const [incomingCall, setIncomingCall] = useState(null);
   const [notificationPermission, setNotificationPermission] = useState(
     typeof Notification === "undefined"
       ? "unsupported"
@@ -197,9 +199,41 @@ export function AppProvider({ children }) {
     if (params.doctor !== undefined) setSelectedDoctor(params.doctor);
     if (params.prescriptionId !== undefined)
       setSelectedPrescriptionId(params.prescriptionId);
-    if (params.consultationId !== undefined)
+    if (page === PAGES.CONSULTATION && params.consultationId === undefined) {
+      setSelectedConsultationId(null);
+    } else if (params.consultationId !== undefined) {
       setSelectedConsultationId(params.consultationId);
+    }
   }, []);
+
+  const acceptIncomingCall = useCallback(() => {
+    if (!incomingCall?.consultationId) return;
+    const consultationId = incomingCall.consultationId;
+    setIncomingCall(null);
+    navigate(PAGES.CONSULTATION, {
+      consultationId,
+      mode: "call",
+      autoAcceptCall: true,
+    });
+  }, [incomingCall, navigate]);
+
+  const openIncomingCallChat = useCallback(() => {
+    if (!incomingCall?.consultationId) return;
+    const consultationId = incomingCall.consultationId;
+    declineVideoCall(consultationId);
+    setIncomingCall(null);
+    navigate(PAGES.CONSULTATION, {
+      consultationId,
+      mode: "chat",
+    });
+  }, [incomingCall, navigate]);
+
+  const dismissIncomingCall = useCallback(() => {
+    if (incomingCall?.consultationId) {
+      declineVideoCall(incomingCall.consultationId);
+    }
+    setIncomingCall(null);
+  }, [incomingCall]);
 
   useEffect(() => {
     if (!isAuthenticated || !user) return;
@@ -346,6 +380,41 @@ export function AppProvider({ children }) {
       });
     };
 
+    const onIncomingVideoCall = (payload = {}) => {
+      const callerName =
+        payload.from?.name ||
+        (payload.from?.role === "doctor" ? "Doctor" : "Patient");
+      setIncomingCall(payload);
+      pushNotification({
+        title: "Incoming video call",
+        body: `${callerName} is calling you now.`,
+        type: "video_call",
+        page: PAGES.CONSULTATION,
+        params: payload.consultationId
+          ? {
+              consultationId: payload.consultationId,
+              mode: "call",
+              autoAcceptCall: true,
+            }
+          : undefined,
+      });
+    };
+
+    const onVideoCallDeclined = (payload = {}) => {
+      setIncomingCall((current) =>
+        current?.consultationId &&
+        String(current.consultationId) === String(payload.consultationId)
+          ? null
+          : current,
+      );
+      showToast(
+        payload.from?.name
+          ? `${payload.from.name} declined the video call.`
+          : "The video call was declined.",
+        "warning",
+      );
+    };
+
     sock.on(EVENTS.RECEIVE_MESSAGE, onMessage);
     sock.on("connect_error", onSocketConnectError);
     sock.on("consultationRequest", onConsultationRequest);
@@ -354,6 +423,8 @@ export function AppProvider({ children }) {
     sock.on("newNotification", onGenericNotification);
     sock.on("consultationUpdated", onGenericNotification);
     sock.on(EVENTS.CONSULTATION_ENDED, onConsultationEnded);
+    sock.on(EVENTS.VIDEO_CALL_INCOMING, onIncomingVideoCall);
+    sock.on(EVENTS.VIDEO_CALL_DECLINED, onVideoCallDeclined);
 
     return () => {
       sock.off(EVENTS.RECEIVE_MESSAGE, onMessage);
@@ -363,6 +434,8 @@ export function AppProvider({ children }) {
       sock.off("newNotification", onGenericNotification);
       sock.off("consultationUpdated", onGenericNotification);
       sock.off(EVENTS.CONSULTATION_ENDED, onConsultationEnded);
+      sock.off(EVENTS.VIDEO_CALL_INCOMING, onIncomingVideoCall);
+      sock.off(EVENTS.VIDEO_CALL_DECLINED, onVideoCallDeclined);
       sock.off("connect_error", onSocketConnectError);
     };
   }, [activePage, isAuthenticated, selectedConsultationId, showToast, user]);
@@ -382,6 +455,7 @@ export function AppProvider({ children }) {
         notifications,
         notificationItems,
         notificationPermission,
+        incomingCall,
         toast,
         login,
         logout,
@@ -390,6 +464,9 @@ export function AppProvider({ children }) {
         syncSession,
         setNotifications,
         requestNotificationPermission,
+        acceptIncomingCall,
+        openIncomingCallChat,
+        dismissIncomingCall,
         clearNotifications,
         dismissNotification,
         setSelectedDoctor,

@@ -16,7 +16,7 @@ const PATIENT_NAV_ITEMS = [
     icon: UserIcon,
   },
   {
-    page: PAGES.CONSULTATION_LIST,
+    page: PAGES.CONSULTATION,
     label: "Consultations",
     mobileLabel: "Chats",
     icon: MessageIcon,

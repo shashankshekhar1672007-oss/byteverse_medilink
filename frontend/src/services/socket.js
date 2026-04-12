@@ -1,14 +1,22 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5001";
+const SOCKET_URL =
+  import.meta.env.VITE_SOCKET_URL ||
+  (import.meta.env.DEV ? window.location.origin : "http://localhost:5001");
 
 let socket = null;
 let socketToken = null;
+let disconnectTimer = null;
 
 export const getSocket = () => socket;
 
 export const connectSocket = (token) => {
   if (!token) return null;
+
+  if (disconnectTimer) {
+    clearTimeout(disconnectTimer);
+    disconnectTimer = null;
+  }
 
   if (socket && socketToken === token) {
     if (!socket.connected && !socket.active) socket.connect();
@@ -24,7 +32,8 @@ export const connectSocket = (token) => {
   socket = io(SOCKET_URL, {
     path: "/socket.io",
     auth: { token },
-    transports: ["websocket", "polling"],
+    transports: ["polling", "websocket"],
+    upgrade: true,
     reconnection: true,
     reconnectionAttempts: 10,
     reconnectionDelay: 1000,
@@ -46,11 +55,16 @@ export const connectSocket = (token) => {
 };
 
 export const disconnectSocket = () => {
-  if (socket) {
+  if (!socket) return;
+
+  if (disconnectTimer) clearTimeout(disconnectTimer);
+  disconnectTimer = window.setTimeout(() => {
+    if (!socket) return;
     socket.disconnect();
     socket = null;
     socketToken = null;
-  }
+    disconnectTimer = null;
+  }, 250);
 };
 
 export const joinConsultation = (consultationId) => {
@@ -69,6 +83,18 @@ export const sendTyping = (consultationId, isTyping) => {
   socket.emit(isTyping ? "typing" : "stopTyping", { consultationId });
 };
 
+export const requestVideoCall = (consultationId) => {
+  if (!socket?.connected || !consultationId) return false;
+  socket.emit("videoCall:request", { consultationId });
+  return true;
+};
+
+export const declineVideoCall = (consultationId) => {
+  if (!socket?.connected || !consultationId) return false;
+  socket.emit("videoCall:decline", { consultationId });
+  return true;
+};
+
 export const EVENTS = {
   RECEIVE_MESSAGE: "receiveMessage",
   TYPING: "typing",
@@ -78,4 +104,7 @@ export const EVENTS = {
   DOCTOR_ONLINE: "doctorOnline",
   DOCTOR_OFFLINE: "doctorOffline",
   CONSULTATION_ENDED: "consultationEnded",
+  VIDEO_CALL_INCOMING: "videoCall:incoming",
+  VIDEO_CALL_REQUESTED: "videoCall:requested",
+  VIDEO_CALL_DECLINED: "videoCall:declined",
 };

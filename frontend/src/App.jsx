@@ -2,6 +2,7 @@ import Profile from "./components/pages/Profile";
 import { AppProvider, useApp, PAGES } from "./context/AppContext";
 import AppShell from "./components/layout/AppShell";
 import DoctorShell from "./components/layout/DoctorShell";
+import IncomingCallNotice from "./components/layout/IncomingCallNotice";
 import Login from "./components/pages/Login";
 import Dashboard from "./components/pages/Dashboard";
 import DoctorDashboard from "./components/pages/DoctorDashboard";
@@ -67,6 +68,7 @@ function AppContent() {
   const Shell = user?.role === "doctor" ? DoctorShell : AppShell;
   return (
     <Shell>
+      <IncomingCallNotice />
       <PageRouter />
       {toast && <Toast message={toast.message} type={toast.type} />}
       <ChatbotWidget />

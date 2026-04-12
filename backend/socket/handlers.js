@@ -212,15 +212,47 @@ const registerSocketHandlers = (io) => {
       }
     });
 
-    socket.on('webrtc:ended', ({ roomId: emitRoomId } = {}) => {
+    const notifyCallEnded = async ({ roomId: emitRoomId, consultationId } = {}) => {
       const room = emitRoomId || socket.consultationRoomId;
+      const activeConsultationId = consultationId || socket.consultationId;
+      const payload = {
+        consultationId: activeConsultationId,
+        from: user._id,
+        name: user.name,
+      };
+
       if (room) {
-        socket.to(room).emit('webrtc:call-ended', {
-          from: user._id,
-          name: user.name,
-        });
-        console.debug(`Call ended signal sent in room ${room} (legacy event)`);
+        socket.to(room).emit('webrtc:call-ended', payload);
       }
+
+      if (!activeConsultationId) {
+        console.debug(`Call ended signal sent to room ${room || 'unknown'} only`);
+        return;
+      }
+
+      try {
+        const consultation = await Consultation.findById(activeConsultationId)
+          .populate('patient', 'userId')
+          .populate('doctor', 'userId');
+
+        if (!consultation) return;
+
+        const patientUserId = consultation.patient?.userId;
+        const doctorUserId = consultation.doctor?.userId;
+        const isPatient = user.role === 'patient' && patientUserId?.equals(user._id);
+        const isDoctor = user.role === 'doctor' && doctorUserId?.equals(user._id);
+        if (!isPatient && !isDoctor) return;
+
+        const targetUserId = isPatient ? doctorUserId : patientUserId;
+        if (targetUserId) emitToUser(io, targetUserId, 'webrtc:call-ended', payload);
+      } catch (err) {
+        console.error(`notifyCallEnded error: ${err.message}`);
+      }
+    };
+
+    socket.on('webrtc:ended', async ({ roomId: emitRoomId, consultationId } = {}) => {
+      await notifyCallEnded({ roomId: emitRoomId, consultationId });
+      console.debug(`Call ended signal sent (legacy event)`);
     });
 
     socket.on('webrtc:ice-candidate', ({ roomId: emitRoomId, candidate } = {}) => {
@@ -230,15 +262,9 @@ const registerSocketHandlers = (io) => {
       }
     });
 
-    socket.on('webrtc:call-ended', ({ roomId: emitRoomId } = {}) => {
-      const room = emitRoomId || socket.consultationRoomId;
-      if (room) {
-        socket.to(room).emit('webrtc:call-ended', { 
-          from: user._id, 
-          name: user.name 
-        });
-        console.debug(`Call ended signal sent to room ${room}`);
-      }
+    socket.on('webrtc:call-ended', async ({ roomId: emitRoomId, consultationId } = {}) => {
+      await notifyCallEnded({ roomId: emitRoomId, consultationId });
+      console.debug(`Call ended signal sent`);
     });
 
     socket.on('webrtc:media-toggle', ({ roomId: emitRoomId, video, audio } = {}) => {
@@ -249,6 +275,94 @@ const registerSocketHandlers = (io) => {
           video, 
           audio 
         });
+      }
+    });
+
+    socket.on('videoCall:request', async ({ consultationId } = {}) => {
+      try {
+        const consultation = await Consultation.findById(consultationId)
+          .populate({ path: 'patient', populate: { path: 'userId', select: 'name avatar' } })
+          .populate({ path: 'doctor', populate: { path: 'userId', select: 'name avatar' } });
+
+        if (!consultation) {
+          return socket.emit('error', { message: 'Consultation not found' });
+        }
+
+        if (consultation.status !== CONSULTATION_STATUS.ACTIVE) {
+          return socket.emit('error', { message: 'Consultation is not active' });
+        }
+
+        const patientUserId = consultation.patient?.userId?._id;
+        const doctorUserId = consultation.doctor?.userId?._id;
+        const isPatient = user.role === 'patient' && patientUserId?.equals(user._id);
+        const isDoctor = user.role === 'doctor' && doctorUserId?.equals(user._id);
+
+        if (!isPatient && !isDoctor) {
+          return socket.emit('error', { message: 'Not authorized for this consultation' });
+        }
+
+        const targetUserId = isPatient ? doctorUserId : patientUserId;
+        const callerName = user.name || (isPatient ? 'Patient' : 'Doctor');
+        const roomId = consultation.roomId || consultation._id.toString();
+        const payload = {
+          consultationId: consultation._id,
+          roomId,
+          from: {
+            userId: user._id,
+            name: callerName,
+            role: user.role,
+          },
+          patient: {
+            name: consultation.patient?.userId?.name,
+            avatar: consultation.patient?.userId?.avatar,
+          },
+          doctor: {
+            name: consultation.doctor?.userId?.name,
+            avatar: consultation.doctor?.userId?.avatar,
+          },
+          reason: consultation.reason,
+          requestedAt: new Date(),
+        };
+
+        if (!targetUserId) {
+          return socket.emit('error', { message: 'Call recipient not found' });
+        }
+
+        emitToUser(io, targetUserId, 'videoCall:incoming', payload);
+        socket.emit('videoCall:requested', payload);
+        console.debug(`Video call request sent from ${user.name} for consultation ${consultation._id}`);
+      } catch (err) {
+        console.error(`videoCall:request error: ${err.message}`);
+        socket.emit('error', { message: 'Failed to request video call' });
+      }
+    });
+
+    socket.on('videoCall:decline', async ({ consultationId } = {}) => {
+      try {
+        const consultation = await Consultation.findById(consultationId)
+          .populate('patient', 'userId')
+          .populate('doctor', 'userId');
+
+        if (!consultation) return;
+
+        const patientUserId = consultation.patient?.userId;
+        const doctorUserId = consultation.doctor?.userId;
+        const isPatient = user.role === 'patient' && patientUserId?.equals(user._id);
+        const isDoctor = user.role === 'doctor' && doctorUserId?.equals(user._id);
+        if (!isPatient && !isDoctor) return;
+
+        const targetUserId = isPatient ? doctorUserId : patientUserId;
+        if (!targetUserId) return;
+        emitToUser(io, targetUserId, 'videoCall:declined', {
+          consultationId: consultation._id,
+          from: {
+            userId: user._id,
+            name: user.name,
+            role: user.role,
+          },
+        });
+      } catch (err) {
+        console.error(`videoCall:decline error: ${err.message}`);
       }
     });
 
@@ -270,6 +384,7 @@ const registerSocketHandlers = (io) => {
 
           // Notify room members only when the user truly leaves the room
           socket.to(roomId).emit('peerLeft', {
+            consultationId: socket.consultationId,
             userId: user._id,
             name: user.name,
           });

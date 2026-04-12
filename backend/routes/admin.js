@@ -65,6 +65,7 @@ const updateUserRules = [
   body('patientProfile.bloodGroup').optional().isIn(BLOOD_GROUPS).withMessage('Invalid blood group'),
   body('doctorProfile.specialization').optional().isIn(SPECIALIZATIONS).withMessage('Invalid specialization'),
   body('doctorProfile.price').optional().isFloat({ min: 0 }).withMessage('Valid price required'),
+  body('doctorProfile.isVerified').optional().isBoolean().withMessage('Doctor verification must be true or false'),
 ];
 
 const orderListRules = [

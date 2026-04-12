@@ -59,7 +59,21 @@ exports.getUsers = async (req, res, next) => {
       User.countDocuments(filter),
     ]);
 
-    return paginate(res, users, total, page, limit);
+    const userIds = users.map((user) => user._id);
+    const [patients, doctors] = await Promise.all([
+      Patient.find({ userId: { $in: userIds } }),
+      Doctor.find({ userId: { $in: userIds } }),
+    ]);
+    const profileByUserId = new Map();
+    patients.forEach((profile) => profileByUserId.set(profile.userId.toString(), profile));
+    doctors.forEach((profile) => profileByUserId.set(profile.userId.toString(), profile));
+
+    const usersWithProfiles = users.map((user) => ({
+      ...user.toObject(),
+      profile: profileByUserId.get(user._id.toString()) || null,
+    }));
+
+    return paginate(res, usersWithProfiles, total, page, limit);
   } catch (err) {
     next(err);
   }
@@ -140,10 +154,11 @@ exports.restoreUser = async (req, res, next) => {
 
 exports.getDashboard = async (req, res, next) => {
   try {
-    const [users, activeUsers, doctors, patients, orders, pendingOrders] = await Promise.all([
+    const [users, activeUsers, doctors, verifiedDoctors, patients, orders, pendingOrders] = await Promise.all([
       User.countDocuments(),
       User.countDocuments({ isActive: true }),
       User.countDocuments({ role: ROLES.DOCTOR }),
+      Doctor.countDocuments({ isVerified: true }),
       User.countDocuments({ role: ROLES.PATIENT }),
       Order.countDocuments(),
       Order.countDocuments({ status: 'pending' }),
@@ -153,6 +168,8 @@ exports.getDashboard = async (req, res, next) => {
       users,
       activeUsers,
       doctors,
+      verifiedDoctors,
+      pendingDoctorVerification: Math.max(doctors - verifiedDoctors, 0),
       patients,
       orders,
       pendingOrders,

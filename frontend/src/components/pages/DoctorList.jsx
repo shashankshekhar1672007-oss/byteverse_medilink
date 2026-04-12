@@ -77,6 +77,7 @@ export default function DoctorList() {
       );
       navigate(PAGES.CONSULTATION, {
         consultationId: r.data._id,
+        mode: "chat",
         doctor: {
           ...doc,
           name: doc.userId?.name,

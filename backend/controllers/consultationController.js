@@ -37,6 +37,14 @@ exports.startConsultation = async (req, res, next) => {
         { path: 'doctor', populate: { path: 'userId', select: 'name avatar' } },
       ]);
 
+      notifyDoctorConsultationRequest({
+        consultation: populatedExisting,
+        doctor,
+        patient,
+        reason: existing.reason || reason,
+        reused: true,
+      });
+
       return success(res, populatedExisting, 200, { reused: true });
     }
 
@@ -68,24 +76,12 @@ exports.startConsultation = async (req, res, next) => {
       { path: 'doctor', populate: { path: 'userId', select: 'name avatar' } },
     ]);
 
-    // 🔔 Real-time notification to doctor via socket
-    try {
-      const { emitToUser } = require('../socket/handlers');
-      const io = require('../socket/ioInstance').get();
-      if (io) emitToUser(io, doctor.userId._id, 'consultationRequest', {
-        consultationId: consultation._id,
-        roomId: consultation.roomId,
-        patient: {
-          name: patient.userId.name,
-          id: patient._id,
-        },
-        reason: reason || 'General consultation',
-        createdAt: consultation.createdAt,
-      });
-      console.log(`🔔 Socket notification sent to doctor ${doctor.userId.name}`);
-    } catch (socketErr) {
-      console.warn(`Socket notification failed: ${socketErr.message}`);
-    }
+    notifyDoctorConsultationRequest({
+      consultation: populated,
+      doctor,
+      patient,
+      reason,
+    });
 
     return success(res, populated, 201);
   } catch (err) {
@@ -99,6 +95,31 @@ exports.startConsultation = async (req, res, next) => {
     next(err);
   }
 };
+
+function notifyDoctorConsultationRequest({ consultation, doctor, patient, reason, reused = false }) {
+  try {
+    const { emitToUser } = require('../socket/handlers');
+    const io = require('../socket/ioInstance').get();
+    if (!io || !doctor?.userId?._id) return;
+
+    emitToUser(io, doctor.userId._id, 'consultationRequest', {
+      consultationId: consultation._id,
+      roomId: consultation.roomId,
+      status: consultation.status,
+      reused,
+      patient: {
+        name: patient.userId?.name || 'A patient',
+        id: patient._id,
+      },
+      reason: reason || 'General consultation',
+      createdAt: consultation.createdAt,
+    });
+
+    console.log(`Socket consultation notification sent to doctor ${doctor.userId.name}`);
+  } catch (socketErr) {
+    console.warn(`Socket notification failed: ${socketErr.message}`);
+  }
+}
 
 /**
  * PUT /api/consultations/:id/leave
