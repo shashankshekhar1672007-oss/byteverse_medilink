@@ -26,7 +26,6 @@ const consultationRoutes = require('./routes/consultations');
 const orderRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
 
-// ── App setup ─────────────────────────────────────────────────────────────────
 // ── Socket.io helpers ─────────────────────────────────────────────────────────
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
   .split(',')
