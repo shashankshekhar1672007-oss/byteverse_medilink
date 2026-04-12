@@ -10,7 +10,7 @@ cloudinary.config({
 });
 
 if (!cloudinary.config().cloud_name) {
-  require('../utils/logger').warn('Cloudinary not configured; file uploads will fail');
+  console.warn('Cloudinary not configured; file uploads will fail');
 }
 
 // ── Custom Cloudinary Storage Engine (compatible with cloudinary v2) ─────────
@@ -103,7 +103,7 @@ const deleteFromCloudinary = async (publicId) => {
   try {
     await cloudinary.uploader.destroy(publicId);
   } catch (err) {
-    require('../utils/logger').error(`Cloudinary delete failed: ${err.message}`);
+    console.error(`Cloudinary delete failed: ${err.message}`);
   }
 };
 

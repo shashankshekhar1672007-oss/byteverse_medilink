@@ -22,14 +22,13 @@ const Message = require('./models/Message');
 const Order = require('./models/Order');
 
 const { users, patientProfiles, doctorProfiles } = require('./utils/seed');
-const logger = require('./utils/logger');
 
 // ── DB CONNECT ────────────────────────────────────────────────────────────────
 const connect = async () => {
   await mongoose.connect(
     process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/medilink'
   );
-  logger.info('MongoDB connected for seeding');
+  console.log('MongoDB connected for seeding');
 };
 
 // ── GENERATORS ────────────────────────────────────────────────────────────────
@@ -38,11 +37,11 @@ const generateRxId = () =>
 
 // ── SEED DATA ─────────────────────────────────────────────────────────────────
 const seedData = async () => {
-  logger.info('Seeding database...');
+  console.log('Seeding database...');
 
   // Users
   const insertedUsers = await User.insertMany(users);
-  logger.info(`Inserted ${insertedUsers.length} users`);
+  console.log(`Inserted ${insertedUsers.length} users`);
 
   const userIds = insertedUsers.map((u) => u._id);
 
@@ -50,13 +49,13 @@ const seedData = async () => {
   const insertedPatients = await Patient.insertMany(
     patientProfiles(userIds)
   );
-  logger.info(`Inserted ${insertedPatients.length} patients`);
+  console.log(`Inserted ${insertedPatients.length} patients`);
 
   // Doctors
   const insertedDoctors = await Doctor.insertMany(
     doctorProfiles(userIds)
   );
-  logger.info(`Inserted ${insertedDoctors.length} doctors`);
+  console.log(`Inserted ${insertedDoctors.length} doctors`);
 
   // ── Prescriptions (FIXED rxId) ────────────────────────────────────────────
   const prescriptions = await Prescription.insertMany([
@@ -97,7 +96,7 @@ const seedData = async () => {
     },
   ]);
 
-  logger.info(`Inserted ${prescriptions.length} prescriptions`);
+  console.log(`Inserted ${prescriptions.length} prescriptions`);
 
   const orders = await Order.insertMany([
     {
@@ -126,7 +125,7 @@ const seedData = async () => {
     },
   ]);
 
-  logger.info(`Inserted ${orders.length} orders`);
+  console.log(`Inserted ${orders.length} orders`);
 
 // ── Consultations
  const consultations = await Consultation.insertMany([
@@ -168,14 +167,14 @@ const seedData = async () => {
     },
   ]);
 
-  logger.info('Inserted messages');
+  console.log('Inserted messages');
 
-  logger.info('✅ Seeding completed successfully');
+  console.log('✅ Seeding completed successfully');
 };
 
 // ── CLEAN DB ────────────────────────────────────────────────────────────────
 const cleanData = async () => {
-  logger.info('Cleaning database...');
+  console.log('Cleaning database...');
   await Promise.all([
     User.deleteMany({}),
     Patient.deleteMany({}),
@@ -185,7 +184,7 @@ const cleanData = async () => {
     Message.deleteMany({}),
     Order.deleteMany({}),
   ]);
-  logger.info('✅ Database cleared');
+  console.log('✅ Database cleared');
 };
 
 // ── MAIN ─────────────────────────────────────────────────────────────────────
@@ -204,7 +203,7 @@ const cleanData = async () => {
       console.log('Usage: node seeder.js --seed | --clean');
     }
   } catch (err) {
-    logger.error(`Seeder error: ${err.message}`);
+    console.error(`Seeder error: ${err.message}`);
   } finally {
     await mongoose.disconnect();
     process.exit(0);

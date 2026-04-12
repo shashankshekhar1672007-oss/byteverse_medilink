@@ -4,7 +4,6 @@ const Doctor = require('../models/Doctor');
 const Consultation = require('../models/Consultation');
 const Message = require('../models/Message');
 const { SOCKET_EVENTS, CONSULTATION_STATUS } = require('../utils/constants');
-const logger = require('../utils/logger');
 
 // Track connected users: userId -> Set of socketIds
 // Track room members:    roomId -> Map<userId, Set<socketId>>
@@ -45,14 +44,14 @@ const registerSocketHandlers = (io) => {
       socket.user = await authenticateSocket(socket);
       next();
     } catch (err) {
-      logger.warn(`Socket auth failed: ${err.message}`);
+      console.warn(`Socket auth failed: ${err.message}`);
       next(new Error('Unauthorized'));
     }
   });
 
   io.on('connection', async (socket) => {
     const user = socket.user;
-    logger.info(`✅ Socket connected: ${user.name} (${user._id}) — ${socket.id}`);
+    console.log(`✅ Socket connected: ${user.name} (${user._id}) — ${socket.id}`);
 
     // Track user sockets
     if (!connectedUsers.has(user._id.toString())) {
@@ -69,14 +68,14 @@ const registerSocketHandlers = (io) => {
     // ── Join consultation room ─────────────────────────────────────────────
     socket.on(SOCKET_EVENTS.JOIN_CONSULTATION, async ({ consultationId } = {}) => {
       try {
-        logger.debug(`${user.name} joining consultation: ${consultationId}`);
+        console.debug(`${user.name} joining consultation: ${consultationId}`);
         
         const consultation = await Consultation.findById(consultationId)
           .populate('patient', 'userId')
           .populate('doctor', 'userId');
 
         if (!consultation) {
-          logger.warn(`Consultation not found: ${consultationId}`);
+          console.warn(`Consultation not found: ${consultationId}`);
           return socket.emit('error', { message: 'Consultation not found' });
         }
 
@@ -94,7 +93,7 @@ const registerSocketHandlers = (io) => {
           consultation.doctor?.userId?.equals(user._id);
         
         if (!isPatient && !isDoctor) {
-          logger.warn(`Unauthorized consultation room access attempt by ${user._id}`);
+          console.warn(`Unauthorized consultation room access attempt by ${user._id}`);
           return socket.emit('error', { message: 'Not authorized for this consultation' });
         }
 
@@ -111,7 +110,7 @@ const registerSocketHandlers = (io) => {
         const isFirstSocketInRoom = memberSockets.size === 0;
         memberSockets.add(socket.id);
 
-        logger.debug(`${user.name} joined room ${roomId} (${roomMembers.get(roomId).size}/2)`);
+        console.debug(`${user.name} joined room ${roomId} (${roomMembers.get(roomId).size}/2)`);
         
         // Confirm join
         socket.emit('joinedConsultation', { roomId, consultationId });
@@ -127,12 +126,12 @@ const registerSocketHandlers = (io) => {
 
         // Both parties ready
         if (isFirstSocketInRoom && roomMembers.get(roomId).size === 2) {
-          logger.debug(`Room ${roomId} ready for WebRTC call`);
+          console.debug(`Room ${roomId} ready for WebRTC call`);
           io.to(roomId).emit('readyForCall');
         }
 
       } catch (err) {
-        logger.error(`joinConsultation error: ${err.message}`);
+        console.error(`joinConsultation error: ${err.message}`);
         socket.emit('error', { message: 'Failed to join consultation' });
       }
     });
@@ -164,9 +163,9 @@ const registerSocketHandlers = (io) => {
         const targetRoom = roomId || consultation.roomId || consultation._id.toString();
         io.to(targetRoom).emit(SOCKET_EVENTS.RECEIVE_MESSAGE, populated);
         
-        logger.debug(`${user.name} sent message in room ${targetRoom}`);
+        console.debug(`${user.name} sent message in room ${targetRoom}`);
       } catch (err) {
-        logger.error(`sendMessage error: ${err.message}`);
+        console.error(`sendMessage error: ${err.message}`);
         socket.emit('error', { message: 'Failed to send message' });
       }
     });
@@ -201,7 +200,7 @@ const registerSocketHandlers = (io) => {
       const room = emitRoomId || socket.consultationRoomId;
       if (room && offer) {
         socket.to(room).emit('webrtc:offer', { offer, from: user._id });
-        logger.debug(`WebRTC offer forwarded in room ${room}`);
+        console.debug(`WebRTC offer forwarded in room ${room}`);
       }
     });
 
@@ -209,7 +208,7 @@ const registerSocketHandlers = (io) => {
       const room = emitRoomId || socket.consultationRoomId;
       if (room && answer) {
         socket.to(room).emit('webrtc:answer', { answer, from: user._id });
-        logger.debug(`WebRTC answer forwarded in room ${room}`);
+        console.debug(`WebRTC answer forwarded in room ${room}`);
       }
     });
 
@@ -220,7 +219,7 @@ const registerSocketHandlers = (io) => {
           from: user._id,
           name: user.name,
         });
-        logger.debug(`Call ended signal sent in room ${room} (legacy event)`);
+        console.debug(`Call ended signal sent in room ${room} (legacy event)`);
       }
     });
 
@@ -238,7 +237,7 @@ const registerSocketHandlers = (io) => {
           from: user._id, 
           name: user.name 
         });
-        logger.debug(`Call ended signal sent to room ${room}`);
+        console.debug(`Call ended signal sent to room ${room}`);
       }
     });
 
@@ -255,7 +254,7 @@ const registerSocketHandlers = (io) => {
 
     // ── Disconnect ────────────────────────────────────────────────────────
     socket.on('disconnect', async (reason) => {
-      logger.debug(`${user.name} disconnected: ${reason}`);
+      console.debug(`${user.name} disconnected: ${reason}`);
       
       const roomId = socket.consultationRoomId;
       if (roomId && roomMembers.has(roomId)) {
@@ -278,7 +277,7 @@ const registerSocketHandlers = (io) => {
 
         if (room.size === 0) {
           roomMembers.delete(roomId);
-          logger.debug(`Room ${roomId} emptied`);
+          console.debug(`Room ${roomId} emptied`);
         }
       }
 

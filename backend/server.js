@@ -9,10 +9,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
-const swaggerUi = require('swagger-ui-express');
 
-const logger = require('./utils/logger');
-const swaggerSpec = require('./utils/swagger');
 const errorHandler = require('./middleware/errorHandler');
 const { registerSocketHandlers } = require('./socket/handlers');
 
@@ -83,7 +80,7 @@ app.use(mongoSanitize());
 // ── Request logging ───────────────────────────────────────────────────────────
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('combined', {
-    stream: { write: (msg) => logger.http(msg.trim()) },
+    stream: { write: (msg) => console.log(msg.trim()) },
     skip: (req) => req.path === '/api/health',
   }));
 }
@@ -100,11 +97,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ── API docs ──────────────────────────────────────────────────────────────────
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  customSiteTitle: 'Medilink API Docs',
-  customCss: '.swagger-ui .topbar { background-color: #0d9488; }',
-}));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/auth', authLimiter, authRoutes);
@@ -129,19 +121,19 @@ const connectDB = async () => {
     const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/medilink', {
       serverSelectionTimeoutMS: 5000,
     });
-    logger.info(`MongoDB connected: ${conn.connection.host}`);
+    console.log(`MongoDB connected: ${conn.connection.host}`);
   } catch (err) {
-    logger.error(`MongoDB connection failed: ${err.message}`);
+    console.error(`MongoDB connection failed: ${err.message}`);
     process.exit(1);
   }
 };
 
 // ── Graceful shutdown ─────────────────────────────────────────────────────────
 const shutdown = async (signal) => {
-  logger.info(`${signal} received — shutting down gracefully`);
+  console.log(`${signal} received — shutting down gracefully`);
   server.close(async () => {
     await mongoose.connection.close();
-    logger.info('Server closed');
+    console.log('Server closed');
     process.exit(0);
   });
   setTimeout(() => process.exit(1), 10000); // force after 10s
@@ -150,7 +142,7 @@ const shutdown = async (signal) => {
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT',  () => shutdown('SIGINT'));
 process.on('unhandledRejection', (err) => {
-  logger.error(`Unhandled rejection: ${err.message}`);
+  console.error(`Unhandled rejection: ${err.message}`);
   shutdown('unhandledRejection');
 });
 
@@ -160,9 +152,8 @@ const PORT = parseInt(process.env.PORT) || 5001;
 if (require.main === module) {
   connectDB().then(() => {
     server.listen(PORT, () => {
-      logger.info(`🚀 Medilink API running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
-      logger.info(`📚 Swagger docs: http://localhost:${PORT}/api-docs`);
-      logger.info(`🏥 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`🚀 Medilink API running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
+      console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
     });
   });
 }

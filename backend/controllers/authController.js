@@ -4,7 +4,6 @@ const Patient = require('../models/Patient');
 const Doctor = require('../models/Doctor');
 const { success, error } = require('../utils/apiResponse');
 const { sendEmail, emailTemplates } = require('../utils/email');
-const logger = require('../utils/logger');
 const { ROLES } = require('../utils/constants');
 
 /**
@@ -45,7 +44,7 @@ exports.register = async (req, res, next) => {
       const tmpl = emailTemplates.verifyEmail(user.name, verifyUrl);
       await sendEmail({ to: user.email, ...tmpl });
     } catch (emailErr) {
-      logger.warn(`Email verification send failed: ${emailErr.message}`);
+      console.warn(`Email verification send failed: ${emailErr.message}`);
     }
 
     const token = user.getSignedToken();
@@ -90,7 +89,7 @@ exports.login = async (req, res, next) => {
     const token = user.getSignedToken();
     const refreshToken = user.getRefreshToken();
 
-    logger.info(`User logged in: ${email}`);
+    console.log(`User logged in: ${email}`);
     return success(res, { token, refreshToken, user: user.toSafeJSON() });
   } catch (err) {
     next(err);

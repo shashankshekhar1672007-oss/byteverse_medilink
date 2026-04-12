@@ -5,7 +5,6 @@ const Consultation = require('../models/Consultation');
 const { success, error, paginate } = require('../utils/apiResponse');
 const { sendEmail, emailTemplates } = require('../utils/email');
 const { PRESCRIPTION_STATUS, PAGINATION } = require('../utils/constants');
-const logger = require('../utils/logger');
 
 /**
  * POST /api/prescriptions
@@ -53,7 +52,7 @@ exports.createPrescription = async (req, res, next) => {
       const tmpl = emailTemplates.prescriptionCreated(patient.userId.name, doctor.userId.name, diagnosis);
       await sendEmail({ to: patient.userId.email, ...tmpl });
     } catch (emailErr) {
-      logger.warn(`Prescription email failed: ${emailErr.message}`);
+      console.warn(`Prescription email failed: ${emailErr.message}`);
     }
 
     const populated = await prescription.populate([

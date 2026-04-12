@@ -5,7 +5,6 @@ const Doctor = require('../models/Doctor');
 const { success, error, paginate } = require('../utils/apiResponse');
 const { sendEmail, emailTemplates } = require('../utils/email');
 const { CONSULTATION_STATUS, PAGINATION, SOCKET_EVENTS } = require('../utils/constants');
-const logger = require('../utils/logger');
 
 // Lazy-import socket helpers to avoid circular dep
 const getIO = () => {
@@ -54,14 +53,14 @@ exports.startConsultation = async (req, res, next) => {
       roomId,  // ✅ Unique roomId for WebRTC
     });
 
-    logger.info(`New consultation created: ${consultation._id}, room: ${roomId}`);
+    console.log(`New consultation created: ${consultation._id}, room: ${roomId}`);
 
     // Notify doctor via email
     try {
       const tmpl = emailTemplates.consultationStarted(doctor.userId.name, patient.userId.name);
       await sendEmail({ to: doctor.userId.email, ...tmpl });
     } catch (emailErr) {
-      logger.warn(`Consultation email failed: ${emailErr.message}`);
+      console.warn(`Consultation email failed: ${emailErr.message}`);
     }
 
     const populated = await consultation.populate([
@@ -83,14 +82,14 @@ exports.startConsultation = async (req, res, next) => {
         reason: reason || 'General consultation',
         createdAt: consultation.createdAt,
       });
-      logger.info(`🔔 Socket notification sent to doctor ${doctor.userId.name}`);
+      console.log(`🔔 Socket notification sent to doctor ${doctor.userId.name}`);
     } catch (socketErr) {
-      logger.warn(`Socket notification failed: ${socketErr.message}`);
+      console.warn(`Socket notification failed: ${socketErr.message}`);
     }
 
     return success(res, populated, 201);
   } catch (err) {
-    logger.error(`startConsultation error: ${err.message}`);
+    console.error(`startConsultation error: ${err.message}`);
     
     // Handle duplicate key errors specifically
     if (err.code === 11000) {
@@ -133,7 +132,7 @@ exports.leaveConsultation = async (req, res, next) => {
         });
       }
     } catch (socketErr) {
-      logger.warn(`Leave consultation socket notification failed: ${socketErr.message}`);
+        console.warn(`End consultation socket notification failed: ${socketErr.message}`);
     }
 
     return success(res, { message: 'Call leave acknowledged' }, 202);
@@ -199,7 +198,7 @@ exports.acceptConsultation = async (req, res, next) => {
         });
       }
     } catch (socketErr) {
-      logger.warn(`Accept notification failed: ${socketErr.message}`);
+      console.warn(`Accept notification failed: ${socketErr.message}`);
     }
 
     return success(res, consultation);
@@ -268,7 +267,7 @@ exports.endConsultation = async (req, res, next) => {
           io.to(roomId).emit('webrtc:call-ended', payload);
         }
       } catch (socketErr) {
-        logger.warn(`End consultation socket notification failed: ${socketErr.message}`);
+        console.warn(`End consultation socket notification failed: ${socketErr.message}`);
       }
     }
 
