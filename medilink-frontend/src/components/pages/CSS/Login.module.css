@@ -40,18 +40,12 @@
   margin-bottom: 30px;
 }
 
-.logo {
-  font-size: 32px;
-  font-weight: 700;
-  background: #007BFF;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 15px;
-  font-family: var(--font-display, 'Syne', sans-serif);
-}
-.logo span{
-  -webkit-text-fill-color: black;
+.logoImage {
+  width: 92px;
+  height: 92px;
+  display: block;
+  object-fit: contain;
+  margin: 0 auto 15px;
 }
 .header h1 {
   font-size: 24px;

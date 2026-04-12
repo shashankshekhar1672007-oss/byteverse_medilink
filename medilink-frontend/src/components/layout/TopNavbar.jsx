@@ -18,10 +18,14 @@ export default function TopNavbar() {
 
   return (
     <header className={styles.navbar}>
-      <div className={styles.logo}>
+      <button
+        type="button"
+        className={styles.logo}
+        onClick={() => navigate(PAGES.DASHBOARD)}
+      >
         <img src={logo} alt="MediLink logo" className={styles.logoImage} />
         {isDoctor && <span className={styles.badge}>Doctor</span>}
-      </div>
+      </button>
 
       <div className={styles.search}>
         <SearchIcon />

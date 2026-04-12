@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useApp } from "../../context/AppContext";
 import { Button } from "../ui/UI";
 import styles from "./CSS/Login.module.css";
+import logo from "../../assets/logo.png";
 
 const SPECIALIZATIONS = [
   "General Physician",
@@ -100,11 +101,9 @@ export default function Login() {
   return (
     <div className={styles.container}>
       <div className={styles.background} />
-      <div className={`${styles.card} ${styles.scrollCard}`}>
+        <div className={`${styles.card} ${styles.scrollCard}`}>
         <div className={styles.header}>
-          <div className={styles.logo}>
-            Medi<span>Link</span>
-          </div>
+          <img src={logo} alt="MediLink logo" className={styles.logoImage} />
           <h1>Welcome to MediLink</h1>
           <p>Healthcare made simple and accessible</p>
         </div>
