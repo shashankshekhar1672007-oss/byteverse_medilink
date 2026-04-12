@@ -1,331 +1,422 @@
-# 🏥 MediLink
+# MediLink
 
-> **A full-stack digital healthcare platform** connecting patients and doctors through real-time consultations, e-prescriptions, health records, medicine ordering, and emergency support — all in one seamless experience.
+MediLink is a full-stack telemedicine app for patients, doctors, and admins. It includes doctor discovery, real-time consultations, WebRTC video signaling, chat, e-prescriptions, medicine orders, patient health records, profile uploads, and admin user/order management.
 
-[![JavaScript](https://img.shields.io/badge/JavaScript-78.6%25-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://github.com/shashankshekhar1672007-oss/byteverse_medilink)
-[![CSS](https://img.shields.io/badge/CSS-20.9%25-1572B6?style=flat-square&logo=css3)](https://github.com/shashankshekhar1672007-oss/byteverse_medilink)
-[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js)](https://nodejs.org)
-[![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?style=flat-square&logo=mongodb)](https://mongodb.com)
-[![Socket.io](https://img.shields.io/badge/Realtime-Socket.io-010101?style=flat-square&logo=socket.io)](https://socket.io)
+The repository is split into an Express/MongoDB backend and a React/Vite frontend.
 
----
+## What is Included
 
-## 📋 Table of Contents
+- JWT authentication with patient, doctor, and admin roles
+- Doctor search, specialty filters, online status, dashboards, and reviews
+- Patient dashboard, profile, prescriptions, consultations, and health data
+- Consultation lifecycle with pending, active, completed, cancelled states
+- Socket.io chat, typing indicators, presence, and WebRTC signaling events
+- E-prescription creation, status updates, and cancellation
+- Medicine order creation, cancellation, and admin fulfillment controls
+- Cloudinary-backed avatar and document uploads
+- Swagger UI and OpenAPI JSON for the REST API
+- Jest/Supertest backend tests
+- Dockerfile and docker-compose setup for the backend and MongoDB
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Demo Credentials](#demo-credentials)
-- [API Reference](#api-reference)
-- [WebSocket Events](#websocket-events)
-- [Docker Setup](#docker-setup)
-- [Environment Variables](#environment-variables)
-- [Scripts](#scripts)
+## Tech Stack
 
----
+| Area | Tools |
+| --- | --- |
+| Frontend | React 18, Vite, CSS Modules, Socket.io client |
+| Backend | Node.js, Express, Socket.io, Helmet, CORS, rate limiting |
+| Database | MongoDB, Mongoose |
+| Auth | JWT, bcryptjs, role guards |
+| Uploads | Multer, Cloudinary |
+| Email | Nodemailer |
+| API docs | Swagger UI, OpenAPI 3 |
+| Tests | Jest, Supertest |
+| Deployment | Docker, Railway config, serverless-http adapter |
 
-## Overview
+## Project Structure
 
-MediLink is built for the **ByteVerse Hackathon** — a production-ready telemedicine platform that bridges the gap between patients and healthcare professionals. Patients can instantly connect with available doctors, conduct video or chat consultations, receive digital prescriptions, and manage their health records, all from one platform.
+Generated/dependency folders such as `node_modules/`, `frontend/dist/`, coverage output, and local `.env` files are intentionally omitted.
 
----
-
-## ✨ Features
-
-- 🔐 **JWT Authentication** — Secure login, registration, refresh tokens, and password reset via email
-- 👨‍⚕️ **Doctor Portal** — Manage profile, toggle availability, view dashboards and consultation history
-- 🧑‍💼 **Patient Portal** — Book consultations, view prescriptions, manage health records
-- 💬 **Real-time Chat** — Socket.io powered in-consultation messaging with typing indicators
-- 📹 **Video Calls** — WebRTC peer-to-peer video consultations with full signaling support
-- 📝 **E-Prescriptions** — Doctors can issue, update, and manage digital prescriptions
-- 🌐 **Doctor Discovery** — Filter doctors by specialty, availability, and price
-- 🐳 **Docker Ready** — Full containerized setup with MongoDB and optional Mongo Express UI
-- 📖 **Swagger Docs** — Interactive API documentation at `/api-docs`
-- ✅ **Jest Test Suite** — Unit and integration tests with coverage reports
-
----
-
-## 🛠 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | React, Vite, CSS |
-| **Backend** | Node.js, Express |
-| **Database** | MongoDB |
-| **Realtime** | Socket.io |
-| **Video** | WebRTC |
-| **Auth** | JWT (Access + Refresh tokens) |
-| **File Storage** | Cloudinary (falls back to memory) |
-| **Email** | Nodemailer (optional) |
-| **API Docs** | Swagger UI |
-| **Testing** | Jest |
-| **Containerization** | Docker, Docker Compose |
-
----
-
-## 📁 Project Structure
-
-```
+```text
 byteverse_medilink/
-├── medilink-backend/       # Node.js + Express REST API
-│   ├── routes/             # Auth, doctors, patients, consultations, prescriptions
-│   ├── models/             # Mongoose schemas
-│   ├── middleware/         # JWT auth, role guards
-│   ├── socket/             # Socket.io event handlers
-│   ├── seeds/              # Demo data seeder
-│   └── .env.example        # Environment config template
-├── medilink-frontend/      # React + Vite client
-│   └── src/
-│       ├── pages/          # Patient & Doctor views
-│       ├── components/     # Shared UI components
-│       └── services/       # API + socket clients
-├── .gitignore
-├── package.json
-└── package-lock.json
+|-- backend/
+|   |-- api/
+|   |   `-- [...all].js                         # Serverless entry that wraps the Express app
+|   |-- config/
+|   |   `-- swagger.js                          # OpenAPI 3 spec and Swagger UI options
+|   |-- controllers/
+|   |   |-- adminController.js                  # Admin dashboard, user management, profile sync
+|   |   |-- authController.js                   # Register, login, logout, refresh, password flows
+|   |   |-- consultationController.js           # Consultation lifecycle and message REST handlers
+|   |   |-- doctorController.js                 # Doctor listing, profile, status, dashboard, reviews
+|   |   |-- orderController.js                  # Medicine order creation, listing, status, cancellation
+|   |   |-- patientController.js                # Patient profile, dashboard, prescriptions, search
+|   |   `-- prescriptionController.js           # E-prescription creation, lookup, status, cancellation
+|   |-- middleware/
+|   |   |-- auth.js                             # JWT protection, role authorization, optional auth
+|   |   |-- errorHandler.js                     # Global Express error response middleware
+|   |   |-- upload.js                           # Multer + Cloudinary avatar/document upload handlers
+|   |   `-- validate.js                         # express-validator result formatter
+|   |-- models/
+|   |   |-- Consultation.js                     # Consultation schema, room IDs, lifecycle helpers
+|   |   |-- Doctor.js                           # Doctor profile schema, availability, ratings
+|   |   |-- Message.js                          # Consultation chat message schema
+|   |   |-- Order.js                            # Medicine order schema, totals, status history
+|   |   |-- Patient.js                          # Patient profile, health data, medical history
+|   |   |-- Prescription.js                     # Prescription schema, medicines, RX IDs, expiry
+|   |   `-- User.js                             # Auth user schema, password hashing, JWT helpers
+|   |-- routes/
+|   |   |-- admin.js                            # /api/admin routes
+|   |   |-- auth.js                             # /api/auth routes
+|   |   |-- consultations.js                    # /api/consultations routes
+|   |   |-- doctors.js                          # /api/doctors routes
+|   |   |-- orders.js                           # /api/orders routes
+|   |   |-- patients.js                         # /api/patients routes
+|   |   `-- prescriptions.js                    # /api/prescriptions routes
+|   |-- socket/
+|   |   |-- handlers.js                         # Socket.io auth, rooms, chat, WebRTC signaling
+|   |   `-- ioInstance.js                       # Shared Socket.io instance setter/getter
+|   |-- tests/
+|   |   |-- admin.test.js                       # Admin API integration tests
+|   |   |-- auth.test.js                        # Authentication integration tests
+|   |   |-- consultations.test.js               # Consultation API integration tests
+|   |   |-- doctors.test.js                     # Doctor API integration tests
+|   |   |-- orders.test.js                      # Order API integration tests
+|   |   `-- prescriptions.test.js              # Prescription API integration tests
+|   |-- utils/
+|   |   |-- apiResponse.js                      # Standard success, error, and pagination helpers
+|   |   |-- constants.js                        # Roles, statuses, enums, pagination constants
+|   |   |-- email.js                            # Nodemailer transport and email templates
+|   |   `-- seed.js                            # Demo users, patients, and doctors fixture data
+|   |-- Dockerfile                            # Production backend container image
+|   |-- docker-compose.yml                    # Backend, MongoDB, optional Mongo Express stack
+|   |-- package-lock.json                     # Backend npm lockfile
+|   |-- package.json                          # Backend dependencies, scripts, Jest config
+|   |-- seeder.js                             # Database clean/seed CLI
+|   `-- server.js                             # Express app, middleware, routes, Swagger, Socket.io
+|-- frontend/
+|   |-- public/
+|   |   |-- notification.wav                   # General notification sound asset
+|   |   |-- ringtone.mp3                       # Incoming call ringtone asset
+|   |   `-- tone.mp3                           # Notification tone asset
+|   |-- src/
+|   |   |-- assets/
+|   |   |   |-- logo.png                       # MediLink logo asset
+|   |   |   `-- logo_2.png                     # Alternate MediLink logo asset
+|   |   |-- components/
+|   |   |   |-- layout/
+|   |   |   |   |-- AppShell.jsx                 # Main authenticated patient/admin layout shell
+|   |   |   |   |-- AppShell.module.css          # App shell styles
+|   |   |   |   |-- DoctorShell.jsx              # Doctor-facing layout shell
+|   |   |   |   |-- IncomingCallNotice.jsx       # Global incoming video call notice
+|   |   |   |   |-- IncomingCallNotice.module.css # Incoming call notice styles
+|   |   |   |   |-- Sidebar.jsx                  # Navigation sidebar
+|   |   |   |   |-- Sidebar.module.css           # Sidebar styles
+|   |   |   |   |-- TopNavbar.jsx                # Top navigation bar
+|   |   |   |   `-- TopNavbar.module.css        # Top navbar styles
+|   |   |   |-- pages/
+|   |   |   |   |-- CSS/
+|   |   |   |   |   |-- AdminDashboard.module.css        # Admin dashboard styles
+|   |   |   |   |   |-- Consultation.module.css          # Consultation room styles
+|   |   |   |   |   |-- ConsultationList.module.css      # Consultation list styles
+|   |   |   |   |   |-- CreatePrescription.module.css    # Prescription creation styles
+|   |   |   |   |   |-- Dashboard.module.css             # Patient dashboard styles
+|   |   |   |   |   |-- DoctorDashboard.module.css       # Doctor dashboard styles
+|   |   |   |   |   |-- DoctorList.module.css            # Doctor discovery styles
+|   |   |   |   |   |-- DoctorPrescriptions.module.css   # Doctor prescriptions styles
+|   |   |   |   |   |-- HealthRecords.module.css         # Health records styles
+|   |   |   |   |   |-- Login.module.css                 # Login/register styles
+|   |   |   |   |   |-- Orders.module.css                # Orders page styles
+|   |   |   |   |   |-- Prescription.module.css          # Prescription detail styles
+|   |   |   |   |   |-- PrescriptionList.module.css      # Prescription list styles
+|   |   |   |   |   |-- Profile.module.css               # Profile page styles
+|   |   |   |   |   `-- SOSPage.module.css             # SOS page styles
+|   |   |   |   |-- consultation/
+|   |   |   |   |   |-- ChatPanel.jsx                    # Consultation chat panel
+|   |   |   |   |   |-- ConsultationHeader.jsx           # Consultation room header
+|   |   |   |   |   |-- consultationUtils.js             # Consultation helper functions
+|   |   |   |   |   |-- CurrentConsultationsList.jsx     # Active/pending consultation list
+|   |   |   |   |   |-- IncomingCallBanner.jsx           # In-room incoming call banner
+|   |   |   |   |   |-- useConsultationSession.js        # Consultation data/socket/WebRTC hook
+|   |   |   |   |   `-- VideoPanel.jsx                  # Local/remote video panel
+|   |   |   |   |-- orders/
+|   |   |   |   |   |-- FulfillmentSelector.jsx          # Delivery/payment selection UI
+|   |   |   |   |   |-- orderUtils.js                    # Order helper functions
+|   |   |   |   |   |-- OrdersHero.jsx                   # Orders page hero/header
+|   |   |   |   |   |-- OrderSummaryCard.jsx             # Order totals and summary card
+|   |   |   |   |   |-- OrderTracker.jsx                 # Order status timeline/tracker
+|   |   |   |   |   |-- PrescriptionItems.jsx            # Prescription medicine item selector
+|   |   |   |   |   |-- PromiseGrid.jsx                  # Orders promise/value grid
+|   |   |   |   |   `-- useMedicineOrder.js            # Medicine order form state hook
+|   |   |   |   |-- sos/
+|   |   |   |   |   |-- SOSHero.jsx                      # SOS page top section
+|   |   |   |   |   |-- SOSInfoPanel.jsx                 # SOS support information panel
+|   |   |   |   |   |-- sosUtils.js                      # Emergency helper functions
+|   |   |   |   |   `-- useEmergencySOS.js             # SOS workflow hook
+|   |   |   |   |-- AdminDashboard.jsx               # Admin dashboard and controls
+|   |   |   |   |-- Consultation.jsx                 # Consultation room page
+|   |   |   |   |-- ConsultationList.jsx             # Consultation history/list page
+|   |   |   |   |-- CreatePrescription.jsx           # Doctor prescription creation page
+|   |   |   |   |-- Dashboard.jsx                    # Patient dashboard page
+|   |   |   |   |-- DoctorDashboard.jsx              # Doctor dashboard page
+|   |   |   |   |-- DoctorList.jsx                   # Doctor search/discovery page
+|   |   |   |   |-- DoctorPrescriptions.jsx          # Doctor-issued prescription list
+|   |   |   |   |-- HealthRecords.jsx                # Patient health records page
+|   |   |   |   |-- Login.jsx                        # Login/register page
+|   |   |   |   |-- Orders.jsx                       # Medicine order page
+|   |   |   |   |-- Prescription.jsx                 # Prescription detail/download page
+|   |   |   |   |-- PrescriptionList.jsx             # Patient prescription list
+|   |   |   |   |-- Profile.jsx                      # User profile page
+|   |   |   |   `-- SOSPage.jsx                      # Emergency SOS page
+|   |   |   `-- ui/
+|   |   |       |-- ChatbotWidget.jsx                # Floating chatbot widget
+|   |   |       |-- ChatbotWidget.module.css         # Chatbot widget styles
+|   |   |       |-- Toast.jsx                        # Toast notification component
+|   |   |       |-- UI.jsx                           # Shared UI primitives
+|   |   |       `-- UI.module.css                    # Shared UI primitive styles
+|   |   |-- context/
+|   |   |   `-- AppContext.jsx                     # Auth, navigation, app state, socket lifecycle
+|   |   |-- services/
+|   |   |   |-- api.js                             # Fetch wrapper and REST API helper methods
+|   |   |   |-- socket.js                          # Socket.io connection and event helpers
+|   |   |   `-- sounds.js                          # Notification sound playback helpers
+|   |   |-- styles/
+|   |   |   `-- globals.css                        # Global design tokens and base styles
+|   |   |-- App.css                               # App-level styles
+|   |   |-- App.jsx                               # Root React component and app routing/state wiring
+|   |   |-- index.css                             # Base CSS reset/global imports
+|   |   `-- main.jsx                              # Vite React entry point
+|   |-- eslint.config.js                          # Frontend ESLint configuration
+|   |-- index.html                                # Vite HTML entry
+|   |-- package-lock.json                         # Frontend npm lockfile
+|   |-- package.json                              # Frontend dependencies and scripts
+|   |-- README.md                                 # Frontend-specific setup notes
+|   `-- vite.config.js                            # Vite dev server and proxy config
+|-- .gitignore                                    # Git ignore rules for env, build, logs, dependencies
+|-- package-lock.json                             # Root npm lockfile
+|-- package.json                                  # Root workspace convenience scripts
+|-- railway.json                                  # Railway deployment config
+`-- README.md                                     # Main project documentation
 ```
 
----
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js v18+
-- MongoDB (local or Atlas)
-- npm or yarn
+- Node.js 18+
+- npm
+- MongoDB running locally or a MongoDB Atlas URI
+- Optional: Docker and Docker Compose
+- Optional: Cloudinary credentials for uploads
+- Optional: SMTP credentials for email verification and password reset
 
-### Installation
+### 1. Install dependencies
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/shashankshekhar1672007-oss/byteverse_medilink.git
-cd byteverse_medilink
-```
-
-#### Backend
+From the repository root:
 
 ```bash
-cd medilink-backend
-
-# Install dependencies
-npm install
-
-# Configure environment
-cp .env.example .env
-# Edit .env — set MONGODB_URI and JWT_SECRET at minimum
-
-# Seed demo data
-npm run seed
-
-# Start dev server
-npm run dev
-# → http://localhost:5000
+npm run install-all
 ```
 
-#### Frontend
+This installs the root, backend, and frontend dependencies.
 
-```bash
-cd medilink-frontend
+### 2. Configure backend environment
 
-# Install dependencies
-npm install
-
-# Start dev server
-npm run dev
-# → http://localhost:5173
-```
-
----
-
-## 🔑 Demo Credentials
-
-| Role | Email | Password |
-|---|---|---|
-| Patient | patient1@medilink.com | pass123 |
-| Doctor | doctor1@medilink.com | pass123 |
-
----
-
-## 📡 API Reference
-
-- **Swagger UI:** `http://localhost:5000/api-docs`
-- **Health Check:** `http://localhost:5000/api/health`
-
-### Endpoints Summary
-
-#### Auth
-```
-POST   /api/auth/register                  Public
-POST   /api/auth/login                     Public
-GET    /api/auth/me                        Protected
-POST   /api/auth/refresh                   Public
-POST   /api/auth/logout                    Protected
-POST   /api/auth/forgot-password           Public
-PUT    /api/auth/reset-password/:token     Public
-PUT    /api/auth/change-password           Protected
-```
-
-#### Doctors
-```
-GET    /api/doctors                        Public (filter by specialty, online, price)
-GET    /api/doctors/:id                    Public
-GET    /api/doctors/profile                Doctor only
-PUT    /api/doctors/profile                Doctor only
-PUT    /api/doctors/status                 Doctor only (toggle online)
-GET    /api/doctors/dashboard              Doctor only
-GET    /api/doctors/consultations          Doctor only
-```
-
-#### Patients
-```
-GET    /api/patients/profile               Patient only
-PUT    /api/patients/profile               Patient only
-GET    /api/patients/dashboard             Patient only
-GET    /api/patients/prescriptions         Patient only
-GET    /api/patients/prescriptions/active  Patient only
-GET    /api/patients/consultations         Patient only
-```
-
-#### Prescriptions
-```
-POST   /api/prescriptions                  Doctor only
-GET    /api/prescriptions                  Doctor only (own)
-GET    /api/prescriptions/:id              Doctor or Patient (own)
-PUT    /api/prescriptions/:id/status       Doctor only
-DELETE /api/prescriptions/:id              Doctor only (cancel)
-```
-
-#### Consultations
-```
-POST   /api/consultations                  Patient only (auto-activates)
-GET    /api/consultations/:id              Both
-PUT    /api/consultations/:id/end          Both
-PUT    /api/consultations/:id/cancel       Both
-POST   /api/consultations/:id/messages     Both
-GET    /api/consultations/:id/messages     Both
-```
-
----
-
-## 🔌 WebSocket Events (Socket.io)
-
-Connect with JWT:
-```js
-socket.connect({ auth: { token: '<your_jwt>' } })
-```
-
-### Emit (Client → Server)
-
-| Event | Payload | Description |
-|---|---|---|
-| `joinConsultation` | `{ consultationId }` | Join a consultation room |
-| `sendMessage` | `{ consultationId, text }` | Send a chat message |
-| `typing` | `{ consultationId }` | Broadcast typing start |
-| `stopTyping` | `{ consultationId }` | Broadcast typing stop |
-| `webrtc:offer` | `{ offer, consultationId }` | WebRTC offer (caller) |
-| `webrtc:answer` | `{ answer, consultationId }` | WebRTC answer (callee) |
-| `webrtc:ice` | `{ candidate, consultationId }` | ICE candidate exchange |
-| `webrtc:ended` | `{ consultationId }` | End video call |
-
-### Listen (Server → Client)
-
-| Event | Payload | Description |
-|---|---|---|
-| `receiveMessage` | Message object | Incoming chat message |
-| `typing` | `{ userId }` | Peer is typing |
-| `stopTyping` | `{ userId }` | Peer stopped typing |
-| `webrtc:offer` | `{ offer, from }` | Incoming call offer |
-| `webrtc:answer` | `{ answer, from }` | Call accepted |
-| `webrtc:ice` | `{ candidate, from }` | ICE candidate |
-| `webrtc:ended` | `{ by }` | Call ended by peer |
-| `doctorOnline` | `{ doctorUserId }` | Doctor came online |
-| `doctorOffline` | `{ doctorUserId }` | Doctor went offline |
-
----
-
-## 🐳 Docker Setup
-
-```bash
-# Start all services (API + MongoDB)
-docker-compose up -d
-
-# Seed demo data in container
-docker-compose exec medilink npm run seed
-
-# With Mongo Express UI (dev only)
-docker-compose --profile dev up -d
-# Mongo Express → http://localhost:8081  (admin / admin123)
-```
-
----
-
-## ⚙️ Environment Variables
-
-### Backend (`/medilink-backend/.env`)
-Copy `.env.example` to `.env` and configure:
+Create `backend/.env` and set the values you need:
 
 ```env
-# Required
-MONGODB_URI=mongodb://localhost:27017/medilink
-JWT_SECRET=<64-char-random-string>
+PORT=5001
+NODE_ENV=development
+MONGODB_URI=mongodb://127.0.0.1:27017/medilink
+JWT_SECRET=replace-with-a-long-random-secret
+JWT_EXPIRE=7d
+JWT_REFRESH_EXPIRE=30d
+ALLOWED_ORIGINS=http://localhost:3000
+CLIENT_URL=http://localhost:3000
 
-# Optional — email verification & notifications
-EMAIL_HOST=
-EMAIL_PORT=
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
 EMAIL_USER=
 EMAIL_PASS=
+EMAIL_FROM=
 
-# Optional — avatar & document uploads (falls back to memory storage)
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
+
+API_BASE_URL=http://localhost:5001
+RATE_LIMIT_WINDOW_MS=60000
+RATE_LIMIT_MAX=100
 ```
 
----
+Minimum local setup needs `MONGODB_URI` and `JWT_SECRET`. Without Cloudinary values, upload endpoints will warn and file uploads will fail.
 
-## 🧪 Scripts
+### 3. Seed demo data
 
-Run these from the `medilink-backend` directory:
+```bash
+npm run seed --prefix backend
+```
+
+Demo accounts after seeding:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Patient | `patient1@medilink.com` | `pass123` |
+| Patient | `patient2@medilink.com` | `pass123` |
+| Doctor | `doctor1@medilink.com` | `pass123` |
+| Doctor | `doctor2@medilink.com` | `pass123` |
+
+The seed file creates patient and doctor users. Admin APIs exist, but an admin account is not seeded by default.
+
+### 4. Run the app
+
+Run both apps from the root:
+
+```bash
+npm run dev
+```
+
+Or run them separately:
+
+```bash
+npm run dev --prefix backend
+npm run dev --prefix frontend
+```
+
+Default local URLs:
+
+| Service | URL |
+| --- | --- |
+| Frontend | `http://localhost:3000` |
+| Backend API | `http://localhost:5001/api` |
+| Health check | `http://localhost:5001/api/health` |
+| Swagger UI | `http://localhost:5001/api-docs` |
+| OpenAPI JSON | `http://localhost:5001/api-docs.json` |
+
+The Vite dev server proxies `/api` and `/socket.io` to `http://localhost:5001`.
+
+## API Documentation
+
+Swagger is mounted by the backend:
+
+```text
+GET /api-docs       # Interactive Swagger UI
+GET /api-docs.json  # Raw OpenAPI 3 document
+```
+
+Use `POST /api/auth/login` in Swagger, copy `data.token`, click `Authorize`, and paste the token as the bearer value.
+
+Main REST route groups:
+
+| Group | Endpoints |
+| --- | --- |
+| Health | `GET /api/health` |
+| Auth | `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`, `/api/auth/me`, `/api/auth/refresh`, `/api/auth/verify-email/:token`, `/api/auth/forgot-password`, `/api/auth/reset-password/:token`, `/api/auth/change-password` |
+| Doctors | `/api/doctors`, `/api/doctors/specialty/:specialty`, `/api/doctors/profile`, `/api/doctors/status`, `/api/doctors/consultations`, `/api/doctors/dashboard`, `/api/doctors/:id`, `/api/doctors/:id/review` |
+| Patients | `/api/patients/search`, `/api/patients/dashboard`, `/api/patients/profile`, `/api/patients/prescriptions`, `/api/patients/prescriptions/active`, `/api/patients/prescriptions/:id`, `/api/patients/consultations` |
+| Consultations | `/api/consultations`, `/api/consultations/pending`, `/api/consultations/:id`, `/api/consultations/:id/accept`, `/api/consultations/:id/end`, `/api/consultations/:id/leave`, `/api/consultations/:id/cancel`, `/api/consultations/:id/messages` |
+| Prescriptions | `/api/prescriptions`, `/api/prescriptions/:id`, `/api/prescriptions/:id/status` |
+| Orders | `/api/orders`, `/api/orders/:id`, `/api/orders/:id/status`, `/api/orders/:id/cancel` |
+| Admin | `/api/admin/dashboard`, `/api/admin/users`, `/api/admin/users/:id`, `/api/admin/users/:id/restore`, `/api/admin/orders`, `/api/admin/orders/:id`, `/api/admin/orders/:id/status`, `/api/admin/orders/:id/cancel` |
+
+## Socket.io Events
+
+Socket connections require a JWT:
+
+```js
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5001', {
+  path: '/socket.io',
+  auth: { token },
+});
+```
+
+Client emits:
+
+| Event | Payload |
+| --- | --- |
+| `joinConsultation` | `{ consultationId }` |
+| `sendMessage` | `{ consultationId, text, attachmentUrl, attachmentType, roomId }` |
+| `typing` | `{ consultationId, roomId }` |
+| `stopTyping` | `{ roomId }` |
+| `videoCall:request` | `{ consultationId }` |
+| `videoCall:decline` | `{ consultationId }` |
+| `webrtc:offer` | `{ roomId, offer }` |
+| `webrtc:answer` | `{ roomId, answer }` |
+| `webrtc:ice` or `webrtc:ice-candidate` | `{ roomId, candidate }` |
+| `webrtc:call-ended` or `webrtc:ended` | `{ roomId, consultationId }` |
+| `webrtc:media-toggle` | `{ roomId, video, audio }` |
+
+Server emits include `joinedConsultation`, `peerJoined`, `readyForCall`, `receiveMessage`, `typing`, `stopTyping`, `doctorOnline`, `doctorOffline`, `videoCall:incoming`, `videoCall:requested`, `videoCall:declined`, `webrtc:offer`, `webrtc:answer`, `webrtc:ice-candidate`, `webrtc:call-ended`, `webrtc:media-toggle`, and `peerLeft`.
+
+## Scripts
+
+Root scripts:
 
 | Command | Description |
-|---|---|
-| `npm run dev` | Start with nodemon (auto-restart) |
-| `npm start` | Start production server |
-| `npm run seed` | Wipe DB and insert demo data |
-| `npm run seed:clean` | Wipe DB only |
-| `npm run seed:status` | Show collection counts |
-| `npm test` | Run Jest test suite |
-| `npm run test:coverage` | Run tests with coverage report |
+| --- | --- |
+| `npm run install-all` | Install root, backend, and frontend dependencies |
+| `npm run dev` | Run backend and frontend together |
+| `npm run backend` | Run backend dev server |
+| `npm run frontend` | Run frontend dev server |
+| `npm start` | Start backend in production mode |
+| `npm run build` | Run backend build placeholder |
 
----
+Backend scripts:
 
-## 👥 Team — The DOMinators
+| Command | Description |
+| --- | --- |
+| `npm run dev --prefix backend` | Start Express with nodemon |
+| `npm start --prefix backend` | Start Express with Node |
+| `npm run seed --prefix backend` | Clear and seed demo data |
+| `npm run seed:clean --prefix backend` | Clear seeded collections |
+| `npm test --prefix backend` | Run Jest/Supertest tests |
+| `npm run test:coverage --prefix backend` | Run tests with coverage |
 
-| Role | Name | Branch | Stream | Year |
-|------|------|--------|--------|------|
-| Team Leader | Shashank Shekhar Singh | B.Tech | CSE | I |
-| Member | Madhukar Kumar | B.Tech | CSE | I |
-| Member | Udit Narayan | B.Tech | CSE | I |
-| Member | Ayush Ranjan | B.Tech | CSE | I |
+Frontend scripts:
 
-**Institute:** NIT Patna | **Hackathon:** ByteVerse 8th Edition
+| Command | Description |
+| --- | --- |
+| `npm run dev --prefix frontend` | Start Vite on port 3000 |
+| `npm run build --prefix frontend` | Build production frontend |
+| `npm run preview --prefix frontend` | Preview the production build |
 
----
+## Docker
 
-## 🤝 Contributing
+The Docker setup lives in `backend/`:
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
+```bash
+cd backend
+docker compose up -d
+```
 
----
+Services:
 
-## 📄 License
+| Service | URL |
+| --- | --- |
+| API | `http://localhost:5000` inside the compose default |
+| MongoDB | `mongodb://localhost:27017/medilink` |
+| Mongo Express profile | `http://localhost:8081` with `docker compose --profile dev up -d` |
 
-This project was built for the **ByteVerse Hackathon**. See [LICENSE](LICENSE) for details.
+Seed inside the running API container:
 
----
+```bash
+docker compose exec medilink npm run seed
+```
 
-<div align="center">
-  Made with ❤️ for ByteVerse Hackathon
-</div>
+## Testing
+
+Start MongoDB, then run:
+
+```bash
+npm test --prefix backend
+```
+
+The tests use `MONGODB_URI_TEST` when provided, otherwise `mongodb://localhost:27017/medilink_test`.
+
+## Notes
+
+- Backend defaults to port `5001`; Docker defaults the container to `5000`.
+- Frontend defaults to port `3000` and proxies API/socket traffic to the backend.
+- Swagger is generated from `backend/config/swagger.js` and mounted in `backend/server.js`.
+- The raw OpenAPI document can be imported into Postman, Insomnia, or other API clients.

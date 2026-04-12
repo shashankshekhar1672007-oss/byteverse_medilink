@@ -11,5 +11,5 @@ export const playIncomingMessageTone = () => {
 };
 
 export const playNotificationSound = () => {
-  playSound("/ringtone.mp3", 0.35);
+  playSound("/notification.wav", 0.35);
 };

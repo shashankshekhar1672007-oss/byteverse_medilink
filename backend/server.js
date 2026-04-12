@@ -12,6 +12,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 const errorHandler = require('./middleware/errorHandler');
 const { registerSocketHandlers } = require('./socket/handlers');
+const { swaggerUi, swaggerSpec, swaggerUiOptions } = require('./config/swagger');
 
 // ── App setup ─────────────────────────────────────────────────────────────────
 const app = express();
@@ -49,6 +50,13 @@ const initializeServer = () => {
 
   return server;
 };
+
+// ── API documentation ────────────────────────────────────────────────────────
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(helmet());
@@ -168,6 +176,7 @@ if (require.main === module) {
     server.listen(PORT, () => {
       console.log(`🚀 Medilink API running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
       console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`📖 Swagger docs: http://localhost:${PORT}/api-docs`);
     });
   });
 }
