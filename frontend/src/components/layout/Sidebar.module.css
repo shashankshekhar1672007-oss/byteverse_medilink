@@ -1,0 +1,298 @@
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding: 0 8px 6px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navIcon {
+  align-items: center;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
+.mobileText {
+  display: none;
+}
+
+.navItem:hover {
+  background: var(--card);
+  color: var(--text);
+}
+.navItem svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.active {
+  background: var(--primary-dim) !important;
+  color: var(--primary) !important;
+  font-weight: 500;
+  position: relative;
+}
+.active svg {
+  opacity: 1 !important;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.sosBtn {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 13px;
+  width: 100%;
+  transition: background 0.15s;
+  margin-bottom: 8px;
+}
+.sosBtn:hover {
+  background: rgba(255, 77, 109, 0.18);
+}
+
+.sosPulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: pulse 1.5s infinite;
+}
+
+.sosIconWrap {
+  align-items: center;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
+.sosActive {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: var(--accent-border);
+}
+
+.logoutBtn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 13px;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.logoutBtn:hover {
+  background: var(--card);
+  color: var(--text);
+  border-color: var(--subtle);
+}
+
+.logoutBtn svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.5); }
+  50%       { box-shadow: 0 0 0 5px rgba(255, 77, 109, 0); }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    z-index: 120;
+    min-height: 0;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 18px 45px rgba(17, 24, 39, 0.18);
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+  }
+
+  .label,
+  .spacer,
+  .logoutBtn {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 2px 4px;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    width: 100%;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navItem,
+  .sosBtn {
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    flex: 0 0 74px;
+    flex-direction: column;
+    gap: 5px;
+    height: 58px;
+    justify-content: center;
+    margin: 0;
+    min-width: 74px;
+    padding: 7px 8px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .navItem {
+    background: transparent;
+    color: var(--muted);
+  }
+
+  .navItem:hover {
+    background: var(--card2);
+  }
+
+  .active {
+    background: var(--primary-dim) !important;
+    border-color: var(--primary-border);
+    box-shadow: inset 0 -3px 0 var(--primary);
+    color: var(--primary) !important;
+    font-weight: 800;
+  }
+
+  .sosBtn {
+    background: var(--accent-dim);
+    border-color: var(--accent-border);
+    color: var(--accent);
+    flex: 0 0 58px;
+    min-width: 58px;
+  }
+
+  .sosActive {
+    box-shadow: inset 0 -3px 0 var(--accent);
+    font-weight: 800;
+  }
+
+  .navIcon,
+  .sosIconWrap {
+    height: 20px;
+    width: 20px;
+  }
+
+  .navItem svg,
+  .logoutBtn svg {
+    height: 18px;
+    width: 18px;
+  }
+
+  .navText {
+    display: none;
+  }
+
+  .mobileText {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    max-width: 66px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sosPulse {
+    height: 12px;
+    width: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .sidebar {
+    left: 8px;
+    right: 8px;
+    padding: 7px;
+  }
+
+  .navItem {
+    flex-basis: 66px;
+    min-width: 66px;
+  }
+
+  .mobileText {
+    font-size: 9px;
+  }
+}
+
+@media (min-width: 701px) {
+  .navText {
+    display: inline;
+  }
+}
+
+@media (max-width: 520px) {
+  .navItem,
+  .sosBtn {
+    width: auto;
+  }
+}

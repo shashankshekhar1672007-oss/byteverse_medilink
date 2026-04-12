@@ -1,0 +1,233 @@
+.page { display: flex; flex-direction: column; gap: 16px; }
+.loadingWrap { display: flex; justify-content: center; padding: 60px; }
+.emptyText { color: var(--muted); font-size: 13px; }
+.inlineAction {
+  color: var(--primary);
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.healthCard { margin-top: 33px; }
+.mapEmpty { padding: 0 20px 20px; }
+.mapEmptyText { color: var(--muted); font-size: 13px; margin: 0; }
+
+.greeting h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.greeting p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 16px;
+}
+
+.left, .right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Quick Actions */
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.quickCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+.quickCard:hover { border-color: var(--subtle); }
+.sosCard {
+  background: var(--accent-dim);
+  border-color: rgba(255,77,109,0.3);
+}
+.sosCard:hover { border-color: var(--accent); }
+
+.quickIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.quickIconSos { background: rgba(255,77,109,0.15); }
+.quickIconPrimary { background: var(--primary-dim); }
+.quickIconBlue { background: var(--blue-dim); }
+.quickIconAccent { background: var(--accent-dim); }
+.quickTitleSos { color: var(--accent) !important; }
+
+.quickCard h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.quickCard p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Consultation row */
+.consultRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.consultRow:hover { border-color: var(--subtle); }
+
+.docAvatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.docAvatarAccent { color: #3ECF8E; }
+
+.docInfo { flex: 1; min-width: 0; }
+.docName { font-size: 13px; font-weight: 600; color: var(--text); }
+.docSpec { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+.consultMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+.consultDate { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.consultDot  { width: 7px; height: 7px; border-radius: 50%; }
+.consultDot_active { background: var(--blue); }
+.consultDot_completed { background: var(--primary); }
+.consultDot_cancelled { background: var(--muted); }
+.consultDot_default { background: var(--muted); }
+
+/* Reminder row */
+.reminderRow {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.pillIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--amber-dim);
+  border: 1px solid rgba(245,158,11,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.reminderInfo { flex: 1; }
+.reminderName { font-size: 12px; font-weight: 600; color: var(--text); }
+.reminderTime { font-size: 11px; color: var(--muted); }
+
+/* Map card */
+.mapCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.mapHeader {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.mapHeader h2 { font-size: 13px; font-weight: 600; color: var(--text); }
+.mapHeader p  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.mapBody {
+  min-height: 240px;
+  background: #141820;
+  position: relative;
+  overflow: hidden;
+}
+.mapIframe {
+  width: 100%;
+  min-height: 260px;
+  border: none;
+}
+.mapGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(62,207,142,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62,207,142,0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.mapDot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.you { background: #4B9EFF; left: 50%; top: 50%; transform: translate(-50%,-50%); box-shadow: 0 0 8px rgba(75,158,255,0.6); }
+.p1  { background: var(--primary); left: 35%; top: 30%; box-shadow: 0 0 8px rgba(62,207,142,0.6); }
+.p2  { background: var(--primary); left: 65%; top: 60%; box-shadow: 0 0 8px rgba(62,207,142,0.6); }
+.p3  { background: var(--primary); left: 75%; top: 25%; box-shadow: 0 0 8px rgba(62,207,142,0.6); }
+
+.pharmacyList { padding: 10px 14px; }
+.pharmacyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text);
+}
+.pharmacyRow:last-child { border-bottom: none; }
+.dist { color: var(--primary); }
+
+@media (max-width: 900px) {
+  .grid           { grid-template-columns: 1fr; }
+  .quickActions   { grid-template-columns: repeat(2,1fr); }
+  .statsRow       { grid-template-columns: 1fr 1fr; }
+}

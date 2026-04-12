@@ -1,0 +1,386 @@
+.overlay {
+  min-height: calc(100vh - 92px);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(239, 68, 68, 0.13), transparent 28%),
+    radial-gradient(circle at 82% 8%, rgba(14, 165, 233, 0.1), transparent 25%),
+    var(--bg);
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+  gap: 18px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+}
+
+.heroCard,
+.infoPanel {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 48px rgba(17, 24, 39, 0.08);
+}
+
+.heroCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  padding: 32px;
+}
+
+.infoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+
+.alert {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+.ring {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+  border: 2px solid var(--accent-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: sosIdle 2s infinite;
+  transition: transform 0.12s, border-color 0.12s;
+}
+.ring:hover { border-color: var(--accent); }
+.ring:active { transform: scale(0.96); }
+
+.ringing { animation: sosPulse 1s infinite; }
+
+@keyframes sosIdle {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.28); }
+  50% { box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
+}
+@keyframes sosPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.52); }
+  50% { box-shadow: 0 0 0 30px rgba(239, 68, 68, 0); }
+}
+
+.inner {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #f97373);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: none;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 8px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 430px;
+  line-height: 1.6;
+}
+
+.hint,
+.connecting,
+.connected {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hint { color: var(--subtle); }
+.connecting {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.connected { color: var(--primary); }
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(130px, 1fr));
+  gap: 10px;
+  width: min(100%, 360px);
+}
+
+.actionChip {
+  min-height: 42px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+.actionChip:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.actionChip:hover {
+  border-color: var(--subtle);
+  background: var(--card2);
+  transform: translateY(-1px);
+}
+.actionChip:first-child:hover { background: var(--accent); }
+
+.helpline { margin-top: 4px; }
+.helplineLabel {
+  font-size: 12px;
+  color: var(--muted);
+}
+.helplineNumber {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.statusCard,
+.hospitalCard,
+.checklist {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.statusCard {
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panelLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.statusText {
+  color: var(--text);
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.smallBtn,
+.inlineBtn {
+  border-radius: var(--radius-md);
+  background: var(--primary-dim);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.smallBtn {
+  padding: 8px 12px;
+  flex-shrink: 0;
+}
+
+.hospitalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hospitalHeader h2 {
+  color: var(--text);
+  font-size: 15px;
+}
+.hospitalHeader p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.sosMap {
+  width: 100%;
+  min-height: 220px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.sosMap iframe {
+  width: 100%;
+  min-height: 220px;
+  border: 0;
+}
+
+.listState {
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+}
+
+.inlineBtn {
+  padding: 7px 10px;
+  white-space: nowrap;
+}
+
+.hospitalList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hospitalCard {
+  display: flex;
+  gap: 12px;
+  padding: 13px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.hospitalCard:hover {
+  border-color: var(--subtle);
+  transform: translateY(-1px);
+}
+
+.rank {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.hospitalMain {
+  flex: 1;
+  min-width: 0;
+}
+.hospitalMain h3 {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+}
+.hospitalMain p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.hospitalActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.hospitalActions a {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 9px;
+}
+
+.checklist {
+  padding: 14px;
+  display: grid;
+  gap: 7px;
+}
+.checklist p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cancel {
+  font-size: 12px;
+  color: var(--subtle);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  transition: color 0.15s, background 0.15s;
+  align-self: center;
+}
+.cancel:hover {
+  color: var(--muted);
+  background: var(--card2);
+}
+
+@media (max-width: 980px) {
+  .overlay {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .overlay {
+    padding: 12px;
+  }
+
+  .heroCard,
+  .infoPanel {
+    padding: 16px;
+  }
+
+  .ring {
+    width: 130px;
+    height: 130px;
+  }
+
+  .inner {
+    width: 92px;
+    height: 92px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .statusCard,
+  .hospitalHeader,
+  .listState {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
