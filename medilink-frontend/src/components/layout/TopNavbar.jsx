@@ -1,6 +1,7 @@
 import { useApp, PAGES } from "../../context/AppContext";
 import { IconBtn } from "../ui/UI";
 import styles from "./TopNavbar.module.css";
+import logo from "../../assets/logo.png";
 
 export default function TopNavbar() {
   const { notifications, user, navigate } = useApp();
@@ -18,7 +19,7 @@ export default function TopNavbar() {
   return (
     <header className={styles.navbar}>
       <div className={styles.logo}>
-        <div>Medi<span>Link</span></div>
+        <img src={logo} alt="MediLink logo" className={styles.logoImage} />
         {isDoctor && <span className={styles.badge}>Doctor</span>}
       </div>
 

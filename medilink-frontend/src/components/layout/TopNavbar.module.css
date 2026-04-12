@@ -13,20 +13,20 @@
 }
 
 .logo {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.5px;
   white-space: nowrap;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.logo span {
-  color: var(--text);
+
+.logoImage {
+  height: 34px;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
+
 .logo .badge {
   font-size: 10px;
   font-weight: 600;
