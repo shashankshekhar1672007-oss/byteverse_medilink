@@ -1,26 +1,26 @@
-# MediLink
+# 🏥 MediLink
 
-**Live Demo:** [https://byteverse-medilink.vercel.app/](https://byteverse-medilink.vercel.app/)
+**🌐 Live Demo:** [https://byteverse-medilink.vercel.app/](https://byteverse-medilink.vercel.app/)
 
 MediLink is a full-stack telemedicine app for patients, doctors, and admins. It includes doctor discovery, real-time consultations, WebRTC video signaling, chat, e-prescriptions, medicine orders, patient health records, profile uploads, and admin user/order management.
 
 The repository is split into an Express/MongoDB backend and a React/Vite frontend.
 
-## What is Included
+## ✨ What is Included
 
-- JWT authentication with patient, doctor, and admin roles
-- Doctor search, specialty filters, online status, dashboards, and reviews
-- Patient dashboard, profile, prescriptions, consultations, and health data
-- Consultation lifecycle with pending, active, completed, cancelled states
-- Socket.io chat, typing indicators, presence, and WebRTC signaling events
-- E-prescription creation, status updates, and cancellation
-- Medicine order creation, cancellation, and admin fulfillment controls
-- Cloudinary-backed avatar and document uploads
-- Swagger UI and OpenAPI JSON for the REST API
-- Jest/Supertest backend tests
-- Dockerfile and docker-compose setup for the backend and MongoDB
+- 🔐 JWT authentication with patient, doctor, and admin roles
+- 🩺 Doctor search, specialty filters, online status, dashboards, and reviews
+- 🧑‍⚕️ Patient dashboard, profile, prescriptions, consultations, and health data
+- 📅 Consultation lifecycle with pending, active, completed, cancelled states
+- 💬 Socket.io chat, typing indicators, presence, and WebRTC signaling events
+- 💊 E-prescription creation, status updates, and cancellation
+- 📦 Medicine order creation, cancellation, and admin fulfillment controls
+- ☁️ Cloudinary-backed avatar and document uploads
+- 📖 Swagger UI and OpenAPI JSON for the REST API
+- 🧪 Jest/Supertest backend tests
+- 🐳 Dockerfile and docker-compose setup for the backend and MongoDB
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 | Area | Tools |
 | --- | --- |
@@ -34,7 +34,7 @@ The repository is split into an Express/MongoDB backend and a React/Vite fronten
 | Tests | Jest, Supertest |
 | Deployment | Docker, Railway config, serverless-http adapter |
 
-## Project Structure
+## 📂 Project Structure
 
 Generated/dependency folders such as `node_modules/`, `frontend/dist/`, coverage output, and local `.env` files are intentionally omitted.
 
@@ -200,9 +200,9 @@ byteverse_medilink/
 `-- README.md                                     # Main project documentation
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
 - Node.js 18+
 - npm
@@ -211,7 +211,7 @@ byteverse_medilink/
 - Optional: Cloudinary credentials for uploads
 - Optional: SMTP credentials for email verification and password reset
 
-### 1. Install dependencies
+### 1️⃣ Install dependencies
 
 From the repository root:
 
@@ -221,7 +221,7 @@ npm run install-all
 
 This installs the root, backend, and frontend dependencies.
 
-### 2. Configure backend environment
+### 2️⃣ Configure backend environment
 
 Create `backend/.env` and set the values you need:
 
@@ -252,7 +252,7 @@ RATE_LIMIT_MAX=100
 
 Minimum local setup needs `MONGODB_URI` and `JWT_SECRET`. Without Cloudinary values, upload endpoints will warn and file uploads will fail.
 
-### 3. Seed demo data
+### 3️⃣ Seed demo data
 
 ```bash
 npm run seed --prefix backend
@@ -269,7 +269,7 @@ Demo accounts after seeding:
 
 The seed file creates patient and doctor users. Admin APIs exist, but an admin account is not seeded by default.
 
-### 4. Run the app
+### 4️⃣ Run the app
 
 Run both apps from the root:
 
@@ -296,7 +296,7 @@ Default local URLs:
 
 The Vite dev server proxies `/api` and `/socket.io` to `http://localhost:5001`.
 
-## API Documentation
+## 📚 API Documentation
 
 Swagger is mounted by the backend:
 
@@ -320,7 +320,7 @@ Main REST route groups:
 | Orders | `/api/orders`, `/api/orders/:id`, `/api/orders/:id/status`, `/api/orders/:id/cancel` |
 | Admin | `/api/admin/dashboard`, `/api/admin/users`, `/api/admin/users/:id`, `/api/admin/users/:id/restore`, `/api/admin/orders`, `/api/admin/orders/:id`, `/api/admin/orders/:id/status`, `/api/admin/orders/:id/cancel` |
 
-## Socket.io Events
+## 🔌 Socket.io Events
 
 Socket connections require a JWT:
 
@@ -351,7 +351,7 @@ Client emits:
 
 Server emits include `joinedConsultation`, `peerJoined`, `readyForCall`, `receiveMessage`, `typing`, `stopTyping`, `doctorOnline`, `doctorOffline`, `videoCall:incoming`, `videoCall:requested`, `videoCall:declined`, `webrtc:offer`, `webrtc:answer`, `webrtc:ice-candidate`, `webrtc:call-ended`, `webrtc:media-toggle`, and `peerLeft`.
 
-## Scripts
+## 📜 Scripts
 
 Root scripts:
 
@@ -383,7 +383,7 @@ Frontend scripts:
 | `npm run build --prefix frontend` | Build production frontend |
 | `npm run preview --prefix frontend` | Preview the production build |
 
-## Docker
+## 🐳 Docker
 
 The Docker setup lives in `backend/`:
 
@@ -406,7 +406,7 @@ Seed inside the running API container:
 docker compose exec medilink npm run seed
 ```
 
-## Testing
+## 🧪 Testing
 
 Start MongoDB, then run:
 
@@ -416,7 +416,7 @@ npm test --prefix backend
 
 The tests use `MONGODB_URI_TEST` when provided, otherwise `mongodb://localhost:27017/medilink_test`.
 
-## Notes
+## 📝 Notes
 
 - Backend defaults to port `5001`; Docker defaults the container to `5000`.
 - Frontend defaults to port `3000` and proxies API/socket traffic to the backend.
