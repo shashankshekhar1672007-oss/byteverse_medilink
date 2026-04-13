@@ -1,8 +1,8 @@
-# MediLink Frontend
+# 💻 MediLink Frontend
 
 React + Vite client for the MediLink telemedicine app. The frontend talks to the Express API, keeps JWT session state in local storage, uses Socket.io for consultation chat and call notifications, and uses browser WebRTC APIs for peer-to-peer video calls.
 
-## Local Setup
+## 🛠️ Local Setup
 
 Start the backend first:
 
@@ -25,13 +25,13 @@ Default URLs:
 
 | Service | URL |
 | --- | --- |
-| Frontend | `http://localhost:3000` |
-| Backend API | `http://localhost:5001/api` |
-| Swagger UI | `http://localhost:5001/api-docs` |
+| 🖥️ Frontend | `http://localhost:3000` |
+| ⚙️ Backend API | `http://localhost:5001/api` |
+| 📖 Swagger UI | `http://localhost:5001/api-docs` |
 
 The Vite config proxies `/api` and `/socket.io` to `http://localhost:5001`, so local browser requests can use same-origin paths during development.
 
-## Environment Variables
+## 🌍 Environment Variables
 
 Optional `frontend/.env` values:
 
@@ -42,20 +42,20 @@ VITE_SOCKET_URL=http://localhost:5001
 
 If omitted, `src/services/api.js` defaults to `http://localhost:5001/api`, and `src/services/socket.js` uses the Vite dev origin in development.
 
-## Demo Accounts
+## 👥 Demo Accounts
 
 Seed the backend first with `npm run seed --prefix backend`.
 
 | Role | Email | Password |
 | --- | --- | --- |
-| Patient | `patient1@medilink.com` | `pass123` |
-| Patient | `patient2@medilink.com` | `pass123` |
-| Doctor | `doctor1@medilink.com` | `pass123` |
-| Doctor | `doctor2@medilink.com` | `pass123` |
+| 🧑‍⚕️ Patient | `patient1@medilink.com` | `pass123` |
+| 🧑‍⚕️ Patient | `patient2@medilink.com` | `pass123` |
+| 🩺 Doctor | `doctor1@medilink.com` | `pass123` |
+| 🩺 Doctor | `doctor2@medilink.com` | `pass123` |
 
 Admin screens exist in the frontend, but the backend seeder does not create an admin account by default.
 
-## Main Code Areas
+## 📂 Main Code Areas
 
 ```text
 src/
