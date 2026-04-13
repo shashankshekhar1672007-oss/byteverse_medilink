@@ -1,5 +1,7 @@
 # MediLink
 
+**Live Demo:** [https://byteverse-medilink.vercel.app/](https://byteverse-medilink.vercel.app/)
+
 MediLink is a full-stack telemedicine app for patients, doctors, and admins. It includes doctor discovery, real-time consultations, WebRTC video signaling, chat, e-prescriptions, medicine orders, patient health records, profile uploads, and admin user/order management.
 
 The repository is split into an Express/MongoDB backend and a React/Vite frontend.
