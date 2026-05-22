@@ -18,7 +18,7 @@ const { swaggerUi, swaggerSpec, swaggerUiOptions } = require('./config/swagger')
 const app = express();
 let server = null;
 
-// ── Routes ────────────────────────────────────────────────────────────────────
+// ── Routes imports ────────────────────────────────────────────────────────────
 const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patients');
 const doctorRoutes = require('./routes/doctors');
@@ -111,7 +111,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/patients', patientRoutes);
@@ -152,7 +151,7 @@ const shutdown = async (signal) => {
       console.log('Server closed');
       process.exit(0);
     });
-    setTimeout(() => process.exit(1), 10000); // force after 10s
+    setTimeout(() => process.exit(1), 10000); // force exit after 10s
     return;
   }
 
@@ -167,16 +166,19 @@ process.on('unhandledRejection', (err) => {
   shutdown('unhandledRejection');
 });
 
-// ── Start ─────────────────────────────────────────────────────────────────────
-const PORT = parseInt(process.env.PORT) || 5001;
+// ── Start Server ──────────────────────────────────────────────────────────────
+const PORT = process.env.PORT || 10000; 
 
 if (require.main === module) {
+  // 1. Setup the HTTP Server wrapping Express + Socket.io
   initializeServer();
+  
+  // 2. Connect to Database, then bind to the port
   connectDB().then(() => {
-    server.listen(PORT, () => {
+    server.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Medilink API running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
-      console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`📖 Swagger docs: http://localhost:${PORT}/api-docs`);
+      console.log(`🏥 Health check: http://0.0.0.0:${PORT}/api/health`);
+      console.log(`📖 Swagger docs: http://0.0.0.0:${PORT}/api-docs`);
     });
   });
 }
