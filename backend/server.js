@@ -18,6 +18,10 @@ const { swaggerUi, swaggerSpec, swaggerUiOptions } = require('./config/swagger')
 const app = express();
 let server = null;
 
+// 👉 CRITICAL FOR RENDER: Tell Express to trust Render's reverse proxy header (X-Forwarded-For)
+// This prevents express-rate-limit from throwing validation errors.
+app.set('trust proxy', 1);
+
 // ── Routes imports ────────────────────────────────────────────────────────────
 const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patients');
@@ -95,9 +99,19 @@ app.use(mongoSanitize());
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('combined', {
     stream: { write: (msg) => console.log(msg.trim()) },
-    skip: (req) => req.path === '/api/health',
+    skip: (req) => req.path === '/api/health' || req.path === '/',
   }));
 }
+
+// ── Root Path Route ───────────────────────────────────────────────────────────
+// 👉 CRITICAL FOR RENDER: Prevents internal ping clients/pagers from seeing a 404 error
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to the Medilink API production server!',
+    documentation: '/api-docs',
+  });
+});
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
@@ -111,7 +125,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ── Routes ────────────────────────────────────────────────────────────────────
+// ── Routes application ────────────────────────────────────────────────────────
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/doctors', doctorRoutes);
@@ -120,7 +134,7 @@ app.use('/api/consultations', consultationRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 
-// ── 404 ───────────────────────────────────────────────────────────────────────
+// ── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
 });
@@ -167,6 +181,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 // ── Start Server ──────────────────────────────────────────────────────────────
+// Render defaults fallback internal port binding to 10000, but adapts automatically
 const PORT = process.env.PORT || 10000; 
 
 if (require.main === module) {
